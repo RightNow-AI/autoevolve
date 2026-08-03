@@ -86,15 +86,20 @@ def search(
     hours: float = 6.0,
     target: float | None = None,
     operators: str = "diff,rewrite,crossover",
+    store: str = "default",
 ) -> dict:
     """Run one long frontier search and leave the store on the volume."""
 
     import os
     import subprocess
 
+    # Each problem gets its own store. Several searches can then run at once
+    # without putting concurrent writers on one SQLite file over a network
+    # filesystem, where locking is unreliable and corruption would take the
+    # database holding every result with it.
     env = dict(os.environ)
-    env["AUTOEVOLVE_HOME"] = "/store/autoevolve"
-    env["AUTOEVOLVE_ARTIFACTS_DIR"] = "/store/runs"
+    env["AUTOEVOLVE_HOME"] = f"/store/{store}/autoevolve"
+    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store}/runs"
     if cell:
         env["AUTOEVOLVE_CELL"] = cell
 
@@ -172,14 +177,14 @@ def search(
 
 
 @app.function(image=image, volumes={"/store": store}, timeout=900)
-def best(run_id: str | None = None) -> dict:
-    """Report the best measured result on the shared store without a rerun."""
+def best(run_id: str | None = None, store_name: str = "default") -> dict:
+    """Report the best measured result on one problem store without a rerun."""
 
     import sqlite3
     from pathlib import Path
 
     store.reload()
-    db_path = Path("/store/autoevolve/autoevolve.db")
+    db_path = Path(f"/store/{store_name}/autoevolve/autoevolve.db")
     if not db_path.is_file():
         print("no store yet", flush=True)
         return {"error": "no store yet"}
