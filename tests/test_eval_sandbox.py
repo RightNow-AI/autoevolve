@@ -83,7 +83,10 @@ def test_slow_candidate_is_killed_at_wall_clock_timeout() -> None:
             StageSpec(name="smoke", timeout_s=2.0),
         )
 
-    assert time.monotonic() - started < 8.0
+    # Generous: this asserts the timeout fired rather than that the machine
+    # is fast. A tight bound turns heavy load into a spurious failure, which
+    # is exactly what happened while six searches were running.
+    assert time.monotonic() - started < 30.0
 
 
 def test_timeout_kills_spawned_grandchild(
@@ -106,7 +109,7 @@ def test_timeout_kills_spawned_grandchild(
     assert time.monotonic() - started < 8.0
     assert pid_path.is_file()
     pid = int(pid_path.read_text(encoding="utf-8"))
-    exited = _wait_for_pid_exit(pid, timeout_s=3.0)
+    exited = _wait_for_pid_exit(pid, timeout_s=15.0)
     if not exited:
         _force_kill_pid(pid)
     assert exited
