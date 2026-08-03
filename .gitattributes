@@ -1,0 +1,8 @@
+# One canonical line ending everywhere. Fixture byte-identity tests and
+# deterministic renders depend on working trees matching committed bytes on
+# every platform.
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.jpg binary
+*.mp4 binary
