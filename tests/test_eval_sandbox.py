@@ -124,8 +124,70 @@ def test_network_call_is_blocked() -> None:
 
 
 def test_environment_is_scrubbed(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AUTOEVOLVE_CANARY", "must-not-leak")
+    monkeypatch.setenv("SECRET_CANARY", "must-not-leak")
 
     metrics = run_stage(TOY_EVALUATOR, CANDIDATES / "envspy", 0, SMOKE)
 
     assert metrics["correct"] == 1.0
+
+
+FORGERY_EVALUATOR = Path(__file__).parent / "fixtures" / "eval_forgery"
+FORGERY_CANDIDATES = Path(__file__).parent / "fixtures" / "eval_forgery_candidates"
+
+
+@pytest.mark.parametrize("attack", ["atexit_forge", "preprint_forge"])
+def test_candidate_cannot_forge_a_passing_verdict(attack: str) -> None:
+    """The gate decides the verdict, never the candidate.
+
+    Both candidates return the wrong answer and the evaluator rejects them.
+    Each also writes a passing payload to the real stdout, one after the
+    runner's verdict and one before it. If either is believed, evolution
+    learns to forge instead of to optimize and every result is fiction.
+    """
+
+    from autoevolve.eval.cascade import run_cascade
+    from autoevolve.eval.contract import load_evaluator
+
+    evaluator = load_evaluator(FORGERY_EVALUATOR)
+    outcome = run_cascade(evaluator, FORGERY_CANDIDATES / attack)
+
+    assert not outcome.gate_passed
+    assert outcome.error is not None and "wrong answer" in outcome.error
+    assert outcome.scores == {}
+
+
+def test_honest_candidate_still_passes_the_same_evaluator() -> None:
+    from autoevolve.eval.cascade import run_cascade
+    from autoevolve.eval.contract import load_evaluator
+
+    evaluator = load_evaluator(FORGERY_EVALUATOR)
+    outcome = run_cascade(evaluator, FORGERY_EVALUATOR / "baseline")
+
+    assert outcome.gate_passed
+    assert outcome.scores["score"] == 1.0
+
+
+def test_cell_configuration_reaches_the_evaluator_but_secrets_never_do(monkeypatch) -> None:
+    """Cells select their workload through AUTOEVOLVE_ variables.
+
+    Stripping them silently reduces every multi-cell campaign to one cell
+    measured many times. Credential shaped names stay excluded regardless.
+    """
+
+    from autoevolve.eval.sandbox import _sandbox_env
+
+    monkeypatch.setenv("AUTOEVOLVE_CELL", "add-8k")
+    monkeypatch.setenv("AUTOEVOLVE_KERNEL_ELEMENTS", "65536")
+    monkeypatch.setenv("AUTOEVOLVE_MODEL_API_KEY", "super-secret")
+    monkeypatch.setenv("AUTOEVOLVE_HOME", "C:/store")
+    monkeypatch.setenv("AUTOEVOLVE_LOCAL_BASE_URL", "http://127.0.0.1:1234/v1")
+    monkeypatch.setenv("OPENAI_API_KEY", "also-secret")
+
+    env = _sandbox_env()
+
+    assert env["AUTOEVOLVE_CELL"] == "add-8k"
+    assert env["AUTOEVOLVE_KERNEL_ELEMENTS"] == "65536"
+    assert "AUTOEVOLVE_MODEL_API_KEY" not in env
+    assert "OPENAI_API_KEY" not in env
+    assert "AUTOEVOLVE_HOME" not in env, "the store path would let a candidate edit its own scores"
+    assert "AUTOEVOLVE_LOCAL_BASE_URL" not in env

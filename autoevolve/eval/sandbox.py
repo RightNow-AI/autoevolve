@@ -35,12 +35,53 @@ _ALLOWED_ENV = frozenset(
 )
 
 
+_ENGINE_ONLY_ENV = frozenset(
+    {
+        "AUTOEVOLVE_HOME",
+        "AUTOEVOLVE_ARTIFACTS_DIR",
+        "AUTOEVOLVE_LOCAL_BASE_URL",
+        "AUTOEVOLVE_LOCAL_MODEL",
+        "AUTOEVOLVE_AGENT_RUNTIME",
+        "AUTOEVOLVE_AGENTIC_TIMEOUT_S",
+    }
+)
+
+
 def _sandbox_env() -> dict[str, str]:
+    """Build the scrubbed child environment.
+
+    The allowlist keeps secrets out of candidate reach. AUTOEVOLVE_ prefixed
+    variables are configuration this project sets deliberately, and cells
+    select their workload through them, so a campaign cannot express a
+    multi-cell campaign at all without them. Credential shaped names are
+    excluded even under that prefix, so configuration can never smuggle a
+    key into a candidate's environment.
+    """
+
     env = {name: value for name, value in os.environ.items() if name in _ALLOWED_ENV}
+    for name, value in os.environ.items():
+        if name.startswith("AUTOEVOLVE_") and _is_candidate_visible(name):
+            env[name] = value
     env.setdefault("PYTHONHASHSEED", "0")
     env.setdefault("PYTHONIOENCODING", "utf-8")
     env["PYTHONPATH"] = str(_REPO_ROOT)
     return env
+
+
+def _is_candidate_visible(name: str) -> bool:
+    """Workload configuration is visible; engine and model configuration is not.
+
+    AUTOEVOLVE_HOME points at the run database, so a candidate holding it
+    could edit its own scores directly. Model and endpoint settings are
+    likewise none of a candidate's business, and credential shaped names
+    never pass under any prefix.
+    """
+
+    if any(
+        token in name for token in ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")
+    ):
+        return False
+    return name not in _ENGINE_ONLY_ENV and not name.startswith("AUTOEVOLVE_MODEL")
 
 
 if sys.platform != "win32":
@@ -127,12 +168,24 @@ def _start_runner(
     )
 
 
-def _parse_response(stdout: str, stderr: str) -> dict[str, float]:
-    lines = stdout.splitlines()
+def _parse_response(stdout: str, stderr: str, returncode: int | None = None) -> dict[str, float]:
+    """Read the runner's verdict, taking the FIRST one and never a later line.
+
+    The runner emits exactly one line and then leaves through os._exit, so a
+    second verdict line can only come from something trying to overwrite the
+    first. Taking the last line would hand the decision to whoever spoke
+    last, which is precisely the forgery this ordering prevents.
+    """
+
+    if returncode is not None and returncode != 0:
+        raise EvalError(
+            f"evaluator runner exited with code {returncode}; stderr: {stderr[-500:]}"
+        )
+    lines = [line for line in stdout.splitlines() if line.strip()]
     if not lines:
         raise EvalError(f"invalid evaluator response; stderr: {stderr[-500:]}")
     try:
-        payload = json.loads(lines[-1])
+        payload = json.loads(lines[0])
     except json.JSONDecodeError as exc:
         raise EvalError(f"invalid evaluator response; stderr: {stderr[-500:]}") from exc
     if not isinstance(payload, dict):
@@ -202,4 +255,4 @@ def run_stage(
                 f"timeout after {spec.timeout_s}s at stage {spec.name}"
             ) from exc
 
-    return _parse_response(stdout, stderr)
+    return _parse_response(stdout, stderr, process.returncode)

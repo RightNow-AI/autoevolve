@@ -56,6 +56,45 @@ on GPU and mock_score in mock mode).
   identical input. Timing metrics may vary; gates may not.
 - Fixtures live in the evaluator folder and are versioned with it.
 
+## 4a. Verdict integrity (the property everything else rests on)
+
+The verdict is decided by the evaluator and reported by the runner. Candidate
+code must never be able to influence what the engine records.
+
+- The runner emits its verdict on file descriptor 1. While evaluator and
+  candidate code runs, fd 1 is the null device, so nothing that code writes
+  can reach the verdict channel, including writes through `sys.__stdout__`
+  or a raw `os.write`.
+- The real descriptor is restored only after the payload is decided, written
+  with a raw `os.write` that ignores tampering with `sys.stdout`, and the
+  process then leaves through `os._exit`, so no `atexit` handler registered
+  by candidate code can append a second verdict.
+- The parent reads the FIRST verdict line, never a later one, and treats a
+  nonzero exit code as a failure.
+
+This is not theoretical. Before these rules, a candidate returning a wrong
+answer could register an `atexit` handler printing a passing payload, and
+the parent, which took the last line of stdout, believed it. Evolution
+optimizes whatever is measured, so a forgeable verdict channel means it
+learns to forge rather than to solve. Regression tests live in
+tests/test_eval_sandbox.py.
+
+Candidate code still runs in the same interpreter as the evaluator that
+judges it, so an evaluator that trusts values a candidate returns can still
+be misled about its own computation. Evaluator authors must recompute every
+quantity that reaches a metric rather than accepting a candidate's report of
+it. Frontier packs carry stricter rules in docs/FRONTIER.md section 5.
+
+## 4b. Environment visibility
+
+The child environment is scrubbed to an allowlist, plus `AUTOEVOLVE_`
+prefixed workload configuration such as `AUTOEVOLVE_CELL`, which campaign
+cells use to select their workload. Engine and model configuration is
+excluded even under that prefix: `AUTOEVOLVE_HOME` would hand a candidate
+the path to the run database and therefore the ability to edit its own
+scores, and endpoint and model settings are no business of a candidate.
+Credential shaped names never pass under any prefix.
+
 ## 4. Sandbox guarantees and limits (honest)
 
 Candidates run in a subprocess spawned by the engine, never in-process:

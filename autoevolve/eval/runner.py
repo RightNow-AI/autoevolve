@@ -145,9 +145,26 @@ def _emit(stream: TextIO, payload: dict[str, Any]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Compute one verdict and emit it on a channel candidate code cannot reach.
+
+    The verdict travels on file descriptor 1, which the parent reads. While
+    evaluator and candidate code runs, fd 1 is replaced by the null device,
+    so nothing that code prints can ever appear on the verdict channel, not
+    through print, not through sys.__stdout__, not through os.write. The
+    real descriptor is restored only after the payload is decided, written
+    with a raw os.write that ignores any tampering with sys.stdout, and the
+    process then leaves through os._exit so no atexit handler registered by
+    candidate code can append a forged second verdict.
+    """
+
     args = _parser().parse_args(argv)
     _install_socket_block()
-    real_stdout = sys.stdout
+
+    saved_stdout_fd = os.dup(1)
+    null_fd = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(null_fd, 1)
+    os.close(null_fd)
+
     try:
         with contextlib.redirect_stdout(sys.stderr):
             if args.describe is not None:
@@ -164,14 +181,22 @@ def main(argv: list[str] | None = None) -> int:
                 payload = {"ok": True, "metrics": metrics}
     except EvalError as exc:
         payload = {"ok": False, "reason": exc.reason}
-    except Exception as exc:
+    except BaseException as exc:  # noqa: BLE001 - a verdict must always be emitted
         payload = {"ok": False, "reason": _crash_reason(exc)}
 
     try:
-        _emit(real_stdout, payload)
-    except Exception as exc:
-        _emit(real_stdout, {"ok": False, "reason": _crash_reason(exc)})
-    return 0
+        encoded = json.dumps(payload, allow_nan=False, separators=(",", ":"))
+    except (TypeError, ValueError) as exc:
+        encoded = json.dumps({"ok": False, "reason": _crash_reason(exc)})
+
+    os.dup2(saved_stdout_fd, 1)
+    os.close(saved_stdout_fd)
+    os.write(1, (encoded + "\n").encode("utf-8"))
+    try:
+        sys.stderr.flush()
+    except Exception:
+        pass
+    os._exit(0)
 
 
 if __name__ == "__main__":

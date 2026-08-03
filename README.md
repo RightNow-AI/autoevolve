@@ -1,3 +1,5 @@
+<img src="docs/assets/banner.jpg" alt="autoevolve" width="100%">
+
 # autoevolve
 
 Agent-native evolutionary optimization. You state a goal in english. The system
