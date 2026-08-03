@@ -43,6 +43,11 @@ uv run autoevolve run --evaluator evaluators/python-speedup --budget-evals 200 -
 uv run autoevolve watch <run_id>
 ```
 
+Add `--parallel N` to drive one run with N workers. A cycle spends nearly all
+of its wall clock waiting on a model call, so workers overlap and throughput
+scales close to linearly: run r0217367e52 measured 12.6 seconds per child on
+four workers against 62.7 in run r8d0a8d799d on one.
+
 Model access resolves from the environment: set AUTOEVOLVE_LOCAL_BASE_URL for
 a local OpenAI-compatible engine (no key needed), or OPENAI_API_KEY with
 AUTOEVOLVE_MODEL (plus optional OPENAI_BASE_URL) for a cloud endpoint. Every

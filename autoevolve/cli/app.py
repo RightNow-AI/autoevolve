@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import json
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -75,6 +76,14 @@ def run_command(
         typer.Option("--wall-clock-s", min=0.001, help="Maximum elapsed seconds."),
     ] = None,
     workers: Annotated[int, typer.Option("--workers", min=1, help="Number of islands.")] = 4,
+    parallel: Annotated[
+        int,
+        typer.Option(
+            "--parallel",
+            min=1,
+            help="Worker threads driving this run. Each takes its own island.",
+        ),
+    ] = 1,
     seed: Annotated[int | None, typer.Option("--seed", help="Replay seed.")] = None,
     target: Annotated[
         float | None,
@@ -92,7 +101,6 @@ def run_command(
         _abort("A run requires at least one budget bound: --budget-evals or --wall-clock-s.")
     operator_names = _parse_operators(operators)
     from autoevolve.core.engine import Engine
-    from autoevolve.core.loop import run_worker_loop
 
     home = home_from_env()
     engine = Engine(home=home)
@@ -110,15 +118,9 @@ def run_command(
         if opened.get("status") == "infeasible" or bool(opened.get("infeasible")):
             typer.echo(f"Opened {run_id}; ceiling analysis closed it as infeasible.")
         else:
-            joined = engine.join_run(run_id, runtime="cli")
-            island = int(joined["island"])
-            typer.echo(f"Opened {run_id}; worker joined island {island}.")
-            run_worker_loop(
-                engine,
-                run_id,
-                _build_get_operator(operator_names, evaluator),
-                island=island,
-            )
+            get_operator = _build_get_operator(operator_names, evaluator)
+            summaries = _drive_workers(engine, run_id, get_operator, parallel)
+            _print_worker_summaries(summaries)
     except (ValueError, RuntimeError) as exc:
         _abort(str(exc))
     _finish_and_print(engine, home, run_id)
@@ -256,6 +258,60 @@ def _parse_operators(raw: str) -> list[str]:
     if invalid:
         _abort(f"Unknown operators: {', '.join(invalid)}. Choose from {', '.join(OPERATORS)}.")
     return list(dict.fromkeys(names))
+
+
+def _drive_workers(
+    engine: Any,
+    run_id: str,
+    get_operator: Callable[[str], object],
+    parallel: int,
+) -> list[dict[str, Any]]:
+    """Run one or more worker threads against a single open run.
+
+    A cycle spends nearly all of its wall clock waiting on a model call, so
+    workers overlap almost perfectly and throughput scales close to linearly
+    with the thread count. Each thread joins separately and gets its own
+    island, which is what keeps their populations distinct. Writes are
+    serialized by the store's write lock, so the engine is shared safely.
+    """
+
+    from autoevolve.core.loop import run_worker_loop
+
+    def work(index: int) -> dict[str, Any]:
+        joined = engine.join_run(run_id, runtime=f"cli-{index}")
+        island = int(joined["island"])
+        typer.echo(f"worker {index} joined island {island}.")
+        return run_worker_loop(engine, run_id, get_operator, island=island)
+
+    if parallel == 1:
+        return [work(0)]
+
+    summaries: list[dict[str, Any]] = []
+    errors: list[BaseException] = []
+    with ThreadPoolExecutor(max_workers=parallel) as pool:
+        futures = [pool.submit(work, index) for index in range(parallel)]
+        for future in as_completed(futures):
+            try:
+                summaries.append(future.result())
+            except BaseException as exc:  # noqa: BLE001 - reported after the join
+                errors.append(exc)
+    if errors and not summaries:
+        raise errors[0]
+    for exc in errors:
+        typer.echo(f"worker failed: {exc}", err=True)
+    return summaries
+
+
+def _print_worker_summaries(summaries: list[Any]) -> None:
+    """Report what the workers did. A summary line never fails a finished run."""
+
+    usable = [item for item in summaries if isinstance(item, dict)]
+    total_submissions = sum(int(item.get("submissions", 0)) for item in usable)
+    total_skips = sum(int(item.get("skips", 0)) for item in usable)
+    typer.echo(
+        f"{len(summaries)} worker(s) finished: {total_submissions} submissions, "
+        f"{total_skips} skipped cycles."
+    )
 
 
 def _build_local_evaluator(evaluator_dir: Path | None) -> Callable[[dict[str, str]], Any] | None:

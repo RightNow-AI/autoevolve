@@ -69,8 +69,9 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
             calls.append(("status", run_id))
             return {"status": "budget_exhausted"}
 
-    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None) -> None:
+    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None):
         calls.append(("loop", {"run_id": run_id, "get_operator": get_operator, "island": island}))
+        return {"submissions": 1, "skips": 0}
 
     engine_module = types.ModuleType("autoevolve.core.engine")
     engine_module.Engine = FakeEngine
@@ -160,3 +161,59 @@ def test_run_without_budget_exits_two(tmp_path: Path) -> None:
 
     assert result.exit_code == 2
     assert "requires at least one budget bound" in result.output
+
+
+def test_parallel_workers_each_join_their_own_island(tmp_path: Path, monkeypatch) -> None:
+    """Cycles are network bound, so threads overlap and each needs its own island."""
+
+    import threading
+
+    joins: list[str] = []
+    islands: list[int] = []
+    lock = threading.Lock()
+
+    class FakeEngine:
+        def __init__(self, home: Path):
+            self._next = 0
+
+        def open_run(self, **kwargs: Any) -> dict[str, str]:
+            return {"run_id": "rpar0000001"}
+
+        def join_run(self, run_id: str, runtime: str) -> dict[str, int]:
+            with lock:
+                joins.append(runtime)
+                island = self._next
+                self._next += 1
+            return {"island": island}
+
+        def run_status(self, run_id: str) -> dict[str, str]:
+            return {"status": "budget_exhausted"}
+
+    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None):
+        with lock:
+            islands.append(island)
+        return {"submissions": 2, "skips": 0}
+
+    engine_module = types.ModuleType("autoevolve.core.engine")
+    engine_module.Engine = FakeEngine
+    loop_module = types.ModuleType("autoevolve.core.loop")
+    loop_module.run_worker_loop = fake_loop
+    monkeypatch.setitem(sys.modules, "autoevolve.core.engine", engine_module)
+    monkeypatch.setitem(sys.modules, "autoevolve.core.loop", loop_module)
+    monkeypatch.setenv("AUTOEVOLVE_HOME", str(tmp_path / "home"))
+
+    import autoevolve.cli.app as app_module
+
+    monkeypatch.setattr(app_module, "_build_local_evaluator", lambda directory: None)
+
+    evaluator = tmp_path / "evaluator"
+    evaluator.mkdir()
+    result = runner.invoke(
+        app,
+        ["run", "--evaluator", str(evaluator), "--budget-evals", "8", "--parallel", "4"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert len(joins) == 4
+    assert sorted(islands) == [0, 1, 2, 3]
+    assert "4 worker(s) finished: 8 submissions" in result.output
