@@ -1,0 +1,34 @@
+{
+  "cells": [
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "uniform"
+      },
+      "key": "uniform",
+      "target": null
+    },
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "clustered"
+      },
+      "key": "clustered",
+      "target": null
+    }
+  ],
+  "domain": "bin-packing",
+  "evaluator": "evaluators/binpack",
+  "full_budget": {
+    "max_evals": 200
+  },
+  "ladder": [
+    "proxy",
+    "replicate-3",
+    "scaled"
+  ],
+  "name": "algorithm-frontier",
+  "proxy_budget": {
+    "max_evals": 20
+  },
+  "replicate_seeds": 3
+}
+
