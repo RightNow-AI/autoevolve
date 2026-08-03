@@ -1,0 +1,14 @@
+{
+  "action": "opened",
+  "issue": {
+    "number": 41,
+    "title": "evolve: make the parser faster",
+    "body": "Improve parser throughput without changing accepted syntax.\n\n```autoevolve\nbudget_evals: 25\nworkers: 2\nmetric: cases_per_second\ntarget: 5000\n```",
+    "labels": [
+      {"id": 1001, "name": "evolve", "color": "1d76db"}
+    ],
+    "user": {"login": "contributor"}
+  },
+  "repository": {"full_name": "acme/demo"},
+  "sender": {"login": "contributor"}
+}

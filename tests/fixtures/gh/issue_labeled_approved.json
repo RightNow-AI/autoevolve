@@ -1,0 +1,15 @@
+{
+  "action": "labeled",
+  "issue": {
+    "number": 41,
+    "title": "evolve: make the parser faster",
+    "body": "Improve parser throughput without changing accepted syntax.\n\n```autoevolve\nbudget_evals: 25\nworkers: 2\nmetric: cases_per_second\ntarget: 5000\nevaluator: evaluators/parser-speed\ntarget_path: src/parser\n```",
+    "labels": [
+      {"id": 1001, "name": "evolve"},
+      {"id": 1002, "name": "evolve:approved"}
+    ]
+  },
+  "label": {"id": 1002, "name": "evolve:approved"},
+  "repository": {"full_name": "acme/demo"},
+  "sender": {"login": "maintainer"}
+}
