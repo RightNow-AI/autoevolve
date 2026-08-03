@@ -89,15 +89,35 @@ def search(
     if target is not None:
         command += ["--target", str(target)]
 
-    completed = subprocess.run(
-        command,
-        cwd="/root/autoevolve",
-        env=env,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-    )
+    # Commit the volume periodically rather than only at the end. A long run
+    # that commits once gives no visibility while it works and loses every
+    # result if the container dies before finishing.
+    import threading
+
+    finished = threading.Event()
+
+    def checkpoint() -> None:
+        while not finished.wait(120.0):
+            try:
+                store.commit()
+            except Exception as exc:  # noqa: BLE001 - checkpointing is best effort
+                print(f"checkpoint failed: {exc}", flush=True)
+
+    keeper = threading.Thread(target=checkpoint, daemon=True)
+    keeper.start()
+    try:
+        completed = subprocess.run(
+            command,
+            cwd="/root/autoevolve",
+            env=env,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    finally:
+        finished.set()
+        keeper.join(timeout=10)
     store.commit()
     tail = (completed.stdout or "")[-4000:]
     # Printed inside the container so Modal streams it; return values are not
@@ -122,8 +142,10 @@ def best(run_id: str | None = None) -> dict:
     import sqlite3
     from pathlib import Path
 
+    store.reload()
     db_path = Path("/store/autoevolve/autoevolve.db")
     if not db_path.is_file():
+        print("no store yet", flush=True)
         return {"error": "no store yet"}
     conn = sqlite3.connect(db_path)
     if run_id is None:
