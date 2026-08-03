@@ -135,14 +135,15 @@ FORGERY_EVALUATOR = Path(__file__).parent / "fixtures" / "eval_forgery"
 FORGERY_CANDIDATES = Path(__file__).parent / "fixtures" / "eval_forgery_candidates"
 
 
-@pytest.mark.parametrize("attack", ["atexit_forge", "preprint_forge"])
+@pytest.mark.parametrize("attack", ["atexit_forge", "preprint_forge", "shadow_forge"])
 def test_candidate_cannot_forge_a_passing_verdict(attack: str) -> None:
     """The gate decides the verdict, never the candidate.
 
-    Both candidates return the wrong answer and the evaluator rejects them.
-    Each also writes a passing payload to the real stdout, one after the
-    runner's verdict and one before it. If either is believed, evolution
-    learns to forge instead of to optimize and every result is fiction.
+    Every candidate returns the wrong answer and the evaluator rejects it.
+    Each also tries to publish a passing payload: after the runner's verdict,
+    before it, and from a module shadowing a stdlib name the evaluator
+    imports once the candidate has run. If any is believed, evolution learns
+    to forge instead of to optimize and every result is fiction.
     """
 
     from autoevolve.eval.cascade import run_cascade

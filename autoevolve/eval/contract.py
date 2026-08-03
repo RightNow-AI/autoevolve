@@ -73,6 +73,12 @@ def _stderr_suffix(stderr: str) -> str:
 def _invoke_runner(mode: str, evaluator_dir: Path) -> dict[str, Any]:
     command = [
         sys.executable,
+        # -P keeps the working directory off sys.path. The child runs with the
+        # candidate copy as its cwd, so without this the candidate directory is
+        # sys.path[0] and any module the runner or evaluator imports can be
+        # shadowed by a file the candidate ships, running candidate code inside
+        # the judging process. Python 3.11+.
+        "-P",
         "-m",
         "autoevolve.eval.runner",
         mode,

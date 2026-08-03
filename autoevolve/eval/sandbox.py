@@ -65,6 +65,10 @@ def _sandbox_env() -> dict[str, str]:
     env.setdefault("PYTHONHASHSEED", "0")
     env.setdefault("PYTHONIOENCODING", "utf-8")
     env["PYTHONPATH"] = str(_REPO_ROOT)
+    # Belt and braces with the -P launch flag: either alone keeps the candidate
+    # directory off sys.path, and both together survive a launch site that
+    # forgets the flag.
+    env["PYTHONSAFEPATH"] = "1"
     return env
 
 
@@ -226,6 +230,12 @@ def run_stage(
 
         command = [
             sys.executable,
+            # -P keeps the working directory off sys.path. The child runs with
+            # the candidate copy as its cwd, so without this the candidate
+            # directory is sys.path[0] and any module the runner or evaluator
+            # imports can be shadowed by a file the candidate ships, executing
+            # candidate code inside the judging process. Python 3.11+.
+            "-P",
             "-m",
             "autoevolve.eval.runner",
             "--evaluate",

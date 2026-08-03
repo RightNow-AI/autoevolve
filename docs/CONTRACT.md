@@ -71,6 +71,13 @@ code must never be able to influence what the engine records.
   by candidate code can append a second verdict.
 - The parent reads the FIRST verdict line, never a later one, and treats a
   nonzero exit code as a failure.
+- The candidate directory is never importable. The child runs with the
+  candidate copy as its working directory, which would otherwise make that
+  directory `sys.path[0]`, so a file the candidate ships could shadow any
+  module the runner or the evaluator imports and execute inside the judging
+  process. The runner is launched with `-P` and `PYTHONSAFEPATH=1`, which
+  keeps the working directory off `sys.path` entirely. Candidate and
+  evaluator modules are loaded by explicit path instead.
 
 This is not theoretical. Before these rules, a candidate returning a wrong
 answer could register an `atexit` handler printing a passing payload, and

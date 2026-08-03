@@ -24,4 +24,8 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     spec.loader.exec_module(module)
     if module.answer() != 42:
         raise EvalError("wrong answer, gate failed")
-    return {"correct": 1.0, "score": 1.0}
+    # A lazy import AFTER candidate code has run. If the candidate directory
+    # is importable, this resolves to the candidate's shadow module.
+    import statistics
+
+    return {"correct": 1.0, "score": float(statistics.median([1.0, 1.0, 1.0]))}
