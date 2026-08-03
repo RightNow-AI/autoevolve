@@ -193,3 +193,56 @@ def test_loop_raises_after_consecutive_skip_cap(
 
     with pytest.raises(RuntimeError, match="consecutive skipped cycles"):
         run_worker_loop(engine, run_id, lambda name: AlwaysSkip())
+
+
+def test_elite_less_island_progresses_without_impossible_crossover(home: Path) -> None:
+    class SkipError(Exception):
+        skip_cycle = True
+
+    class PartnerAwareOperator:
+        def __init__(self, name: str) -> None:
+            self.name = name
+
+        def propose(self, bundle: object, ctx: SimpleNamespace) -> Proposal:
+            crossover_parent = getattr(bundle, "crossover_parent", None)
+            if self.name == "crossover" and crossover_parent is None:
+                raise SkipError("crossover requires a partner")
+            return Proposal({"candidate.py": "value = 3\n"}, "made progress")
+
+    engine, _cascade, evaluator_dir = _engine(home)
+    run_id = engine.open_run(
+        "joined worker crossover fallback",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=2),
+        workers=2,
+        seed=43,
+    )["run_id"]
+    assert engine.join_run(run_id, "worker-zero")["island"] == 0
+    joined_island = engine.join_run(run_id, "worker-one")["island"]
+    assert joined_island == 1
+
+    first = engine.next_parent(run_id, 0)
+    engine.submit_child(
+        run_id,
+        first.parent.id,
+        "agentic",
+        {"candidate.py": "value = 2\n"},
+    )
+    requested: list[str] = []
+
+    def get_operator(name: str) -> PartnerAwareOperator:
+        requested.append(name)
+        return PartnerAwareOperator(name)
+
+    summary = run_worker_loop(
+        engine,
+        run_id,
+        get_operator,
+        max_cycles=30,
+        island=joined_island,
+    )
+
+    assert requested == ["diff"]
+    assert summary["skips"] == 0
+    assert summary["submissions"] == 1
+    assert summary["status"] == "budget_exhausted"

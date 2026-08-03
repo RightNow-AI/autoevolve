@@ -34,6 +34,7 @@ class FakeParentBundle:
     operator_hint: str | None = None
     crossover_parent: FakeProgram | None = None
     crossover_files: dict[str, str] | None = None
+    parent_sample_seq: int | None = None
 
 
 def _program(
@@ -91,6 +92,7 @@ class FakeEngine:
                 operator_hint="profile_guided",
                 crossover_parent=crossover,
                 crossover_files={"solution.py": "crossover body"},
+                parent_sample_seq=41,
             ),
             "submit_child": {
                 "program_id": "prog_19",
@@ -173,6 +175,7 @@ class FakeEngine:
         operator: str,
         files: dict[str, str],
         notes: str = "",
+        parent_sample_seq: int | None = None,
     ) -> object:
         return self._record(
             "submit_child",
@@ -181,6 +184,7 @@ class FakeEngine:
             operator=operator,
             files=files,
             notes=notes,
+            parent_sample_seq=parent_sample_seq,
         )
 
     def best(self, run_id: str, k: int = 5) -> object:
@@ -261,6 +265,7 @@ def test_tool_input_schemas_preserve_exact_arguments_and_defaults() -> None:
     submit_schema = schemas["submit_child"]
     assert submit_schema["required"] == ["run_id", "parent_id", "operator", "files"]
     assert submit_schema["properties"]["notes"]["default"] == ""
+    assert submit_schema["properties"]["parent_sample_seq"]["default"] is None
     assert schemas["best"]["properties"]["k"]["default"] == 5
     assert schemas["discoveries"]["properties"]["query"]["default"] is None
 
@@ -340,6 +345,7 @@ def test_all_tools_round_trip_and_call_the_engine_once() -> None:
                 "operator": "profile_guided",
                 "files": child_files,
                 "notes": "",
+                "parent_sample_seq": None,
             },
         ),
         ("best", {"run_id": "run_01", "k": 2}),
@@ -384,6 +390,7 @@ def test_all_tools_round_trip_and_call_the_engine_once() -> None:
     ]
     assert parent_payload["crossover_parent"]["id"] == "prog_15"
     assert parent_payload["crossover_files"] == {"solution.py": "crossover body"}
+    assert parent_payload["parent_sample_seq"] == 41
     assert payloads["submit_child"] == engine.responses["submit_child"]
     assert payloads["best"] == engine.responses["best"]
     assert payloads["lineage"] == engine.responses["lineage"]
@@ -459,3 +466,35 @@ def test_open_run_all_none_budget_reaches_engine_and_returns_error() -> None:
     assert budget.max_evals is None
     assert budget.wall_clock_s is None
     assert budget.max_cost_usd is None
+
+
+def test_parent_sample_sequence_is_forwarded_to_engine() -> None:
+    engine = FakeEngine()
+    child_files = {"solution.py": "# EVOLVE-BLOCK-START\nnew\n# EVOLVE-BLOCK-END\n"}
+
+    payload = _call_tool(
+        build_server(engine=engine),
+        "submit_child",
+        {
+            "run_id": "run_01",
+            "parent_id": "prog_18",
+            "operator": "profile_guided",
+            "files": child_files,
+            "parent_sample_seq": 41,
+        },
+    )
+
+    assert payload == engine.responses["submit_child"]
+    assert engine.calls == [
+        (
+            "submit_child",
+            {
+                "run_id": "run_01",
+                "parent_id": "prog_18",
+                "operator": "profile_guided",
+                "files": child_files,
+                "notes": "",
+                "parent_sample_seq": 41,
+            },
+        )
+    ]

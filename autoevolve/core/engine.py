@@ -117,11 +117,19 @@ class Engine:
     def _resolve_evaluator(self, goal_text: str, evaluator_ref: str | Path | None) -> Path:
         if evaluator_ref is not None:
             return Path(evaluator_ref).expanduser().resolve()
+        from autoevolve.mutate.models import resolve_endpoint
         from autoevolve.synth.pipeline import synthesize
 
+        endpoint = resolve_endpoint("strong") or resolve_endpoint("cheap")
+        if endpoint is None:
+            raise ValueError(
+                "evaluator synthesis requires a configured model endpoint "
+                "(set AUTOEVOLVE_LOCAL_BASE_URL, or OPENAI_API_KEY plus "
+                "AUTOEVOLVE_MODEL)"
+            )
         workdir = self.home / "generated-evaluators" / uuid.uuid4().hex
         workdir.mkdir(parents=True, exist_ok=True)
-        return Path(synthesize(goal_text, workdir, None)).expanduser().resolve()
+        return Path(synthesize(goal_text, workdir, endpoint)).expanduser().resolve()
 
     def _baseline_files(self, evaluator_dir: Path, evaluator: object) -> dict[str, str]:
         provided = getattr(evaluator, "baseline_files", None)
@@ -508,6 +516,16 @@ class Engine:
                 ]
                 if alternatives:
                     crossover = alternatives[0]
+                else:
+                    operator_hint = bandit.select_operator(
+                        conn,
+                        str(run["domain"]),
+                        tuple(
+                            name
+                            for name in available_operators
+                            if name != "crossover"
+                        ),
+                    )
 
             sample_payload = dict(choice.trace)
             sample_payload.update(
@@ -523,7 +541,12 @@ class Engine:
                     "rng_kind": rng_kind,
                 }
             )
-            append_event(conn, run_id, "parent_sampled", sample_payload)
+            parent_sample_seq = append_event(
+                conn,
+                run_id,
+                "parent_sampled",
+                sample_payload,
+            )
             inspiration_elites = sampling.inspirations(
                 elites,
                 choice.elite.program.id,
@@ -546,6 +569,7 @@ class Engine:
             crossover_files=(
                 self.store.get(crossover.program.code_ref) if crossover is not None else None
             ),
+            parent_sample_seq=parent_sample_seq,
         )
 
     @staticmethod
@@ -553,6 +577,7 @@ class Engine:
         conn: Any,
         run_id: str,
         parent_id: str,
+        parent_sample_seq: int | None = None,
     ) -> dict[str, Any] | None:
         events = load_events(conn, run_id)
         consumed = {
@@ -561,7 +586,28 @@ class Engine:
             if event["kind"] in {"child_submitted", "gate_failed"}
             and event["payload"].get("parent_sample_seq") is not None
         }
-        for event in events:
+        if parent_sample_seq is not None:
+            sample = next(
+                (event for event in events if event["seq"] == parent_sample_seq),
+                None,
+            )
+            if sample is None:
+                raise ValueError(
+                    f"parent sample seq {parent_sample_seq} not found for run {run_id}"
+                )
+            if sample["kind"] != "parent_sampled":
+                raise ValueError(
+                    f"event seq {parent_sample_seq} is {sample['kind']}, not parent_sampled"
+                )
+            if sample["payload"].get("chosen_parent_id") != parent_id:
+                raise ValueError(
+                    f"parent sample seq {parent_sample_seq} does not select parent {parent_id}"
+                )
+            if parent_sample_seq in consumed:
+                raise ValueError(f"parent sample seq {parent_sample_seq} is already consumed")
+            return {"seq": sample["seq"], **sample["payload"]}
+
+        for event in reversed(events):
             if event["kind"] != "parent_sampled" or event["seq"] in consumed:
                 continue
             if event["payload"].get("chosen_parent_id") == parent_id:
@@ -688,6 +734,7 @@ class Engine:
         operator: str,
         files: dict[str, str],
         notes: str = "",
+        parent_sample_seq: int | None = None,
     ) -> dict[str, Any]:
         """Validate, evaluate, record, and account for one proposed child."""
 
@@ -711,7 +758,12 @@ class Engine:
         block_check = validate_files(parent_files, files)
         if not block_check.valid:
             with transaction(self.home) as conn:
-                sample = self._pending_sample(conn, run_id, parent_id)
+                sample = self._pending_sample(
+                    conn,
+                    run_id,
+                    parent_id,
+                    parent_sample_seq,
+                )
                 append_event(
                     conn,
                     run_id,
@@ -769,7 +821,12 @@ class Engine:
             if current_run is None or str(current_run["status"]) != "open":
                 status = current_run["status"] if current_run is not None else "missing"
                 raise RuntimeError(f"run {run_id} became {status} during evaluation")
-            sample = self._pending_sample(conn, run_id, parent_id)
+            sample = self._pending_sample(
+                conn,
+                run_id,
+                parent_id,
+                parent_sample_seq,
+            )
             child_island = int(sample["island"]) if sample is not None else parent.island
             conn.execute(
                 "INSERT INTO programs(id, run_id, parent_id, operator, code_ref, island, "
