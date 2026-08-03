@@ -1,0 +1,31 @@
+{
+  "bounds": [
+    {
+      "claim": "exact diagonal Ramsey number R(4,4)",
+      "value": "18",
+      "direction": "exact",
+      "who_and_year": "Greenwood and Gleason, 1955",
+      "source_url": "https://doi.org/10.4153/CJM-1955-001-4",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "confirm the paper's K17 construction and K18 upper bound"
+    },
+    {
+      "claim": "published lower bound for R(5,5)",
+      "value": "43",
+      "direction": "higher_is_better",
+      "who_and_year": "Exoo, 1989",
+      "source_url": "https://arxiv.org/abs/2212.12630",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "confirm that the studied K42 coloring has no monochromatic K5"
+    },
+    {
+      "claim": "published upper bound for R(5,5)",
+      "value": "46",
+      "direction": "lower_is_better",
+      "who_and_year": "Angeltveit and McKay, 2024 preprint and 2026 journal publication",
+      "source_url": "https://doi.org/10.1002/jgt.70029",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "read Theorem 1.1 and confirm that it proves R(5,5) is at most 46"
+    }
+  ]
+}
