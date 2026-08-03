@@ -26,3 +26,20 @@ def test_report_explains_every_terminal_state(tmp_path: Path, status: str) -> No
     assert f"autoevolve {__version__}" in rendered
     assert f"recorded seed `{snapshot.run.seed}`" in rendered
 
+
+
+def test_report_artifact_paths_are_relative_and_portable(tmp_path: Path) -> None:
+    """A shared report must not carry absolute machine paths."""
+
+    home = tmp_path / "home"
+    run_id = build_status_fixture(home / "autoevolve.db", "target_hit")
+    out_dir = tmp_path / "artifacts"
+    out_dir.mkdir()
+    out_path = out_dir / "report.md"
+
+    report(home, run_id, out_path)
+    text = out_path.read_text(encoding="utf-8")
+
+    assert "- Evolution GIF: `evolution.gif" in text
+    assert "- Dashboard: `dashboard.html" in text
+    assert str(tmp_path) not in text

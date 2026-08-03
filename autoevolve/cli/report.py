@@ -40,7 +40,7 @@ def report(home: Path, run_id: str, out_path: Path) -> Path:
         if metric != snapshot.metric
     )
     milestone_rows = _milestone_rows(snapshot)
-    artifact_lines = _artifact_lines(paths)
+    artifact_lines = _artifact_lines(paths, out_path.parent)
     content = f"""# autoevolve run report: {snapshot.run.id}
 
 ## Outcome
@@ -111,7 +111,14 @@ def _milestone_rows(snapshot: Snapshot) -> str:
     )
 
 
-def _artifact_lines(paths: dict[str, Path]) -> str:
+def _artifact_lines(paths: dict[str, Path], base: Path) -> str:
+    """Render artifact references relative to the report itself.
+
+    Artifacts sit beside the report, so a relative name travels with the
+    file. Absolute machine paths would make a shared or committed report
+    wrong on every other machine and would leak local directory layout.
+    """
+
     lines = []
     labels = {
         "dashboard": "Dashboard",
@@ -123,11 +130,15 @@ def _artifact_lines(paths: dict[str, Path]) -> str:
     }
     for key in ("dashboard", "gif", "mp4", "poster_svg", "poster_png", "report"):
         path = paths[key]
+        try:
+            display = path.resolve().relative_to(base.resolve()).as_posix()
+        except ValueError:
+            display = path.name
         if key == "mp4" and not path.exists() and shutil.which("ffmpeg") is None:
             detail = "not generated because ffmpeg is unavailable"
         elif path.exists() or key == "report":
-            detail = str(path.resolve())
+            detail = display
         else:
-            detail = f"{path.resolve()} (not generated yet)"
+            detail = f"{display} (not generated yet)"
         lines.append(f"- {labels[key]}: `{detail}`")
     return "\n".join(lines)

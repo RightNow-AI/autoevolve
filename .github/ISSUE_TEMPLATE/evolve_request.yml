@@ -1,0 +1,46 @@
+name: Evolve something
+description: Ask autoevolve to optimize code in this repository
+title: "evolve: "
+labels: ["evolve"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        autoevolve replies with a proposed contract and the evaluator it
+        would measure against. Nothing executes until a maintainer applies
+        the `evolve:approved` label. That label is the consent record.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: >
+        Say it in plain english. What should get better, and what must stay
+        correct.
+      placeholder: Make the parser faster without changing accepted syntax.
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: >
+        Optional. Keys: budget_evals, wall_clock_s, workers, evaluator,
+        target, metric, target_path, operators. Every run needs a budget
+        bound; the default is 150 evaluations.
+      value: |
+        ```autoevolve
+        budget_evals: 150
+        workers: 2
+        operators: diff
+        ```
+      render: markdown
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Acknowledgement
+      options:
+        - label: >
+            I understand a maintainer must apply `evolve:approved` before any
+            code runs, and that results are only real if the correctness gate
+            passes.
+          required: true

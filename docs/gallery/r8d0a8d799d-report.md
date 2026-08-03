@@ -54,12 +54,12 @@ The run ended because it reached the target of 10 for speedup. The best measured
 
 ## Artifacts
 
-- Dashboard: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\dashboard.html`
-- Evolution GIF: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\evolution.gif`
-- Evolution MP4: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\evolution.mp4`
-- Lineage poster SVG: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\lineage_poster.svg`
-- Lineage poster PNG: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\lineage_poster.png`
-- Report: `C:\Users\jaber\RightNow-Full\AutoEvolve\autoevolve-runs\r8d0a8d799d\report.md`
+- Dashboard: `dashboard.html (not generated yet)`
+- Evolution GIF: `evolution.gif (not generated yet)`
+- Evolution MP4: `evolution.mp4 (not generated yet)`
+- Lineage poster SVG: `lineage_poster.svg (not generated yet)`
+- Lineage poster PNG: `lineage_poster.png (not generated yet)`
+- Report: `report.md`
 
 ## Replay
 

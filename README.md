@@ -73,6 +73,16 @@ run requires a budget bound and every number it reports carries its run id.
 | GitHub issue mode | issue in, contract proposal comment, evolve:approved label as the consent record, evolution with milestone comments, artifact-embedded PR out |
 | Dashboard | self-contained dashboard.html plus evolution.gif plus lineage poster per run |
 
+## Use it on your own repository
+
+Copy `autoevolve/gh/workflow-template.yml` to `.github/workflows/evolve.yml`,
+create the `evolve` and `evolve:approved` labels, and add a model endpoint
+secret. Then open an issue titled `evolve: make X faster`. autoevolve replies
+with the contract it would measure against, and nothing executes until a
+maintainer with write access applies `evolve:approved`. That label is the
+consent record. The run ends with a pull request carrying the winning code,
+the report, and the artifacts.
+
 ## Evaluator packs
 
 Four bundled packs under evaluators/, each obeying docs/CONTRACT.md:

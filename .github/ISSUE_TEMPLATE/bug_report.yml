@@ -1,0 +1,37 @@
+name: Bug report
+description: Something behaved differently than documented
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, what you got.
+      placeholder: |
+        Command: uv run autoevolve run --evaluator evaluators/python-speedup --budget-evals 50
+        Expected: the run climbs and closes
+        Got: it stopped after four cycles with ...
+    validations:
+      required: true
+  - type: input
+    id: run_id
+    attributes:
+      label: Run id
+      description: >
+        If a run was involved, paste its id. `uv run autoevolve report
+        <run_id>` reconstructs everything needed to reproduce.
+      placeholder: r8d0a8d799d
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: Paste the actual terminal output or traceback.
+      render: text
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, and how model access is configured.
+      placeholder: Windows 11, Python 3.12, AUTOEVOLVE_LOCAL_BASE_URL
+    validations:
+      required: true

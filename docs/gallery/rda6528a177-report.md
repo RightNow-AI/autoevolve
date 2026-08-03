@@ -53,12 +53,12 @@ The run is still open after 4 evaluations. The current best measured speedup is 
 
 ## Artifacts
 
-- Dashboard: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\dashboard.html (not generated yet)`
-- Evolution GIF: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\evolution.gif (not generated yet)`
-- Evolution MP4: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\evolution.mp4 (not generated yet)`
-- Lineage poster SVG: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\lineage_poster.svg (not generated yet)`
-- Lineage poster PNG: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\lineage_poster.png (not generated yet)`
-- Report: `C:\Users\jaber\RightNow-Full\AutoEvolve\docs\gallery\report.md`
+- Dashboard: `dashboard.html (not generated yet)`
+- Evolution GIF: `evolution.gif (not generated yet)`
+- Evolution MP4: `evolution.mp4 (not generated yet)`
+- Lineage poster SVG: `lineage_poster.svg (not generated yet)`
+- Lineage poster PNG: `lineage_poster.png (not generated yet)`
+- Report: `report.md`
 
 ## Replay
 

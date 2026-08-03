@@ -1,5 +1,14 @@
-# Create the `evolve` and `evolve:approved` labels first. The approval label records
-# maintainer consent to execute the reviewed evaluator and start evolution.
+# Copy this file to .github/workflows/evolve.yml in your repository.
+#
+# Setup, in order:
+#   1. Create the `evolve` and `evolve:approved` labels. The approval label is
+#      the consent record: nothing derived from an issue executes until a
+#      maintainer with write access applies it.
+#   2. Add a model endpoint secret. Either AUTOEVOLVE_LOCAL_BASE_URL for a
+#      self hosted OpenAI compatible engine, or OPENAI_API_KEY together with
+#      the AUTOEVOLVE_MODEL repository variable. Without one of these the run
+#      cannot mutate anything and will stop with a clear error.
+#   3. Open an issue titled `evolve: <goal>` and label it `evolve`.
 name: AutoEvolve issue mode
 
 on:
@@ -24,3 +33,13 @@ jobs:
         run: uv run python -m autoevolve.gh.action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Model access. Set the local base url for a self hosted engine, or
+          # the API key plus model name for a cloud endpoint. Unset values are
+          # ignored by the endpoint resolver.
+          AUTOEVOLVE_LOCAL_BASE_URL: ${{ secrets.AUTOEVOLVE_LOCAL_BASE_URL }}
+          AUTOEVOLVE_LOCAL_MODEL: ${{ vars.AUTOEVOLVE_LOCAL_MODEL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+          AUTOEVOLVE_MODEL: ${{ vars.AUTOEVOLVE_MODEL }}
+          AUTOEVOLVE_MODEL_CHEAP: ${{ vars.AUTOEVOLVE_MODEL_CHEAP }}
+          AUTOEVOLVE_MODEL_STRONG: ${{ vars.AUTOEVOLVE_MODEL_STRONG }}
