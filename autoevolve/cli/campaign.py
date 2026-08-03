@@ -10,7 +10,7 @@ import tempfile
 from collections.abc import Callable, Iterator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -38,6 +38,9 @@ _CONTRACT_OVERRIDES: dict[str, tuple[str, bool]] = {
     "equation-discovery": ("fitness", True),
 }
 _REGISTERED_APPS: set[int] = set()
+# A cited bound older than this must be re-read before an improvement over it
+# means anything. docs/FRONTIER.md section 3.
+STALE_AFTER_DAYS = 30
 
 campaign_app = typer.Typer(
     name="campaign",
@@ -99,6 +102,83 @@ class CampaignConfig:
             wall_clock_s=_optional_float(values.get("wall_clock_s")),
             max_cost_usd=_optional_float(values.get("max_cost_usd")),
         )
+
+
+@dataclass(frozen=True)
+class LiteratureBound:
+    """One published bound a frontier campaign measures itself against.
+
+    A bound is never our measurement. It carries its source and the date a
+    human last re-read that source, so a result beating it can be labeled
+    honestly. See docs/FRONTIER.md.
+    """
+
+    claim: str
+    value: str
+    direction: str
+    who_and_year: str
+    source_url: str
+    checked_on: str
+    how_to_recheck: str
+
+    def age_days(self, today: date | None = None) -> int:
+        """Days since the source was last re-read."""
+
+        current = today or datetime.now(UTC).date()
+        try:
+            checked = date.fromisoformat(self.checked_on)
+        except ValueError:
+            return STALE_AFTER_DAYS + 1
+        return max((current - checked).days, 0)
+
+    def is_stale(self, today: date | None = None) -> bool:
+        return self.age_days(today) > STALE_AFTER_DAYS
+
+
+def load_bounds(pack_dir: Path) -> tuple[LiteratureBound, ...]:
+    """Load a frontier pack's cited bounds, or nothing when it declares none."""
+
+    path = pack_dir / "bounds.json"
+    if not path.is_file():
+        return ()
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise CampaignError(
+            f"invalid JSON in {path}: line {exc.lineno}, column {exc.colno}"
+        ) from exc
+    if not isinstance(raw, dict) or not isinstance(raw.get("bounds"), list):
+        raise CampaignError(f"{path} must contain an object with a bounds list")
+    required = (
+        "claim",
+        "value",
+        "direction",
+        "who_and_year",
+        "source_url",
+        "checked_on",
+        "how_to_recheck",
+    )
+    bounds: list[LiteratureBound] = []
+    for index, entry in enumerate(raw["bounds"]):
+        if not isinstance(entry, dict):
+            raise CampaignError(f"{path} bounds[{index}] must be an object")
+        missing = sorted(field for field in required if not entry.get(field))
+        if missing:
+            raise CampaignError(
+                f"{path} bounds[{index}] is missing required fields: {', '.join(missing)}"
+            )
+        bounds.append(
+            LiteratureBound(
+                claim=str(entry["claim"]),
+                value=str(entry["value"]),
+                direction=str(entry["direction"]),
+                who_and_year=str(entry["who_and_year"]),
+                source_url=str(entry["source_url"]),
+                checked_on=str(entry["checked_on"]),
+                how_to_recheck=str(entry["how_to_recheck"]),
+            )
+        )
+    return tuple(bounds)
 
 
 @dataclass(frozen=True)
@@ -415,6 +495,16 @@ def run_command(
         _abort("Choose only one of --proxy or --full.")
     try:
         config = find_campaign(name)
+        for bound in load_bounds(config.pack_dir):
+            if bound.is_stale():
+                typer.echo(
+                    f"WARNING stale bound: {bound.claim} = {bound.value} "
+                    f"({bound.who_and_year}) last checked {bound.checked_on}, "
+                    f"{bound.age_days()} days ago. Any result beating it is an "
+                    "improvement-candidate against a stale bound until you "
+                    "re-read the source. See docs/FRONTIER.md.",
+                    err=True,
+                )
         results = execute_campaign(
             config,
             cell_key=cell,
@@ -428,6 +518,35 @@ def run_command(
         typer.echo(
             f"{result.run_id}\t{result.cell}\t"
             f"best={format_number(result.best_fitness)}\tend={result.end_cause}"
+        )
+
+
+@campaign_app.command("bounds")
+def bounds_command(
+    name: Annotated[str, typer.Argument(help="Campaign pack name.")],
+) -> None:
+    """Print the cited literature bounds and how stale each citation is."""
+
+    try:
+        config = find_campaign(name)
+    except CampaignError as exc:
+        _abort(str(exc), code=1)
+    bounds = load_bounds(config.pack_dir)
+    if not bounds:
+        typer.echo(f"{name} declares no literature bounds.")
+        return
+    for bound in bounds:
+        age = bound.age_days()
+        flag = "STALE" if bound.is_stale() else "fresh"
+        typer.echo(
+            f"{flag}\t{bound.claim}\t{bound.value}\t{bound.who_and_year}\t"
+            f"checked {bound.checked_on} ({age} days ago)"
+        )
+        typer.echo(f"\trecheck: {bound.how_to_recheck}")
+    if any(bound.is_stale() for bound in bounds):
+        typer.echo(
+            "\nRe-read the sources above and update checked_on in bounds.json "
+            "before treating any result as an improvement."
         )
 
 

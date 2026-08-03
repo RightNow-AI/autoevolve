@@ -15,6 +15,11 @@ The claims policy. Mirrors CLAUDE.md sections 11 and 13. Enforced by CI lint
   always labeled proxy wins.
 - Never compare against a baseline you did not run in the same environment.
 
+Campaigns that attack published open problems carry extra rules, because
+their baseline is somebody else's record rather than a number we measured.
+See docs/FRONTIER.md for the claim tiers, the cited bounds registry, the
+staleness rule, and the `[lit: source]` citation marker.
+
 ## Campaign claims ladder
 
 - "candidate": any interesting artifact from a run. Needs nothing but the

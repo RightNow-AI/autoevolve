@@ -9,6 +9,9 @@ from pathlib import Path
 
 RUN_ID_PATTERN = re.compile(r"r[0-9a-f]{10}")
 NO_CLAIM_MARKER = "[no-claim]"
+# A published bound we did not measure. It must name its source, so an empty
+# or bare marker does not satisfy the lint. See docs/FRONTIER.md section 4.
+LITERATURE_PATTERN = re.compile(r"\[lit:\s*\S[^\]]{2,}\]")
 FENCE_PATTERN = re.compile(r"^\s*(`{3,}|~{3,})")
 MEASURED_CLAIM_PATTERNS = (
     re.compile(r"(?<![\w.])\d+(?:\.\d+)?x\b", re.IGNORECASE),
@@ -105,7 +108,11 @@ def _scan_file(path: Path) -> Iterator[ClaimViolation]:
             continue
         if fence is not None or not _is_measured_claim(raw_line):
             continue
-        if RUN_ID_PATTERN.search(raw_line) or NO_CLAIM_MARKER in raw_line:
+        if (
+            RUN_ID_PATTERN.search(raw_line)
+            or NO_CLAIM_MARKER in raw_line
+            or LITERATURE_PATTERN.search(raw_line) is not None
+        ):
             continue
         yield ClaimViolation(path=path, line_number=line_number, text=raw_line.strip())
 

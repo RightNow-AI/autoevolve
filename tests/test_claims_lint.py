@@ -56,3 +56,23 @@ def test_run_id_named_artifact_files_are_skipped(tmp_path):
 
     assert len(violations) == 1
     assert violations[0].path == plain
+
+
+def test_literature_marker_requires_a_named_source(tmp_path):
+    """A published bound is citable, but only with a source that names it."""
+
+    from autoevolve.cli.claims_lint import scan_claims
+
+    good = tmp_path / "cited.md"
+    good.write_text(
+        "Best known length at order 29 is 553 [lit: distributed.net OGR-29, 2014].\n",
+        encoding="utf-8",
+    )
+    bare = tmp_path / "bare.md"
+    bare.write_text("We reached a 12x speedup [lit:].\n", encoding="utf-8")
+    naked = tmp_path / "naked.md"
+    naked.write_text("We reached a 12x speedup.\n", encoding="utf-8")
+
+    violations = scan_claims([good, bare, naked])
+
+    assert {v.path for v in violations} == {bare, naked}

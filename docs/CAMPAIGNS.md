@@ -19,9 +19,14 @@ configuration.
 campaigns/<name>/
   spec.md          # goal, method, promotion ladder, honesty section (required)
   campaign.json    # machine config, schema below (required)
+  bounds.json      # cited literature bounds (required for frontier packs)
   evaluators/      # one or more evaluator folders obeying docs/CONTRACT.md
   log.md           # append-only campaign log, includes negative results
 ```
+
+A pack whose baseline is a published record is a frontier pack and must also
+obey docs/FRONTIER.md: it ships bounds.json, its results carry a claim tier,
+and `autoevolve campaign run` warns when a cited bound has gone stale.
 
 ## 3. campaign.json schema
 
