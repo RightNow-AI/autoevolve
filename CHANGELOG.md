@@ -49,8 +49,10 @@ repository's history and carries its run id.
 
 ### Known limits
 
-- The triton pack reports `mock_` metrics without a GPU. No real throughput
-  number exists or is claimed anywhere in this repository.
+- The triton pack reports `mock_` metrics without a CUDA device. Real mode
+  needs a CUDA GPU and torch, not Triton specifically, so any backend works.
+  No throughput claim appears anywhere in this repository, because no such
+  number has yet come from a run with a run id.
 - Campaigns have been exercised at proxy scale only.
 - The local model endpoint path is implemented and tested offline but has
   not been proven against a live local engine.
