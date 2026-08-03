@@ -14,18 +14,23 @@ def run_worker_loop(
     run_id: str,
     get_operator: Callable[[str], object],
     max_cycles: int | None = None,
+    island: int | None = None,
 ) -> dict[str, Any]:
     """Run mutation cycles until closure or an optional deterministic cycle cap.
 
-    The temporary U1 operator context intentionally contains only the locked
-    contract, a per-cycle RNG, run metadata, and the engine home. U3 can duck-type
-    this context while keeping core independent from ``autoevolve.mutate``.
+    The loop context intentionally contains only the locked contract, a
+    per-cycle RNG, run metadata, and the engine home. The composition root
+    (CLI or MCP worker) supplies operators that carry their own services.
+    get_operator may substitute a different operator than the hint (for
+    example under an allowlist); the submitted operator name is the one the
+    returned operator reports, so bandit stats stay truthful.
     """
 
     if max_cycles is not None and max_cycles < 0:
         raise ValueError("max_cycles must be non-negative")
-    assignment = engine.join_run(run_id, "core-loop")
-    island = assignment["island"]
+    if island is None:
+        assignment = engine.join_run(run_id, "core-loop")
+        island = assignment["island"]
     cycles = 0
     submissions = 0
     last_result: dict[str, Any] | None = None
@@ -53,10 +58,11 @@ def run_worker_loop(
         if not isinstance(files, dict):
             raise TypeError(f"operator {operator_name!r} returned no file mapping")
         notes = str(getattr(proposal, "notes", ""))
+        actual_operator = str(getattr(operator, "name", operator_name))
         last_result = engine.submit_child(
             run_id,
             bundle.parent.id,
-            operator_name,
+            actual_operator,
             files,
             notes,
         )

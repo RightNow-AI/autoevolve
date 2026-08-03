@@ -69,8 +69,8 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
             calls.append(("status", run_id))
             return {"status": "budget_exhausted"}
 
-    def fake_loop(**kwargs: Any) -> None:
-        calls.append(("loop", kwargs))
+    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None) -> None:
+        calls.append(("loop", {"run_id": run_id, "get_operator": get_operator, "island": island}))
 
     engine_module = types.ModuleType("autoevolve.core.engine")
     engine_module.Engine = FakeEngine
@@ -79,6 +79,16 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
     monkeypatch.setitem(sys.modules, "autoevolve.core.engine", engine_module)
     monkeypatch.setitem(sys.modules, "autoevolve.core.loop", loop_module)
     monkeypatch.setenv("AUTOEVOLVE_HOME", str(tmp_path / "home"))
+
+    import autoevolve.cli._data as data_module
+    import autoevolve.cli.app as app_module
+
+    monkeypatch.setattr(app_module, "_build_local_evaluator", lambda directory: None)
+    monkeypatch.setattr(
+        data_module,
+        "load_snapshot",
+        lambda home, run_id: types.SimpleNamespace(run=types.SimpleNamespace(evaluator_ref=None)),
+    )
     evaluator = tmp_path / "evaluator"
     evaluator.mkdir()
 
@@ -101,8 +111,11 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
     open_call = next(value for name, value in calls if name == "open")
     assert open_call["budget"].max_evals == 5
     loop_calls = [value for name, value in calls if name == "loop"]
-    assert loop_calls[0]["operator_names"] == ["diff", "rewrite"]
+    assert loop_calls[0]["island"] == 2
     assert loop_calls[1]["island"] == 1
+    get_operator = loop_calls[0]["get_operator"]
+    assert get_operator("diff").name == "diff"
+    assert get_operator("crossover").name == "diff"
 
 
 def test_serve_lazily_wires_stdio_and_http(monkeypatch) -> None:
