@@ -21,12 +21,25 @@ anywhere.
 
 v0 DONE per CLAUDE.md section 15: all U0 through U9 merged, all U8 proofs
 green (proof 1 r59ff8810dd, proof 2 r8d0a8d799d at 10.90x target_hit,
-proof 3 rda6528a177 dual runtime), 233 tests green with ruff clean, README
+proof 3 rda6528a177 dual runtime), 234 tests green with ruff clean, README
 gallery from real runs, adversarial review of 26 agents with 20 findings
-fixed same day (docs/reviews/2026-08-03-adversarial-review.md). No remote
-configured; nothing was pushed anywhere. Lane clones AutoEvolve-* may
-linger until the codex companion releases directory handles; safe to
-delete afterward.
+fixed same day (docs/reviews/2026-08-03-adversarial-review.md).
+
+PUBLISHED 2026-08-03 to https://github.com/RightNow-AI/autoevolve, public,
+default branch main, CI green on ubuntu-latest and windows-latest from a
+clean clone. Release prep shipped community health files, issue and PR
+templates, package metadata, CHANGELOG with run ids, and a fix making run
+reports reference artifacts relatively so shared reports carry no machine
+paths. Secret scans over the pushed tree are clean.
+
+Remaining opt-in step: issue mode is not enabled on this repository itself.
+Enabling it means copying autoevolve/gh/workflow-template.yml to
+.github/workflows/evolve.yml, creating the evolve and evolve:approved
+labels, and adding a model endpoint secret. Left off deliberately so the
+repo does not show failing runs before a key exists.
+
+Lane clones AutoEvolve-* may linger until the codex companion releases
+directory handles; safe to delete afterward.
 
 ## Merge discipline
 
