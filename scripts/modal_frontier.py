@@ -1,0 +1,170 @@
+"""Long-running autoevolve frontier search on Modal.
+
+Design note. The store is SQLite. Spreading workers across containers would
+put concurrent writers on a network filesystem, where SQLite locking is
+unreliable, so this runs ONE container with many threads instead. That uses
+the process write lock the engine already has, and it costs nothing in
+throughput because a worker spends nearly all its wall clock waiting on a
+model call rather than on CPU.
+
+GPU is deliberately absent. Superpermutation and Golomb search are integer
+CPU work; a GPU would be idle money. Kernel work is a separate app.
+
+Usage:
+    modal run scripts/modal_frontier.py::search --evaluator campaigns/golomb-ruler/evaluators/golomb \
+        --goal "..." --cell order-29 --budget 4000 --parallel 24 --hours 6
+"""
+
+from __future__ import annotations
+
+import modal
+
+REPO = "https://github.com/RightNow-AI/autoevolve"
+
+image = (
+    modal.Image.debian_slim(python_version="3.12")
+    .apt_install("git")
+    .pip_install("uv")
+    .run_commands(
+        f"git clone --depth 1 {REPO} /root/autoevolve",
+        "cd /root/autoevolve && uv sync --frozen",
+    )
+)
+
+store = modal.Volume.from_name("autoevolve-store", create_if_missing=True)
+app = modal.App("autoevolve-frontier")
+
+
+@app.function(
+    image=image,
+    volumes={"/store": store},
+    cpu=8.0,
+    memory=16384,
+    timeout=60 * 60 * 24,
+    secrets=[modal.Secret.from_name("autoevolve-model")],
+)
+def search(
+    evaluator: str,
+    goal: str,
+    budget: int = 2000,
+    parallel: int = 24,
+    cell: str | None = None,
+    seed: int = 1,
+    hours: float = 6.0,
+    target: float | None = None,
+) -> dict:
+    """Run one long frontier search and leave the store on the volume."""
+
+    import os
+    import subprocess
+
+    env = dict(os.environ)
+    env["AUTOEVOLVE_HOME"] = "/store/autoevolve"
+    env["AUTOEVOLVE_ARTIFACTS_DIR"] = "/store/runs"
+    if cell:
+        env["AUTOEVOLVE_CELL"] = cell
+
+    command = [
+        "uv",
+        "run",
+        "autoevolve",
+        "run",
+        "--evaluator",
+        evaluator,
+        "--goal",
+        goal,
+        "--budget-evals",
+        str(budget),
+        "--wall-clock-s",
+        str(int(hours * 3600)),
+        "--workers",
+        str(parallel),
+        "--parallel",
+        str(parallel),
+        "--operators",
+        "diff",
+        "--seed",
+        str(seed),
+    ]
+    if target is not None:
+        command += ["--target", str(target)]
+
+    completed = subprocess.run(
+        command,
+        cwd="/root/autoevolve",
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    store.commit()
+    tail = (completed.stdout or "")[-4000:]
+    # Printed inside the container so Modal streams it; return values are not
+    # surfaced by `modal run`.
+    print("=== autoevolve stdout tail ===", flush=True)
+    print(tail, flush=True)
+    if completed.returncode != 0:
+        print("=== stderr tail ===", flush=True)
+        print((completed.stderr or "")[-2000:], flush=True)
+    print(f"=== exit {completed.returncode} ===", flush=True)
+    return {
+        "returncode": completed.returncode,
+        "stdout_tail": tail,
+        "stderr_tail": (completed.stderr or "")[-2000:],
+    }
+
+
+@app.function(image=image, volumes={"/store": store}, timeout=900)
+def best(run_id: str | None = None) -> dict:
+    """Report the best measured result on the shared store without a rerun."""
+
+    import sqlite3
+    from pathlib import Path
+
+    db_path = Path("/store/autoevolve/autoevolve.db")
+    if not db_path.is_file():
+        return {"error": "no store yet"}
+    conn = sqlite3.connect(db_path)
+    if run_id is None:
+        row = conn.execute("SELECT id FROM runs ORDER BY created_at DESC LIMIT 1").fetchone()
+        if row is None:
+            return {"error": "no runs"}
+        run_id = row[0]
+    status, contract = conn.execute(
+        "SELECT status, contract_json FROM runs WHERE id = ?", (run_id,)
+    ).fetchone()
+    import json as _json
+
+    metric = _json.loads(contract)["metric"]
+    maximize = _json.loads(contract)["maximize"]
+    order = "DESC" if maximize else "ASC"
+    best_row = conn.execute(
+        f"SELECT s.value, p.id, p.code_ref FROM scores s JOIN programs p ON p.id = s.program_id "
+        f"WHERE p.run_id = ? AND s.metric = ? ORDER BY s.value {order} LIMIT 1",
+        (run_id, metric),
+    ).fetchone()
+    count = conn.execute(
+        "SELECT COUNT(*) FROM programs WHERE run_id = ?", (run_id,)
+    ).fetchone()[0]
+    code = ""
+    if best_row is not None:
+        source = Path("/store/autoevolve/store") / best_row[2] / "ruler.py"
+        if source.is_file():
+            text = source.read_text(encoding="utf-8")
+            if "EVOLVE-BLOCK-START" in text:
+                code = text.split("EVOLVE-BLOCK-START")[1].split("EVOLVE-BLOCK-END")[0]
+    conn.close()
+    result = {
+        "run_id": run_id,
+        "status": status,
+        "metric": metric,
+        "programs": count,
+        "best_value": best_row[0] if best_row else None,
+        "best_program": best_row[1] if best_row else None,
+    }
+    print(_json.dumps(result, indent=2), flush=True)
+    if code:
+        print("=== winning mutable region ===", flush=True)
+        print(code[:2000], flush=True)
+    return result
