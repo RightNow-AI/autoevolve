@@ -1,0 +1,14 @@
+{
+  "name": "superpermutation",
+  "domain": "superpermutation",
+  "evaluator": "evaluators/superperm",
+  "cells": [
+    {"key": "n5", "env": {"AUTOEVOLVE_CELL": "n5"}, "target": 153},
+    {"key": "n6", "env": {"AUTOEVOLVE_CELL": "n6"}, "target": 871},
+    {"key": "n7", "env": {"AUTOEVOLVE_CELL": "n7"}, "target": 5905}
+  ],
+  "proxy_budget": {"max_evals": 30, "wall_clock_s": 14400},
+  "full_budget": {"max_evals": 300, "wall_clock_s": 172800},
+  "ladder": ["proxy", "replicate-3", "fresh-checkout-rederive"],
+  "replicate_seeds": 3
+}
