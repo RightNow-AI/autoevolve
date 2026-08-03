@@ -13,3 +13,8 @@ build/
 
 # lane working notes (lane-local, orchestrator reads in place)
 LANE-PROGRESS.md
+
+# local run artifacts and proof-session leftovers
+autoevolve-runs/
+scripts/proofs/*.log
+scripts/proofs/*-last.txt
