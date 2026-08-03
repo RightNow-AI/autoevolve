@@ -1,1 +1,5 @@
-"""Core engine: db, store, archive, islands, sampling, bandit, loop. Unit U1."""
+"""Core engine: durable evolution state, mechanics, replay, and worker loop."""
+
+from autoevolve.core.engine import Engine
+
+__all__ = ["Engine"]
