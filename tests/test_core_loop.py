@@ -246,3 +246,42 @@ def test_elite_less_island_progresses_without_impossible_crossover(home: Path) -
     assert summary["skips"] == 0
     assert summary["submissions"] == 1
     assert summary["status"] == "budget_exhausted"
+
+
+def test_failing_operator_is_charged_so_the_bandit_routes_around_it(home: Path) -> None:
+    """An operator that never produces a proposal must not be selected forever.
+
+    A skip creates no program, so submit_child never runs. Without charging
+    the skip the arm stays unpulled, and unpulled-first selection keeps
+    picking it until the worker dies on the consecutive-skip cap.
+    """
+
+    from autoevolve.core.db import connection
+
+    class SkipError(Exception):
+        skip_cycle = True
+
+    class AlwaysSkip:
+        name = "rewrite"
+
+        def propose(self, bundle, ctx):
+            raise SkipError("rewrite returned no marker-bearing files")
+
+    engine, _cascade, evaluator_dir = _engine(home)
+    run_id = engine.open_run(
+        "charge the failing arm",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=5),
+        seed=31,
+    )["run_id"]
+
+    summary = run_worker_loop(engine, run_id, lambda name: AlwaysSkip(), max_cycles=3)
+
+    assert summary["skips"] == 3
+    with connection(home) as conn:
+        row = conn.execute(
+            "SELECT pulls, mean_gain FROM operators WHERE domain = ? AND name = 'rewrite'",
+            ("loop-test",),
+        ).fetchone()
+    assert int(row["pulls"]) == 3, "every skipped cycle must charge the arm"
+    assert float(row["mean_gain"]) < 0, "a failing arm must lose standing"

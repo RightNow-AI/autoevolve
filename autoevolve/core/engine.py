@@ -606,6 +606,30 @@ class Engine:
             recent_failures=recent_failures,
         )
 
+    def record_operator_skip(self, run_id: str, operator: str, reason: str) -> None:
+        """Charge an operator that failed to produce a proposal at all.
+
+        A skipped cycle creates no program, so submit_child never runs and the
+        bandit never learns anything. Because unpulled arms are preferred
+        first, an operator that always fails is selected forever and starves
+        every other arm, which is indistinguishable from that operator being
+        disabled. Charging the failure is what lets the bandit route around it.
+        """
+
+        with transaction(self.home) as conn:
+            run = conn.execute(
+                "SELECT domain FROM runs WHERE id = ?", (run_id,)
+            ).fetchone()
+            if run is None:
+                raise KeyError(f"unknown run: {run_id}")
+            bandit.update_operator(conn, str(run["domain"]), operator, 1.0, 0.0)
+            append_event(
+                conn,
+                run_id,
+                "operator_update",
+                {"operator": operator, "skipped": True, "reason": reason[:500]},
+            )
+
     @staticmethod
     def _recent_failures(conn: Any, run_id: str, limit: int = 3) -> list[str]:
         """Return the most recent gate failure reasons for operator feedback.

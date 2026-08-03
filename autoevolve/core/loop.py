@@ -70,6 +70,11 @@ def run_worker_loop(
             skips += 1
             cycles += 1
             _LOG.warning("skipped cycle %d on run %s: %s", cycles, run_id, exc)
+            charged = str(getattr(operator, "name", operator_name))
+            try:
+                engine.record_operator_skip(run_id, charged, str(exc))
+            except Exception:  # noqa: BLE001 - accounting must not kill the worker
+                _LOG.warning("could not charge %s for a skipped cycle", charged)
             if consecutive_skips >= _MAX_CONSECUTIVE_SKIPS:
                 raise RuntimeError(
                     f"{consecutive_skips} consecutive skipped cycles; last reason: {exc}"
