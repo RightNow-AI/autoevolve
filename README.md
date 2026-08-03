@@ -99,6 +99,16 @@ kernel-frontier, arch-search, algorithm-frontier, equation-discovery. Every
 campaign enforces the promotion ladder and the claims policy in code; a
 measured claim without a run id fails the test suite.
 
+## Any domain, not just code
+
+Nothing in the engine knows what a kernel or a graph is. The evaluator is the
+domain, so adding one means writing roughly two hundred lines, not changing
+the system. What decides whether a domain works is whether a candidate answer
+can be checked by a program, cheaply, with partial credit. docs/DOMAINS.md
+gives the three questions, the certificate taxonomy, and worked answers for
+AI algorithms, space, vehicles, vision, language, and mathematics, including
+which parts of each are honestly out of reach.
+
 ## Honesty
 
 docs/HONESTY.md is enforced, not aspirational. Measured-or-null, run ids on
