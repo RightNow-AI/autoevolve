@@ -32,12 +32,27 @@ Cascade = Callable[[Path, Path], EvalOutcome]
 EvaluatorLoader = Callable[[Path], object]
 
 
+_IGNORED_DIRS = {"__pycache__", ".git", ".venv"}
+_IGNORED_SUFFIXES = {".pyc", ".pyo"}
+
+
 def _candidate_files(directory: Path) -> dict[str, str]:
+    """Load a candidate's text files, skipping interpreter and VCS artifacts.
+
+    Bytecode caches appear next to any evaluator that has been imported and
+    are not part of the candidate. Only utf-8 text belongs in the store.
+    """
+
     files: dict[str, str] = {}
     if not directory.is_dir():
         raise FileNotFoundError(f"candidate directory does not exist: {directory}")
     for path in sorted(item for item in directory.rglob("*") if item.is_file()):
-        files[path.relative_to(directory).as_posix()] = path.read_text(encoding="utf-8")
+        relative = path.relative_to(directory)
+        if any(part in _IGNORED_DIRS for part in relative.parts):
+            continue
+        if path.suffix in _IGNORED_SUFFIXES:
+            continue
+        files[relative.as_posix()] = path.read_text(encoding="utf-8")
     return files
 
 

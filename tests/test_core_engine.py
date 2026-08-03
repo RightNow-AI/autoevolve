@@ -403,3 +403,17 @@ def test_discoveries_rank_keyword_overlap_then_recency(home: Path) -> None:
     rows = engine.discoveries("kernels", "speed kernels")
     assert rows[0]["id"] == "d0000000002"
     assert rows[0]["source_programs"] == ["p1"]
+
+
+def test_candidate_files_skip_bytecode_and_vcs_artifacts(tmp_path):
+    from autoevolve.core.engine import _candidate_files
+
+    (tmp_path / "solution.py").write_text("x = 1\n", encoding="utf-8")
+    cache = tmp_path / "__pycache__"
+    cache.mkdir()
+    (cache / "solution.cpython-312.pyc").write_bytes(b"\xcb\x0d\x0d\x0a junk")
+    (tmp_path / "stale.pyc").write_bytes(b"\xcb\x0d\x0d\x0a junk")
+
+    files = _candidate_files(tmp_path)
+
+    assert files == {"solution.py": "x = 1\n"}
