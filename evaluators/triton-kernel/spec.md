@@ -2,10 +2,14 @@
 
 ## Task
 
-The candidate computes `x + alpha * y` for float32 vectors. The bundled seed contains
-a Triton vector-add-and-scale kernel. Triton and Torch are imported only inside the
-real execution path. The same file contains a pure NumPy `ref` implementation outside
-the mutable block.
+The candidate computes `x + alpha * y` for float32 vectors. `AUTOEVOLVE_CELL` selects
+one of `add-1k`, `add-8k`, `scale-1k`, or `scale-8k`. The add cells use `alpha=1.0`;
+the scale cells use non-unit alpha values. The suffix selects 1024 or 8192 elements.
+When `AUTOEVOLVE_CELL` is unset, all four groups run. Any other value is rejected.
+
+The bundled seed contains a Triton vector-add-and-scale kernel. Triton and Torch are
+imported only inside the real execution path. The same file contains a pure NumPy
+`ref` implementation outside the mutable block.
 
 ## Metrics and gate
 
@@ -37,9 +41,11 @@ It returns `None` in mock mode or when the runtime does not expose those propert
 
 ## Fixture provenance
 
-`cases.json` contains vectors of sizes 1024 and 8192 with alpha values `0.375` and
-`-1.25`. Python `random.Random` seed `65537` generates every value. Values are rounded
-to seven decimal places.
+`cases.json` contains one group for each campaign cell. The add groups use `alpha=1.0`
+at sizes 1024 and 8192. The scale groups use `alpha=0.375` at size 1024 and
+`alpha=-1.25` at size 8192. Groups of the same size reuse identical vectors so only
+the operation changes. Python `random.Random` seed `65537` generates every value.
+Values are rounded to seven decimal places.
 
 Regenerate the fixture with:
 

@@ -81,15 +81,16 @@ def _kill_process_tree(process: subprocess.Popen[str]) -> None:
             process.kill()
 
 
-def _start_runner(
+def _start_isolated_process(
     command: list[str],
     cwd: Path,
-    spec: StageSpec,
+    env: dict[str, str],
+    *,
+    preexec_fn: Callable[[], None] | None = None,
 ) -> subprocess.Popen[str]:
-    # Retain the child PID so timeout handling can terminate the complete process tree.
     common: dict[str, Any] = {
         "cwd": cwd,
-        "env": _sandbox_env(),
+        "env": env,
         "stdout": subprocess.PIPE,
         "stderr": subprocess.PIPE,
         "text": True,
@@ -105,8 +106,24 @@ def _start_runner(
     return subprocess.Popen(
         command,
         start_new_session=True,
-        preexec_fn=_posix_limits(spec),
+        preexec_fn=preexec_fn,
         **common,
+    )
+
+
+def _start_runner(
+    command: list[str],
+    cwd: Path,
+    spec: StageSpec,
+) -> subprocess.Popen[str]:
+    # Retain the child PID so timeout handling can terminate the complete process tree.
+    if sys.platform == "win32":
+        return _start_isolated_process(command, cwd, _sandbox_env())
+    return _start_isolated_process(
+        command,
+        cwd,
+        _sandbox_env(),
+        preexec_fn=_posix_limits(spec),
     )
 
 
@@ -177,7 +194,10 @@ def run_stage(
             except subprocess.TimeoutExpired:
                 if process.poll() is None:
                     process.kill()
-                process.communicate()
+                try:
+                    process.communicate(timeout=1)
+                except subprocess.TimeoutExpired:
+                    pass
             raise EvalError(
                 f"timeout after {spec.timeout_s}s at stage {spec.name}"
             ) from exc

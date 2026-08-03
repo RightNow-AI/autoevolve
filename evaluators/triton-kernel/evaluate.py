@@ -22,6 +22,7 @@ PACK_DIR = Path(__file__).resolve().parent
 BASELINE_DIR = PACK_DIR / "baseline"
 FIXTURE_DIR = PACK_DIR / "fixtures"
 Case = tuple[str, np.ndarray, np.ndarray, float]
+_CELLS = frozenset({"add-1k", "add-8k", "scale-1k", "scale-8k"})
 
 _REFERENCE_MODULE: ModuleType | None = None
 
@@ -42,10 +43,20 @@ def _load_module(candidate_dir: Path) -> ModuleType:
     return module
 
 
-def _load_cases() -> list[Case]:
+def _selected_cell() -> str | None:
+    cell = os.environ.get("AUTOEVOLVE_CELL")
+    if cell is not None and cell not in _CELLS:
+        allowed = ", ".join(sorted(_CELLS))
+        raise EvalError(f"AUTOEVOLVE_CELL must be one of: {allowed}")
+    return cell
+
+
+def _load_cases(cell: str | None = None) -> list[Case]:
     raw = json.loads((FIXTURE_DIR / "cases.json").read_text(encoding="utf-8"))
     cases: list[Case] = []
     for item in raw["cases"]:
+        if cell is not None and item["cell"] != cell:
+            continue
         cases.append(
             (
                 str(item["name"]),
@@ -162,14 +173,18 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     """Run parity first, then return real throughput or explicit mock metrics."""
     if stage != 0:
         raise EvalError(f"unknown stage {stage}")
-    cases = _load_cases()
+    cases = _load_cases(_selected_cell())
     candidate = _load_module(candidate_dir)
     real = _real_mode_available()
     _check_parity(candidate, cases, real=real)
     if not real:
         return {
             GATE: 1.0,
-            "mock_score": _mock_score(candidate, candidate_dir, [x.size for _, x, _, _ in cases]),
+            "mock_score": _mock_score(
+                candidate,
+                candidate_dir,
+                [x.size for _, x, _, _ in cases],
+            ),
         }
     tflops, candidate_ms = _measure_real(candidate, cases)
     return {GATE: 1.0, "tflops": tflops, "candidate_ms": candidate_ms}

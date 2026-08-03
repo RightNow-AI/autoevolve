@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from autoevolve.core.types import EvalError, StageSpec
+from autoevolve.eval.sandbox import _kill_process_tree, _start_isolated_process
 
 _RUNNER_TIMEOUT_S = 30.0
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -78,33 +79,39 @@ def _invoke_runner(mode: str, evaluator_dir: Path) -> dict[str, Any]:
         str(evaluator_dir),
     ]
     try:
-        completed = subprocess.run(
+        process = _start_isolated_process(
             command,
-            cwd=evaluator_dir,
-            env=_runner_env(),
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=_RUNNER_TIMEOUT_S,
-            check=False,
+            evaluator_dir,
+            _runner_env(),
         )
-    except subprocess.TimeoutExpired as exc:
-        action = mode.removeprefix("--")
-        raise EvalError(f"evaluator {action} timed out after 30s") from exc
     except OSError as exc:
         raise EvalError(f"could not start evaluator runner: {exc}") from exc
+    try:
+        stdout, stderr = process.communicate(timeout=_RUNNER_TIMEOUT_S)
+    except subprocess.TimeoutExpired as exc:
+        _kill_process_tree(process)
+        try:
+            process.communicate(timeout=10)
+        except subprocess.TimeoutExpired:
+            if process.poll() is None:
+                process.kill()
+            try:
+                process.communicate(timeout=1)
+            except subprocess.TimeoutExpired:
+                pass
+        action = mode.removeprefix("--")
+        raise EvalError(f"evaluator {action} timed out after 30s") from exc
 
-    lines = completed.stdout.splitlines()
+    lines = stdout.splitlines()
     if not lines:
         raise EvalError(
-            "evaluator runner produced no JSON response" + _stderr_suffix(completed.stderr)
+            "evaluator runner produced no JSON response" + _stderr_suffix(stderr)
         )
     try:
         payload = json.loads(lines[-1])
     except json.JSONDecodeError as exc:
         raise EvalError(
-            "evaluator runner returned invalid JSON" + _stderr_suffix(completed.stderr)
+            "evaluator runner returned invalid JSON" + _stderr_suffix(stderr)
         ) from exc
     if not isinstance(payload, dict):
         raise EvalError("evaluator runner response must be a JSON object")
