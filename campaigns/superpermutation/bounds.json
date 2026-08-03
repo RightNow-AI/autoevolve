@@ -1,0 +1,49 @@
+{
+  "bounds": [
+    {
+      "claim": "proven minimum superpermutation length on 5 symbols",
+      "value": "153",
+      "direction": "lower_is_better",
+      "who_and_year": "Ben Chaffin, 2014; summarized by Engen and Vatter, 2021",
+      "source_url": "https://arxiv.org/abs/1810.08252",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read the superpermutation section and confirm that exhaustive search rules out every length below 153"
+    },
+    {
+      "claim": "published lower bound for a minimum superpermutation on 6 symbols",
+      "value": "867",
+      "direction": "higher_is_better",
+      "who_and_year": "anonymous poster, 2011; formalized by Houston, Pantone, and Vatter, 2018",
+      "source_url": "https://oeis.org/A376269",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read OEIS A376269 and its linked proof of the lower bound n! + (n-1)! + (n-2)! + n - 3"
+    },
+    {
+      "claim": "published superpermutation construction length on 6 symbols",
+      "value": "872",
+      "direction": "lower_is_better",
+      "who_and_year": "Robin Houston, 2014",
+      "source_url": "https://arxiv.org/abs/1408.5108",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read the abstract and explicit 6-symbol counterexample in arXiv 1408.5108"
+    },
+    {
+      "claim": "published lower bound for a minimum superpermutation on 7 symbols",
+      "value": "5884",
+      "direction": "higher_is_better",
+      "who_and_year": "anonymous poster, 2011; formalized by Houston, Pantone, and Vatter, 2018",
+      "source_url": "https://oeis.org/A376269",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read OEIS A376269 and evaluate its stated lower-bound formula at n = 7"
+    },
+    {
+      "claim": "published superpermutation construction length on 7 symbols",
+      "value": "5906",
+      "direction": "lower_is_better",
+      "who_and_year": "Greg Egan, 2019",
+      "source_url": "https://www.gregegan.net/SCIENCE/Superpermutations/Superpermutations.html",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read the breaking-news section and independently gate the linked 5906-character certificate"
+    }
+  ]
+}
