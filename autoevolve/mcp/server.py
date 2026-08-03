@@ -76,6 +76,7 @@ def _serialize_parent_bundle(bundle: object) -> dict[str, Any]:
         "inspirations": inspirations,
         "discoveries": _json_safe(typed_bundle.discoveries),
         "operator_hint": _json_safe(typed_bundle.operator_hint),
+        "parent_sample_seq": _json_safe(typed_bundle.parent_sample_seq),
     }
     crossover_parent = typed_bundle.crossover_parent
     crossover_files = typed_bundle.crossover_files
@@ -109,6 +110,7 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
         instructions=(
             "Read get_contract before joining a run. In every worker cycle, call next_parent, "
             "read its inspirations and discoveries, submit one child, then call run_status. "
+            "Echo parent_sample_seq from next_parent into submit_child. "
             "Change marked files only inside EVOLVE-BLOCK regions. Check every result for an "
             "error key before continuing, and report measured scores and artifact paths exactly."
         ),
@@ -198,8 +200,8 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
 
         Returns: {"parent": Program fields, "parent_files": {path: content}, "inspirations":
         [{"program": Program fields, "scores": dict, "files_excerpt": {path: content}}],
-        "discoveries": [str], "operator_hint": str|null, and optional "crossover_parent" and
-        "crossover_files"}, or the standard error dict.
+        "discoveries": [str], "operator_hint": str|null, "parent_sample_seq": int, and
+        optional "crossover_parent" and "crossover_files"}, or the standard error dict.
 
         Mistake to avoid: never mutate before reading inspirations and discoveries.
         """
@@ -215,11 +217,12 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
         operator: str,
         files: dict[str, str],
         notes: str = "",
+        parent_sample_seq: int | None = None,
     ) -> dict[str, Any]:
         """Submit full child file contents for evaluation and archive insertion.
 
-        Call this once after producing one mutation from the current parent bundle. Use the
-        operator selected or suggested for the cycle, and explain material reasoning in notes.
+        Call this once after producing one mutation from the current parent bundle. Echo its
+        parent_sample_seq, use the selected or suggested operator, and explain reasoning in notes.
 
         Returns: {"program_id": str, "gate_passed": bool, "scores": dict, "fitness": number,
         "archive_improved": bool, "best_fitness": number, "plateau": bool,
@@ -229,7 +232,14 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
         """
         try:
             return _dict_result(
-                runtime_engine.submit_child(run_id, parent_id, operator, files, notes)
+                runtime_engine.submit_child(
+                    run_id,
+                    parent_id,
+                    operator,
+                    files,
+                    notes,
+                    parent_sample_seq=parent_sample_seq,
+                )
             )
         except Exception as exc:
             return _error_result(exc, identifier_lookup=True)

@@ -86,6 +86,7 @@ def run_worker_loop(
             actual_operator,
             files,
             notes,
+            parent_sample_seq=bundle.parent_sample_seq,
         )
         cycles += 1
         if not last_result.get("rejected", False):

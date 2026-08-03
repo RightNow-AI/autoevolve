@@ -123,3 +123,4 @@ class ParentBundle:
     operator_hint: str | None = None
     crossover_parent: Program | None = None
     crossover_files: dict[str, str] | None = None
+    parent_sample_seq: int | None = None

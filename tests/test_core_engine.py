@@ -444,3 +444,226 @@ def test_open_run_target_override_locks_contract_and_stops_on_hit(home: Path) ->
     )
     assert result["gate_passed"]
     assert engine.run_status(run_id)["status"] == "target_hit"
+
+
+def test_open_run_synthesis_receives_resolved_endpoint(
+    home: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from autoevolve.mutate import models as models_module
+    from autoevolve.synth import pipeline as synth_module
+
+    endpoint = object()
+    resolution_attempts: list[str] = []
+    synthesized_with: list[object] = []
+
+    def fake_resolve_endpoint(tier: str) -> object | None:
+        resolution_attempts.append(tier)
+        return endpoint
+
+    def fake_synthesize(
+        goal_text: str,
+        workdir: Path,
+        resolved_endpoint: object,
+    ) -> Path:
+        assert goal_text == "synthesize evaluator"
+        assert workdir.is_dir()
+        synthesized_with.append(resolved_endpoint)
+        return workdir
+
+    monkeypatch.setattr(models_module, "resolve_endpoint", fake_resolve_endpoint)
+    monkeypatch.setattr(synth_module, "synthesize", fake_synthesize)
+    engine, cascade, _ = _make_engine(
+        home,
+        _contract(),
+        [_outcome(1.0), _outcome(1.0), _outcome(1.0)],
+    )
+
+    opened = engine.open_run(
+        "synthesize evaluator",
+        evaluator_ref=None,
+        budget=Budget(max_evals=1),
+    )
+
+    assert opened["contract"].baseline == 1.0
+    assert resolution_attempts == ["strong"]
+    assert synthesized_with == [endpoint]
+    assert len(cascade.calls) == 3
+
+
+def test_open_run_synthesis_requires_configured_endpoint(
+    home: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from autoevolve.mutate import models as models_module
+    from autoevolve.synth import pipeline as synth_module
+
+    resolution_attempts: list[str] = []
+
+    def no_endpoint(tier: str) -> None:
+        resolution_attempts.append(tier)
+        return None
+
+    def unexpected_synthesis(*args: object, **kwargs: object) -> Path:
+        raise AssertionError("synthesize should not run without an endpoint")
+
+    monkeypatch.setattr(models_module, "resolve_endpoint", no_endpoint)
+    monkeypatch.setattr(synth_module, "synthesize", unexpected_synthesis)
+    engine, _, _ = _make_engine(home, _contract(), [])
+
+    with pytest.raises(ValueError) as exc_info:
+        engine.open_run(
+            "missing endpoint",
+            evaluator_ref=None,
+            budget=Budget(max_evals=1),
+        )
+
+    message = str(exc_info.value)
+    assert resolution_attempts == ["strong", "cheap"]
+    assert "AUTOEVOLVE_LOCAL_BASE_URL" in message
+    assert "OPENAI_API_KEY" in message
+    assert "AUTOEVOLVE_MODEL" in message
+
+
+def test_next_parent_degrades_crossover_hint_without_partner(home: Path) -> None:
+    engine, _, evaluator_dir = _make_engine(
+        home,
+        _contract(),
+        [_outcome(1.0), _outcome(1.0), _outcome(1.0), _outcome(2.0)],
+    )
+    run_id = engine.open_run(
+        "single cell crossover",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=3),
+        workers=2,
+        seed=31,
+    )["run_id"]
+    first = engine.next_parent(run_id, 0)
+    engine.submit_child(
+        run_id,
+        first.parent.id,
+        "agentic",
+        {"candidate.py": "value = 2\n"},
+    )
+
+    bundle = engine.next_parent(run_id, 1)
+
+    assert bundle.operator_hint == "diff"
+    assert bundle.crossover_parent is None
+    with connection(home) as conn:
+        sample = load_events(conn, run_id, "parent_sampled")[-1]
+    assert sample["payload"]["operator_hint"] == bundle.operator_hint
+    assert sample["payload"]["crossover_parent_id"] is None
+
+
+def test_parent_sample_seq_correlates_out_of_order_island_submissions(home: Path) -> None:
+    engine, _, evaluator_dir = _make_engine(
+        home,
+        _contract(),
+        [
+            _outcome(1.0),
+            _outcome(1.0),
+            _outcome(1.0),
+            _outcome(2.0),
+            _outcome(3.0),
+        ],
+    )
+    run_id = engine.open_run(
+        "correlate concurrent samples",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=5),
+        workers=2,
+        seed=37,
+    )["run_id"]
+    island_zero = engine.next_parent(run_id, 0)
+    island_one = engine.next_parent(run_id, 1)
+    latest_island_zero = engine.next_parent(run_id, 0)
+    assert island_zero.parent.id == island_one.parent.id
+    assert island_one.parent.id == latest_island_zero.parent.id
+    assert island_zero.parent_sample_seq is not None
+    assert island_one.parent_sample_seq is not None
+    assert latest_island_zero.parent_sample_seq is not None
+    assert (
+        island_zero.parent_sample_seq
+        < island_one.parent_sample_seq
+        < latest_island_zero.parent_sample_seq
+    )
+
+    island_one_result = engine.submit_child(
+        run_id,
+        island_one.parent.id,
+        "diff",
+        {"candidate.py": "value = 2\n"},
+        parent_sample_seq=island_one.parent_sample_seq,
+    )
+    island_zero_result = engine.submit_child(
+        run_id,
+        island_zero.parent.id,
+        "rewrite",
+        {"candidate.py": "value = 3\n"},
+        parent_sample_seq=island_zero.parent_sample_seq,
+    )
+
+    expected_islands = {
+        island_zero_result["program_id"]: 0,
+        island_one_result["program_id"]: 1,
+    }
+    with connection(home) as conn:
+        programs = conn.execute(
+            "SELECT id, island FROM programs WHERE id IN (?, ?)",
+            tuple(expected_islands),
+        ).fetchall()
+        edges = conn.execute(
+            "SELECT child_id, kind FROM edges WHERE child_id IN (?, ?)",
+            tuple(expected_islands),
+        ).fetchall()
+        submissions = load_events(conn, run_id, "child_submitted")
+
+    assert {str(row["id"]): int(row["island"]) for row in programs} == expected_islands
+    assert {
+        child_id: sorted(str(row["kind"]) for row in edges if row["child_id"] == child_id)
+        for child_id in expected_islands
+    } == {child_id: ["parent"] for child_id in expected_islands}
+    submitted_sequences = {
+        event["payload"]["program_id"]: event["payload"]["parent_sample_seq"]
+        for event in submissions
+        if event["payload"]["program_id"] in expected_islands
+    }
+    assert submitted_sequences == {
+        island_zero_result["program_id"]: island_zero.parent_sample_seq,
+        island_one_result["program_id"]: island_one.parent_sample_seq,
+    }
+
+
+def test_legacy_submission_prefers_newest_matching_parent_sample(home: Path) -> None:
+    engine, _, evaluator_dir = _make_engine(
+        home,
+        _contract(),
+        [_outcome(1.0), _outcome(1.0), _outcome(1.0), _outcome(2.0)],
+    )
+    run_id = engine.open_run(
+        "legacy newest sample",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=2),
+        workers=2,
+        seed=41,
+    )["run_id"]
+    older = engine.next_parent(run_id, 0)
+    newer = engine.next_parent(run_id, 1)
+    assert older.parent.id == newer.parent.id
+
+    result = engine.submit_child(
+        run_id,
+        newer.parent.id,
+        "diff",
+        {"candidate.py": "value = 2\n"},
+    )
+
+    with connection(home) as conn:
+        program = conn.execute(
+            "SELECT island FROM programs WHERE id = ?",
+            (result["program_id"],),
+        ).fetchone()
+        submission = load_events(conn, run_id, "child_submitted")[-1]
+    assert int(program["island"]) == 1
+    assert submission["payload"]["parent_sample_seq"] == newer.parent_sample_seq
