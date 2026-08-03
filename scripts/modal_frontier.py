@@ -18,16 +18,48 @@ Usage:
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import modal
 
 REPO = "https://github.com/RightNow-AI/autoevolve"
+
+
+def _head_sha() -> str:
+    """The commit this image must contain.
+
+    Modal caches images by their build steps. A plain `git clone` of the
+    default branch produces an identical step every time, so the cached layer
+    is reused and containers keep running whatever code existed at the first
+    build. Baking the commit into the step makes the image rebuild whenever
+    the repository moves, which is the difference between testing your fixes
+    and testing a snapshot from hours ago.
+    """
+
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=str(Path(__file__).resolve().parents[1]),
+        )
+        return result.stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "main"
+
+
+COMMIT = _head_sha()
 
 image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("git")
     .pip_install("uv")
     .run_commands(
-        f"git clone --depth 1 {REPO} /root/autoevolve",
+        f"git clone {REPO} /root/autoevolve",
+        f"cd /root/autoevolve && git checkout {COMMIT}",
         "cd /root/autoevolve && uv sync --frozen",
     )
 )
