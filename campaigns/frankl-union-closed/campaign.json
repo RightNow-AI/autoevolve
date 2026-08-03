@@ -1,0 +1,35 @@
+{
+  "name": "frankl-union-closed",
+  "domain": "frankl-union-closed",
+  "evaluator": "evaluators/ucf",
+  "cells": [
+    {
+      "key": "u12-validation",
+      "env": {
+        "AUTOEVOLVE_UCF_NMAX": "12",
+        "AUTOEVOLVE_UCF_MMAX": "20000"
+      },
+      "target": 0.5
+    },
+    {
+      "key": "u13-frontier",
+      "env": {
+        "AUTOEVOLVE_UCF_NMAX": "13",
+        "AUTOEVOLVE_UCF_MMAX": "20000"
+      },
+      "target": 0.49999
+    },
+    {
+      "key": "u24-frontier",
+      "env": {
+        "AUTOEVOLVE_UCF_NMAX": "24",
+        "AUTOEVOLVE_UCF_MMAX": "20000"
+      },
+      "target": 0.49999
+    }
+  ],
+  "proxy_budget": {"max_evals": 30},
+  "full_budget": {"max_evals": 300},
+  "ladder": ["proxy", "replicate-3", "scaled"],
+  "replicate_seeds": 3
+}

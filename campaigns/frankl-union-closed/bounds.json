@@ -1,0 +1,31 @@
+{
+  "bounds": [
+    {
+      "claim": "Frankl counterexample threshold for maximum element frequency ratio",
+      "value": "1/2",
+      "direction": "lower_is_better",
+      "who_and_year": "Peter Frankl, 1979, as cataloged by Douglas West",
+      "source_url": "https://dwest.web.illinois.edu/openp/unionclos.html",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "confirm that the problem remains open and that the conjectured threshold is one half"
+    },
+    {
+      "claim": "proved universal lower bound for maximum element frequency ratio",
+      "value": "(3-sqrt(5))/2",
+      "direction": "lower_is_better",
+      "who_and_year": "Alweiss, Huang, and Sellke, 2024",
+      "source_url": "https://www.combinatorics.org/ojs/index.php/eljc/article/view/v31i3p35",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read the abstract and theorem statement for the exact constant (3-sqrt(5))/2"
+    },
+    {
+      "claim": "minimum maximum element frequency ratio for ground sets of size at most 12",
+      "value": "1/2",
+      "direction": "lower_is_better",
+      "who_and_year": "Vuckovic and Zivkovic, 2017",
+      "source_url": "https://ipsitransactions.org/journals/papers/tir/2017jan/p9.pdf",
+      "checked_on": "2026-08-04",
+      "how_to_recheck": "read the 12-element verification and combine it with the powerset equality example"
+    }
+  ]
+}
