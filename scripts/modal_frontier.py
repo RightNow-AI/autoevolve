@@ -176,6 +176,81 @@ def search(
     }
 
 
+gpu_image = image.pip_install(
+    "torch", extra_index_url="https://download.pytorch.org/whl/cu128"
+)
+
+
+@app.function(
+    image=gpu_image,
+    volumes={"/store": store},
+    gpu="A10G",
+    cpu=4.0,
+    memory=16384,
+    timeout=60 * 60 * 24,
+    secrets=[modal.Secret.from_name("autoevolve-model")],
+)
+def search_gpu(
+    goal: str,
+    budget: int = 400,
+    parallel: int = 6,
+    seed: int = 1,
+    hours: float = 3.0,
+    store: str = "kernel",
+) -> dict:
+    """Evolve a GPU kernel where the answer cannot be recalled.
+
+    Nobody has published the optimal kernel for this device on this workload,
+    so a passing result came from measurement rather than memory. Throughput
+    is measured on the device the candidate ran on, against a roofline derived
+    from that device's own memory bandwidth.
+
+    Parallelism is deliberately low: every candidate contends for one GPU, so
+    threads past a handful only add measurement noise.
+    """
+
+    import os
+    import subprocess
+
+    env = dict(os.environ)
+    env["AUTOEVOLVE_HOME"] = f"/store/{store}/autoevolve"
+    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store}/runs"
+
+    probe = subprocess.run(
+        ["uv", "run", "python", "-c", "import torch;print(torch.cuda.get_device_name(0))"],
+        cwd="/root/autoevolve",
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    print(f"device: {probe.stdout.strip() or probe.stderr.strip()[:200]}", flush=True)
+
+    completed = subprocess.run(
+        [
+            "uv", "run", "autoevolve", "run",
+            "--evaluator", "evaluators/triton-kernel",
+            "--goal", goal,
+            "--budget-evals", str(budget),
+            "--wall-clock-s", str(int(hours * 3600)),
+            "--workers", str(parallel),
+            "--parallel", str(parallel),
+            "--operators", "diff,rewrite",
+            "--seed", str(seed),
+        ],
+        cwd="/root/autoevolve",
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    store.commit()
+    print((completed.stdout or "")[-4000:], flush=True)
+    if completed.returncode != 0:
+        print((completed.stderr or "")[-2000:], flush=True)
+    return {"returncode": completed.returncode}
+
+
 @app.function(image=image, volumes={"/store": store}, timeout=900)
 def best(run_id: str | None = None, store_name: str = "default") -> dict:
     """Report the best measured result on one problem store without a rerun."""
