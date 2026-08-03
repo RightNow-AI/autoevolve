@@ -146,6 +146,7 @@ def _emit(stream: TextIO, payload: dict[str, Any]) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    _install_socket_block()
     real_stdout = sys.stdout
     try:
         with contextlib.redirect_stdout(sys.stderr):
@@ -155,7 +156,6 @@ def main(argv: list[str] | None = None) -> int:
                 payload = {"ok": True, "ceiling": _ceiling(args.ceiling.resolve())}
             else:
                 evaluator_raw, candidate_raw, stage_raw = args.evaluate
-                _install_socket_block()
                 metrics = _evaluate(
                     Path(evaluator_raw).resolve(),
                     Path(candidate_raw).resolve(),

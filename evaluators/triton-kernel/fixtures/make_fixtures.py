@@ -7,7 +7,12 @@ import random
 from pathlib import Path
 
 SEED = 65_537
-CASES = ((1_024, 0.375), (8_192, -1.25))
+CASES = (
+    ("add-1k", 1_024, 1.0),
+    ("add-8k", 8_192, 1.0),
+    ("scale-1k", 1_024, 0.375),
+    ("scale-8k", 8_192, -1.25),
+)
 FIXTURE_DIR = Path(__file__).resolve().parent
 
 
@@ -15,12 +20,19 @@ def build_cases() -> dict[str, object]:
     """Return stable float lists without requiring NumPy or Triton."""
     rng = random.Random(SEED)
     cases: list[dict[str, object]] = []
-    for size, alpha in CASES:
-        x = [round(rng.uniform(-2.0, 2.0), 7) for _ in range(size)]
-        y = [round(rng.uniform(-2.0, 2.0), 7) for _ in range(size)]
+    vectors: dict[int, tuple[list[float], list[float]]] = {}
+    for cell, size, alpha in CASES:
+        if size not in vectors:
+            vectors[size] = (
+                [round(rng.uniform(-2.0, 2.0), 7) for _ in range(size)],
+                [round(rng.uniform(-2.0, 2.0), 7) for _ in range(size)],
+            )
+        x, y = vectors[size]
+        operation = cell.split("-", maxsplit=1)[0]
         cases.append(
             {
-                "name": f"vector-{size}",
+                "cell": cell,
+                "name": f"vector-{size}-{operation}",
                 "size": size,
                 "alpha": alpha,
                 "x": x,
@@ -42,4 +54,3 @@ def write_fixtures(output_dir: Path = FIXTURE_DIR) -> None:
 
 if __name__ == "__main__":
     write_fixtures()
-

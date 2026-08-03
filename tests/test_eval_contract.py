@@ -1,12 +1,17 @@
+import time
 from pathlib import Path
 
 import pytest
 
+import autoevolve.eval.contract as contract_module
 from autoevolve.core.types import EvalError, StageSpec
 from autoevolve.eval.contract import load_evaluator
 
 FIXTURES = Path(__file__).parent / "fixtures"
 TOY_EVALUATOR = FIXTURES / "eval_toy"
+SOCKET_IMPORT_EVALUATOR = FIXTURES / "eval_socket_import"
+SOCKET_CEILING_EVALUATOR = FIXTURES / "eval_socket_ceiling"
+SPAWN_IMPORT_EVALUATOR = FIXTURES / "eval_spawn_on_import"
 
 
 def test_load_evaluator_reads_child_reported_contract() -> None:
@@ -43,12 +48,31 @@ def test_load_evaluator_surfaces_import_failure(tmp_path: Path) -> None:
         load_evaluator(evaluator_dir)
 
 
-def test_loader_carries_metric_declaration(toy_evaluator_dir=None):
-    from pathlib import Path
+def test_load_evaluator_blocks_network_during_module_import() -> None:
+    with pytest.raises(EvalError, match="network disabled in sandbox"):
+        load_evaluator(SOCKET_IMPORT_EVALUATOR)
 
-    from autoevolve.eval.contract import load_evaluator
 
-    toy = Path(__file__).parent / "fixtures" / "eval_toy"
-    evaluator = load_evaluator(toy)
+def test_evaluator_ceiling_blocks_network_call() -> None:
+    evaluator = load_evaluator(SOCKET_CEILING_EVALUATOR)
+
+    with pytest.raises(EvalError, match="network disabled in sandbox"):
+        evaluator.ceiling()
+
+
+def test_describe_timeout_kills_spawned_grandchild(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(contract_module, "_RUNNER_TIMEOUT_S", 0.5)
+    started = time.monotonic()
+
+    with pytest.raises(EvalError, match="evaluator describe timed out after 30s"):
+        load_evaluator(SPAWN_IMPORT_EVALUATOR)
+
+    assert time.monotonic() - started < 5.0
+
+
+def test_loader_carries_metric_declaration() -> None:
+    evaluator = load_evaluator(TOY_EVALUATOR)
     assert evaluator.metric == "score"
     assert evaluator.maximize is True

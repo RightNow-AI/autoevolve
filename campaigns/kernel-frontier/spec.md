@@ -3,8 +3,11 @@
 ## Goal
 
 This campaign studies add and add-with-scale vector kernels at two fixture sizes.
-Each cell is selected with `AUTOEVOLVE_CELL`. The evaluator path is the bundled
-Triton kernel evaluator.
+Each cell is selected with `AUTOEVOLVE_CELL`: `add-1k` and `add-8k` use `alpha=1.0`,
+while `scale-1k` uses `alpha=0.375` and `scale-8k` uses `alpha=-1.25`. The suffix
+selects 1024 or 8192 elements. The evaluator rejects unknown cells and evaluates all
+four groups only when the variable is unset. The evaluator path is the bundled Triton
+kernel evaluator.
 
 ## Method
 
@@ -23,4 +26,3 @@ run. The campaign runner never claims the scaled stage automatically.
 Without a compatible GPU, every returned score metric has a `mock_` prefix. A mock
 metric is only a deterministic scheduling signal. It is not a performance claim.
 GPU performance can be reported only from a real run with its exact run id.
-
