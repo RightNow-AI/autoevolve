@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Callable
 from types import SimpleNamespace
 from typing import Any
@@ -9,6 +10,7 @@ from typing import Any
 from autoevolve.core.engine import Engine
 
 _MAX_CONSECUTIVE_SKIPS = 25
+_LOG = logging.getLogger("autoevolve.loop")
 
 
 def run_worker_loop(
@@ -66,6 +68,7 @@ def run_worker_loop(
             consecutive_skips += 1
             skips += 1
             cycles += 1
+            _LOG.warning("skipped cycle %d on run %s: %s", cycles, run_id, exc)
             if consecutive_skips >= _MAX_CONSECUTIVE_SKIPS:
                 raise RuntimeError(
                     f"{consecutive_skips} consecutive skipped cycles; last reason: {exc}"
