@@ -69,7 +69,7 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
             calls.append(("status", run_id))
             return {"status": "budget_exhausted"}
 
-    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None):
+    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None, operators=None):
         calls.append(("loop", {"run_id": run_id, "get_operator": get_operator, "island": island}))
         return {"submissions": 1, "skips": 0}
 
@@ -189,7 +189,7 @@ def test_parallel_workers_each_join_their_own_island(tmp_path: Path, monkeypatch
         def run_status(self, run_id: str) -> dict[str, str]:
             return {"status": "budget_exhausted"}
 
-    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None):
+    def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None, operators=None):
         with lock:
             islands.append(island)
         return {"submissions": 2, "skips": 0}

@@ -20,6 +20,7 @@ def run_worker_loop(
     max_cycles: int | None = None,
     island: int | None = None,
     on_submission: Callable[[dict[str, Any]], None] | None = None,
+    operators: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Run mutation cycles until closure or an optional deterministic cycle cap.
 
@@ -46,7 +47,7 @@ def run_worker_loop(
         status = engine.run_status(run_id)
         if status["status"] != "open":
             break
-        bundle = engine.next_parent(run_id, island)
+        bundle = engine.next_parent(run_id, island, operators)
         operator_name = bundle.operator_hint or "diff"
         operator = get_operator(operator_name)
         propose = getattr(operator, "propose", None)

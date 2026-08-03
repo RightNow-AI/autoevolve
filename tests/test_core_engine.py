@@ -667,3 +667,35 @@ def test_legacy_submission_prefers_newest_matching_parent_sample(home: Path) -> 
         submission = load_events(conn, run_id, "child_submitted")[-1]
     assert int(program["island"]) == 1
     assert submission["payload"]["parent_sample_seq"] == newer.parent_sample_seq
+
+
+def test_next_parent_only_hints_operators_the_worker_can_run(home: Path) -> None:
+    """A hint outside the worker's allowlist starves the bandit.
+
+    The selector prefers unpulled arms alphabetically, so it hints agentic
+    forever. A worker without agentic substitutes another operator, the pull
+    is recorded against the substitute, agentic stays unpulled, and every
+    cycle collapses onto one operator.
+    """
+
+    engine, _cascade, evaluator_dir = _make_engine(
+        home,
+        _contract(),
+        [_outcome(1.0), _outcome(1.0), _outcome(1.0)],
+    )
+    run_id = engine.open_run(
+        "restricted operators",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=5),
+        seed=11,
+    )["run_id"]
+    engine.join_run(run_id, "test")
+
+    unrestricted = engine.next_parent(run_id, 0)
+    assert unrestricted.operator_hint == "agentic"
+
+    restricted = engine.next_parent(run_id, 0, ("diff", "rewrite"))
+    assert restricted.operator_hint in {"diff", "rewrite"}
+
+    with pytest.raises(ValueError, match="unknown operators"):
+        engine.next_parent(run_id, 0, ("teleport",))

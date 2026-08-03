@@ -446,8 +446,21 @@ class Engine:
             return [str(item) for item in decoded]
         return [str(decoded)]
 
-    def next_parent(self, run_id: str, island: int) -> ParentBundle:
-        """Choose a deterministic parent and assemble its mutation context."""
+    def next_parent(
+        self,
+        run_id: str,
+        island: int,
+        operators: tuple[str, ...] | None = None,
+    ) -> ParentBundle:
+        """Choose a deterministic parent and assemble its mutation context.
+
+        operators restricts the bandit to arms this worker can actually run.
+        Without it the selector may hint an operator the worker does not
+        have, the worker substitutes a different one, and the pull is
+        recorded against the substitute. The hinted arm then stays unpulled
+        and is hinted forever, which silently collapses every cycle onto one
+        operator and starves the bandit of feedback.
+        """
 
         with transaction(self.home) as conn:
             run = conn.execute("SELECT * FROM runs WHERE id = ?", (run_id,)).fetchone()
@@ -460,11 +473,19 @@ class Engine:
                 raise ValueError(f"invalid island {island} for run {run_id}")
             elites = archive.current_elites(conn, run_id)
             has_cross_island_elite = any(elite.program.island != island for elite in elites)
+            allowed = tuple(operators) if operators else bandit.OPERATORS
+            unknown = sorted(set(allowed) - set(bandit.OPERATORS))
+            if unknown:
+                raise ValueError(f"unknown operators: {', '.join(unknown)}")
             available_operators = tuple(
                 name
-                for name in bandit.OPERATORS
+                for name in allowed
                 if name != "crossover" or has_cross_island_elite
             )
+            if not available_operators:
+                available_operators = tuple(name for name in allowed if name != "crossover")
+            if not available_operators:
+                raise ValueError("no operator is available for this worker")
             operator_hint = bandit.select_operator(
                 conn,
                 str(run["domain"]),

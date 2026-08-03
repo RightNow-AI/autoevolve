@@ -119,7 +119,7 @@ def run_command(
             typer.echo(f"Opened {run_id}; ceiling analysis closed it as infeasible.")
         else:
             get_operator = _build_get_operator(operator_names, evaluator)
-            summaries = _drive_workers(engine, run_id, get_operator, parallel)
+            summaries = _drive_workers(engine, run_id, get_operator, parallel, operator_names)
             _print_worker_summaries(summaries)
     except (ValueError, RuntimeError) as exc:
         _abort(str(exc))
@@ -265,6 +265,7 @@ def _drive_workers(
     run_id: str,
     get_operator: Callable[[str], object],
     parallel: int,
+    operator_names: list[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Run one or more worker threads against a single open run.
 
@@ -281,7 +282,13 @@ def _drive_workers(
         joined = engine.join_run(run_id, runtime=f"cli-{index}")
         island = int(joined["island"])
         typer.echo(f"worker {index} joined island {island}.")
-        return run_worker_loop(engine, run_id, get_operator, island=island)
+        return run_worker_loop(
+            engine,
+            run_id,
+            get_operator,
+            island=island,
+            operators=tuple(operator_names) if operator_names else None,
+        )
 
     if parallel == 1:
         return [work(0)]
