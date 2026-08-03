@@ -1,0 +1,15 @@
+# python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+
+# autoevolve run state (never commit run databases or artifacts)
+.autoevolve/
+
+# lane working notes (lane-local, orchestrator reads in place)
+LANE-PROGRESS.md
