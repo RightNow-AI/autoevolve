@@ -53,6 +53,7 @@ def search(
     seed: int = 1,
     hours: float = 6.0,
     target: float | None = None,
+    operators: str = "diff,rewrite,crossover",
 ) -> dict:
     """Run one long frontier search and leave the store on the volume."""
 
@@ -82,8 +83,10 @@ def search(
         str(parallel),
         "--parallel",
         str(parallel),
+        # agentic is excluded by default: it shells out to a coding CLI that
+        # is not installed in this image, so every cycle would be a skip.
         "--operators",
-        "diff",
+        operators,
         "--seed",
         str(seed),
     ]
@@ -175,8 +178,26 @@ def best(run_id: str | None = None) -> dict:
         (run_id, metric, gate),
     ).fetchone()
     passed = conn.execute(
-        "SELECT COUNT(DISTINCT program_id) FROM scores WHERE metric = ? AND value = 1.0",
-        (gate,),
+        "SELECT COUNT(DISTINCT s.program_id) FROM scores s JOIN programs p "
+        "ON p.id = s.program_id WHERE p.run_id = ? AND s.metric = ? AND s.value = 1.0",
+        (run_id, gate),
+    ).fetchone()[0]
+    operator_mix = dict(
+        conn.execute(
+            "SELECT operator, COUNT(*) FROM programs WHERE run_id = ? GROUP BY operator",
+            (run_id,),
+        ).fetchall()
+    )
+    arms = {
+        row[0]: {"pulls": row[1], "improvements": row[2], "mean_gain": round(row[3], 4)}
+        for row in conn.execute(
+            "SELECT name, pulls, improvements, mean_gain FROM operators WHERE domain = ?",
+            (_json.loads(contract)["domain"],),
+        )
+    }
+    plateaus = conn.execute(
+        "SELECT COUNT(*) FROM events WHERE run_id = ? AND kind = 'plateau_detected'",
+        (run_id,),
     ).fetchone()[0]
     count = conn.execute(
         "SELECT COUNT(*) FROM programs WHERE run_id = ?", (run_id,)
@@ -195,6 +216,9 @@ def best(run_id: str | None = None) -> dict:
         "metric": metric,
         "programs": count,
         "gate_passed_programs": passed,
+        "operator_mix": operator_mix,
+        "bandit": arms,
+        "plateau_events": plateaus,
         "best_value": best_row[0] if best_row else None,
         "best_program": best_row[1] if best_row else None,
     }
