@@ -67,7 +67,7 @@ campaigns/<name>/
 
 - The claims lint runs as part of the test suite. It scans README.md, docs/,
   and campaigns/**/spec.md and log.md: any line making a measured claim (a
-  multiplier like 10x, a percentage gain, TFLOPS, tok/s, or the words faster
+  multiplier like 10x [no-claim], a percentage gain, TFLOPS, tok/s, or the words faster
   or speedup next to a number) must contain a run id (pattern r[0-9a-f]{10})
   or the explicit marker [no-claim] for illustrative text. A violating line
   fails the suite.

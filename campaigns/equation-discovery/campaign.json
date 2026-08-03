@@ -1,0 +1,27 @@
+{
+  "cells": [
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "nguyen-5"
+      },
+      "key": "nguyen-5",
+      "target": null
+    }
+  ],
+  "domain": "symbolic-regression",
+  "evaluator": "evaluators/symreg-nguyen5",
+  "full_budget": {
+    "max_evals": 200
+  },
+  "ladder": [
+    "proxy",
+    "replicate-3",
+    "scaled"
+  ],
+  "name": "equation-discovery",
+  "proxy_budget": {
+    "max_evals": 20
+  },
+  "replicate_seeds": 3
+}
+

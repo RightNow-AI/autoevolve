@@ -1,0 +1,48 @@
+{
+  "cells": [
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "add-1k"
+      },
+      "key": "add-1k",
+      "target": null
+    },
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "add-8k"
+      },
+      "key": "add-8k",
+      "target": null
+    },
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "scale-1k"
+      },
+      "key": "scale-1k",
+      "target": null
+    },
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "scale-8k"
+      },
+      "key": "scale-8k",
+      "target": null
+    }
+  ],
+  "domain": "triton-kernel",
+  "evaluator": "../../evaluators/triton-kernel",
+  "full_budget": {
+    "max_evals": 200
+  },
+  "ladder": [
+    "proxy",
+    "replicate-3",
+    "scaled"
+  ],
+  "name": "kernel-frontier",
+  "proxy_budget": {
+    "max_evals": 20
+  },
+  "replicate_seeds": 3
+}
+

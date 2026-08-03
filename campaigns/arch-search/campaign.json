@@ -1,0 +1,27 @@
+{
+  "cells": [
+    {
+      "env": {
+        "AUTOEVOLVE_CELL": "tiny-mlp"
+      },
+      "key": "tiny-mlp",
+      "target": null
+    }
+  ],
+  "domain": "architecture-search",
+  "evaluator": "evaluators/tiny-mlp",
+  "full_budget": {
+    "max_evals": 150
+  },
+  "ladder": [
+    "proxy",
+    "replicate-3",
+    "scaled"
+  ],
+  "name": "arch-search",
+  "proxy_budget": {
+    "max_evals": 15
+  },
+  "replicate_seeds": 3
+}
+
