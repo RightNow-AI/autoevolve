@@ -1,0 +1,31 @@
+{
+  "bounds": [
+    {
+      "claim": "optimal Golomb ruler length, order 8",
+      "value": "34",
+      "direction": "lower_is_better",
+      "who_and_year": "proven optimal, classical result tabulated in OEIS A003022",
+      "source_url": "https://oeis.org/A003022",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "read OEIS A003022, the length of the optimal Golomb ruler with n marks"
+    },
+    {
+      "claim": "optimal Golomb ruler length, order 11",
+      "value": "72",
+      "direction": "lower_is_better",
+      "who_and_year": "proven optimal, classical result tabulated in OEIS A003022",
+      "source_url": "https://oeis.org/A003022",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "read OEIS A003022, the length of the optimal Golomb ruler with n marks"
+    },
+    {
+      "claim": "optimal Golomb ruler length, order 13",
+      "value": "106",
+      "direction": "lower_is_better",
+      "who_and_year": "proven optimal, classical result tabulated in OEIS A003022",
+      "source_url": "https://oeis.org/A003022",
+      "checked_on": "2026-08-03",
+      "how_to_recheck": "read OEIS A003022, the length of the optimal Golomb ruler with n marks"
+    }
+  ]
+}

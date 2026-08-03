@@ -34,8 +34,8 @@ def _config(tmp_path: Path) -> CampaignConfig:
     )
 
 
-def test_list_discovers_all_four_campaigns() -> None:
-    assert {item.name for item in campaign.discover_campaigns()} == {
+def test_list_discovers_every_campaign() -> None:
+    assert {item.name for item in campaign.discover_campaigns()} >= {
         "algorithm-frontier",
         "arch-search",
         "equation-discovery",

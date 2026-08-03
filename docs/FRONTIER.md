@@ -84,6 +84,35 @@ benchmark claim without a run id.
 `[no-claim]` remains available for purely illustrative numbers that assert
 nothing about the world.
 
+## 4a. Memorization is a confound on every published instance
+
+Mutation operators are language models trained on the literature. On any
+instance whose answer is published, the fastest path to a passing gate is to
+recall the answer and emit it as a constant, not to search for it.
+
+This is not cheating and the gate is not wrong. A hardcoded optimal Golomb
+ruler still has distinct pairwise differences, and the certificate is real
+and independently checkable. But the run measured recall, not search, and
+reporting it as though evolution discovered something would be false.
+
+Observed directly in run r48c09efb6d: an order 11 Golomb ruler cell, seeded
+at length 221 against a proven optimum of 72, reached 72 in a single
+mutation by returning a literal mark list for that order while leaving the
+general construction untouched.
+
+Rules that follow:
+
+- A cell whose answer is published is a **validation cell**. It tests the
+  harness end to end, which is worth doing, and it says nothing about search
+  capability. Label it that way in spec.md.
+- A **frontier cell** must be an instance with no published answer. Recall
+  cannot help there, so whatever the gate accepts came from search.
+- When a result matches a published value, inspect the winning program before
+  reporting anything. If the answer appears as a literal, say so plainly in
+  the campaign log. Tier is `matched`, and the mechanism was recall.
+- Never present a validation cell result as evidence that the system can
+  find new results.
+
 ## 5. Gate discipline for frontier packs
 
 A frontier gate is stricter than an ordinary evaluator gate, because a false

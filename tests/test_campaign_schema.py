@@ -13,15 +13,18 @@ from autoevolve.cli.campaign import (
 )
 
 
-def test_all_four_campaign_configs_parse_and_validate() -> None:
-    configs = discover_campaigns(CAMPAIGNS_ROOT)
+def test_every_campaign_config_parses_and_validates() -> None:
+    """Every discovered pack must load. Adding a pack must not edit this test."""
 
-    assert {config.name for config in configs} == {
+    configs = discover_campaigns(CAMPAIGNS_ROOT)
+    names = {config.name for config in configs}
+
+    assert {
         "algorithm-frontier",
         "arch-search",
         "equation-discovery",
         "kernel-frontier",
-    }
+    } <= names
     for config in configs:
         assert config.cells
         assert config.ladder

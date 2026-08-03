@@ -1,0 +1,14 @@
+{
+  "name": "golomb-ruler",
+  "domain": "golomb-ruler",
+  "evaluator": "evaluators/golomb",
+  "cells": [
+    {"key": "order-8", "env": {"AUTOEVOLVE_CELL": "order-8"}, "target": 34},
+    {"key": "order-11", "env": {"AUTOEVOLVE_CELL": "order-11"}, "target": 72},
+    {"key": "order-13", "env": {"AUTOEVOLVE_CELL": "order-13"}, "target": 106}
+  ],
+  "proxy_budget": {"max_evals": 40},
+  "full_budget": {"max_evals": 400},
+  "ladder": ["proxy", "replicate-3", "scaled"],
+  "replicate_seeds": 3
+}
