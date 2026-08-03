@@ -1,0 +1,29 @@
+{
+  "outputs": [
+    {
+      "name": "synthetic-24",
+      "value": 354
+    },
+    {
+      "name": "synthetic-32",
+      "value": 715
+    },
+    {
+      "name": "synthetic-48",
+      "value": 1734
+    },
+    {
+      "name": "synthetic-64",
+      "value": 3258
+    },
+    {
+      "name": "synthetic-80",
+      "value": 5199
+    },
+    {
+      "name": "synthetic-96",
+      "value": 7643
+    }
+  ],
+  "seed": 104729
+}
