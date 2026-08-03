@@ -176,8 +176,13 @@ def search(
     }
 
 
-gpu_image = image.pip_install(
-    "torch", extra_index_url="https://download.pytorch.org/whl/cu128"
+# torch must land in the PROJECT venv, not the system interpreter. The run
+# executes through `uv run`, so a plain pip_install is invisible to it and the
+# evaluator silently falls back to mock mode, which is what happened on the
+# first GPU attempt.
+gpu_image = image.run_commands(
+    "cd /root/autoevolve && uv pip install torch "
+    "--index-url https://download.pytorch.org/whl/cu128"
 )
 
 

@@ -204,6 +204,16 @@ def _mock_score(candidate: ModuleType, candidate_dir: Path, sizes: list[int]) ->
             raise EvalError(f"mock_schedule failed for n={size}: {exc}") from exc
         if not math.isfinite(score):
             raise EvalError(f"mock_schedule returned a non-finite score for n={size}")
+        # The mock score is a utilization product and is therefore bounded by
+        # one. The candidate reports it, so an unbounded value is not a
+        # measurement, it is a claim, and evolution will make that claim
+        # arbitrarily large: an unclamped run reached 1e300 in 46 programs.
+        if not 0.0 <= score <= 1.0:
+            raise EvalError(
+                f"mock_schedule returned {score} for n={size}; the utilization "
+                "model is bounded to [0, 1] and a self-reported score outside "
+                "it is rejected"
+            )
         scores.append(score)
     return sum(scores) / len(scores)
 

@@ -116,3 +116,28 @@ def test_fixture_regeneration_is_byte_identical(tmp_path: Path) -> None:
     generator.write_fixtures(tmp_path)
     committed = (PACK / "fixtures" / "cases.json").read_bytes()
     assert (tmp_path / "cases.json").read_bytes() == committed
+
+
+def test_self_reported_mock_score_outside_the_model_is_rejected(tmp_path, monkeypatch):
+    """A candidate reports this score, so an unbounded value is a claim, not a measurement.
+
+    An unclamped run drove it to 1e300 in 46 programs, which is reward
+    hacking of the metric rather than any improvement to a kernel.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_FORCE_TRITON_MOCK", "1")
+    pack = Path(__file__).resolve().parents[1] / "evaluators" / "triton-kernel"
+    module = _load_evaluator("triton-kernel")
+
+    candidate = tmp_path / "cand"
+    candidate.mkdir()
+    source = (pack / "baseline" / "kernel.py").read_text(encoding="utf-8")
+    cheat = source.replace(
+        'return {"score": lane_utilization * warp_balance}',
+        'return {"score": 1e300}',
+    )
+    assert cheat != source, "baseline mock_schedule shape drifted"
+    (candidate / "kernel.py").write_text(cheat, encoding="utf-8")
+
+    with pytest.raises(EvalError, match="bounded to"):
+        module.evaluate(candidate, 0)
