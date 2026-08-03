@@ -11,6 +11,7 @@ from autoevolve.eval.contract import StageSpec
 ROOT = Path(__file__).resolve().parents[1]
 EVALUATORS = ROOT / "evaluators"
 PACKS = (
+    ("optimizer-rule", "rule.py", "val_loss"),
     ("python-speedup", "pipeline.py", "speedup"),
     ("triton-kernel", "kernel.py", "tflops"),
     ("routing-heuristic", "heuristic.py", "tour_cost"),
