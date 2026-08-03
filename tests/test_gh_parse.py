@@ -62,3 +62,16 @@ def test_extract_config_rejects_malformed_known_values(line: str, key: str) -> N
 
 def test_extract_config_defaults() -> None:
     assert extract_config(None) == {"budget_evals": 150, "workers": 2}
+
+
+def test_operators_key_parses_and_validates():
+    from autoevolve.gh.parse import extract_config
+
+    body = "goal\n\n```autoevolve\noperators: diff, rewrite\n```"
+    assert extract_config(body)["operators"] == "diff,rewrite"
+
+    import pytest as _pytest
+
+    bad = "goal\n\n```autoevolve\noperators: warp\n```"
+    with _pytest.raises(ValueError):
+        extract_config(bad)

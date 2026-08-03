@@ -134,7 +134,7 @@ def _comments() -> list[str]:
 def main() -> None:
     issue_body = (
         "Make the bundled image pipeline faster while keeping outputs identical.\n\n"
-        "```autoevolve\nbudget_evals: 4\nworkers: 1\n"
+        "```autoevolve\nbudget_evals: 4\nworkers: 1\noperators: diff\n"
         "evaluator: evaluators/python-speedup\n```"
     )
     opened = {

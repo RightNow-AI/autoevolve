@@ -23,7 +23,9 @@ _KNOWN_KEYS = {
     "target",
     "metric",
     "target_path",
+    "operators",
 }
+_VALID_OPERATORS = ("diff", "rewrite", "agentic", "crossover")
 
 
 def extract_goal(issue_title: str, issue_body: str | None) -> str:
@@ -94,6 +96,12 @@ def _parse_value(key: str, value: str) -> int | float | str:
         raise ValueError("must not be empty")
     if key in {"evaluator", "target_path"}:
         return _repo_relative_path(value, key)
+    if key == "operators":
+        names = [item.strip() for item in value.split(",") if item.strip()]
+        invalid = sorted(set(names) - set(_VALID_OPERATORS))
+        if not names or invalid:
+            raise ValueError(f"must be a comma list from {', '.join(_VALID_OPERATORS)}")
+        return ",".join(names)
     return value
 
 

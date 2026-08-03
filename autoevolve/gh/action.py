@@ -228,12 +228,19 @@ def handle_approved(
             print(f"[autoevolve-gh] posted milestone {submission_count} for run {run_id}")
 
         print(f"[autoevolve-gh] starting evolution for run {run_id}")
+        raw_operators = config.get("operators")
+        operator_names = (
+            [name for name in str(raw_operators).split(",") if name]
+            if isinstance(raw_operators, str)
+            else None
+        )
         loop_result = _run_loop(
             engine,
             run_id,
             workdir=workdir,
             workers=int(config["workers"]),
             evaluator_dir=evaluator_ref,
+            operator_names=operator_names,
             on_submission=on_submission,
         )
         status = engine.run_status(run_id)
@@ -298,6 +305,7 @@ def _run_loop(
     workdir: Path,
     workers: int,
     evaluator_dir: Path | None = None,
+    operator_names: list[str] | None = None,
     on_submission: Callable[[dict[str, Any] | None], None],
 ) -> dict[str, Any] | None:
     from autoevolve.core.loop import run_worker_loop
@@ -306,7 +314,7 @@ def _run_loop(
     return run_worker_loop(
         engine,
         run_id,
-        build_get_operator(None, build_local_evaluator(evaluator_dir)),
+        build_get_operator(operator_names, build_local_evaluator(evaluator_dir)),
         on_submission=on_submission,
     )
 
