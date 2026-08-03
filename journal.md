@@ -104,3 +104,18 @@ the orchestrator and produced byte-identical files. Line-ending class of bug
 killed repo-wide with .gitattributes eol=lf.
 
 NOT done: no real evolution numbers exist yet anywhere, per HONESTY.md.
+
+## U9 campaign packs (2026-08-03)
+
+Built: campaigns/ kernel-frontier, arch-search, algorithm-frontier,
+equation-discovery per docs/CAMPAIGNS.md, the campaign runner (list, run,
+report) with db-derived ladder labeling, and the claims lint enforced inside
+the test suite. The lint immediately caught an unmarked illustrative
+multiplier in the spec doc, which is exactly its job.
+
+Evidence: ruff clean, 15 campaign and lint tests pass, `autoevolve campaign
+list` shows all four packs.
+
+NOT done: kernel-frontier cells share the triton evaluator fixtures because
+the evaluator does not read AUTOEVOLVE_CELL yet; documented in its spec. No
+campaign has been run beyond proxy smoke in tests.
