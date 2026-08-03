@@ -13,6 +13,7 @@ EVALUATORS = ROOT / "evaluators"
 PACKS = (
     ("lander-control", "policy.py", "fuel_efficiency"),
     ("lossless-compression", "codec.py", "compression_ratio"),
+    ("optimizer-rule", "rule.py", "val_loss"),
     ("python-speedup", "pipeline.py", "speedup"),
     ("triton-kernel", "kernel.py", "tflops"),
     ("routing-heuristic", "heuristic.py", "tour_cost"),
