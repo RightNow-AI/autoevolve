@@ -89,13 +89,53 @@ def _describe(evaluator_dir: Path) -> dict[str, Any]:
     maximize = getattr(module, "MAXIMIZE", None)
     if maximize is not None and not isinstance(maximize, bool):
         raise TypeError("evaluate.py MAXIMIZE must be a bool when defined")
+    descriptors = _descriptor_payloads(getattr(module, "DESCRIPTORS", None))
     return {
         "stages": stage_payloads,
         "gate": gate,
         "has_ceiling": callable(ceiling),
         "metric": metric,
         "maximize": maximize,
+        "descriptors": descriptors,
     }
+
+
+def _descriptor_payloads(raw: object) -> list[dict[str, Any]]:
+    """Validate the optional MAP-elites behavior descriptors.
+
+    Descriptors are what make the archive a quality-diversity archive rather
+    than a single elite. Without them every candidate lands in one cell and
+    the search degenerates to hill climbing.
+    """
+
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise TypeError("evaluate.py DESCRIPTORS must be a list when defined")
+    payloads: list[dict[str, Any]] = []
+    for index, item in enumerate(raw):
+        if not isinstance(item, dict):
+            raise TypeError(f"DESCRIPTORS[{index}] must be a dict")
+        missing = sorted({"name", "metric", "bins", "lo", "hi"} - set(item))
+        if missing:
+            raise TypeError(f"DESCRIPTORS[{index}] is missing {', '.join(missing)}")
+        bins = item["bins"]
+        if not isinstance(bins, int) or isinstance(bins, bool) or bins < 1:
+            raise TypeError(f"DESCRIPTORS[{index}] bins must be a positive int")
+        lo = float(item["lo"])
+        hi = float(item["hi"])
+        if not hi > lo:
+            raise TypeError(f"DESCRIPTORS[{index}] requires hi greater than lo")
+        payloads.append(
+            {
+                "name": str(item["name"]),
+                "metric": str(item["metric"]),
+                "bins": bins,
+                "lo": lo,
+                "hi": hi,
+            }
+        )
+    return payloads
 
 
 def _ceiling(evaluator_dir: Path) -> dict[str, Any] | None:

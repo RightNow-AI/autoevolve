@@ -111,14 +111,32 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         raise EvalError(f"build() raised: {exc}") from exc
     marks = _normalize_marks(raw)
     distinct = _check_golomb(marks)
+    gaps = [marks[i + 1] - marks[i] for i in range(len(marks) - 1)]
+    mean_gap = sum(gaps) / len(gaps)
+    spread = (sum((g - mean_gap) ** 2 for g in gaps) / len(gaps)) ** 0.5
     return {
         GATE: 1.0,
         "length": float(marks[-1]),
         "order": float(len(marks)),
         "distinct_differences": float(distinct),
+        # Behavior descriptors: structural shape, deliberately not quality.
+        # Two rulers of equal length with different gap structure occupy
+        # different archive cells, so neither displaces the other and the
+        # search keeps diverse footholds instead of hill climbing one.
+        "max_gap": float(max(gaps)),
+        "gap_spread": float(spread),
     }
 
 
 def ceiling() -> dict[str, float | str] | None:
     """No certified ceiling. A lower bound on length is not computed here."""
     return None
+
+
+# MAP-elites behavior descriptors. Without these every candidate lands in a
+# single archive cell and the search degenerates to greedy hill climbing,
+# which is what plateaued run ra1ac573da6 at 153 of 3000 evaluations.
+DESCRIPTORS = [
+    {"name": "max_gap", "metric": "max_gap", "bins": 8, "lo": 1.0, "hi": 120.0},
+    {"name": "gap_spread", "metric": "gap_spread", "bins": 6, "lo": 0.0, "hi": 60.0},
+]

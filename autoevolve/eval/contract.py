@@ -46,6 +46,7 @@ class Evaluator:
     spec_text: str
     metric: str | None = None
     maximize: bool | None = None
+    descriptors: list[dict[str, Any]] | None = None
 
     def ceiling(self) -> dict[str, Any] | None:
         """Load the optional ceiling in an isolated runner process."""
@@ -201,6 +202,10 @@ def load_evaluator(evaluator_dir: Path) -> Evaluator:
     maximize = payload.get("maximize")
     if maximize is not None and not isinstance(maximize, bool):
         raise EvalError("evaluator MAXIMIZE must be a bool when declared")
+    raw_descriptors = payload.get("descriptors")
+    if raw_descriptors is not None and not isinstance(raw_descriptors, list):
+        raise EvalError("evaluator DESCRIPTORS must be a list when declared")
+    descriptors = list(raw_descriptors) if raw_descriptors else None
 
     return Evaluator(
         dir=directory,
@@ -210,6 +215,7 @@ def load_evaluator(evaluator_dir: Path) -> Evaluator:
         spec_text=spec_text,
         metric=metric,
         maximize=maximize,
+        descriptors=descriptors,
     )
 
 

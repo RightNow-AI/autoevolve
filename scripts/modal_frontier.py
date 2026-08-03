@@ -11,7 +11,8 @@ GPU is deliberately absent. Superpermutation and Golomb search are integer
 CPU work; a GPU would be idle money. Kernel work is a separate app.
 
 Usage:
-    modal run scripts/modal_frontier.py::search --evaluator campaigns/golomb-ruler/evaluators/golomb \
+    modal run scripts/modal_frontier.py::search
+        --evaluator campaigns/golomb-ruler/evaluators/golomb
         --goal "..." --cell order-29 --budget 4000 --parallel 24 --hours 6
 """
 
@@ -161,11 +162,22 @@ def best(run_id: str | None = None) -> dict:
     metric = _json.loads(contract)["metric"]
     maximize = _json.loads(contract)["maximize"]
     order = "DESC" if maximize else "ASC"
+    gate = _json.loads(contract)["gate"]
+    # Gate failures record the metric as 0.0. For a minimized metric that
+    # sorts to the front, so the best candidate must be filtered to those
+    # that actually passed the gate at the same stage.
     best_row = conn.execute(
-        f"SELECT s.value, p.id, p.code_ref FROM scores s JOIN programs p ON p.id = s.program_id "
-        f"WHERE p.run_id = ? AND s.metric = ? ORDER BY s.value {order} LIMIT 1",
-        (run_id, metric),
+        f"SELECT s.value, p.id, p.code_ref FROM scores s "
+        f"JOIN programs p ON p.id = s.program_id "
+        f"JOIN scores g ON g.program_id = p.id AND g.stage = s.stage "
+        f"WHERE p.run_id = ? AND s.metric = ? AND g.metric = ? AND g.value = 1.0 "
+        f"ORDER BY s.value {order} LIMIT 1",
+        (run_id, metric, gate),
     ).fetchone()
+    passed = conn.execute(
+        "SELECT COUNT(DISTINCT program_id) FROM scores WHERE metric = ? AND value = 1.0",
+        (gate,),
+    ).fetchone()[0]
     count = conn.execute(
         "SELECT COUNT(*) FROM programs WHERE run_id = ?", (run_id,)
     ).fetchone()[0]
@@ -182,6 +194,7 @@ def best(run_id: str | None = None) -> dict:
         "status": status,
         "metric": metric,
         "programs": count,
+        "gate_passed_programs": passed,
         "best_value": best_row[0] if best_row else None,
         "best_program": best_row[1] if best_row else None,
     }

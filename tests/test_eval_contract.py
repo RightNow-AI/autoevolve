@@ -76,3 +76,21 @@ def test_loader_carries_metric_declaration() -> None:
     evaluator = load_evaluator(TOY_EVALUATOR)
     assert evaluator.metric == "score"
     assert evaluator.maximize is True
+
+
+def test_loader_carries_behavior_descriptors():
+    """Without descriptors the archive is one cell and search is hill climbing."""
+
+    from pathlib import Path
+
+    from autoevolve.eval.contract import load_evaluator
+
+    pack = Path(__file__).parents[1] / "campaigns" / "golomb-ruler" / "evaluators" / "golomb"
+    evaluator = load_evaluator(pack)
+
+    assert evaluator.descriptors
+    names = {item["metric"] for item in evaluator.descriptors}
+    assert names == {"max_gap", "gap_spread"}
+    for item in evaluator.descriptors:
+        assert item["bins"] >= 1
+        assert item["hi"] > item["lo"]
