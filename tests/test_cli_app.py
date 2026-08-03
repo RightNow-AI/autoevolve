@@ -217,3 +217,44 @@ def test_parallel_workers_each_join_their_own_island(tmp_path: Path, monkeypatch
     assert len(joins) == 4
     assert sorted(islands) == [0, 1, 2, 3]
     assert "4 worker(s) finished: 8 submissions" in result.output
+
+
+def test_finish_distills_discoveries_so_knowledge_compounds(tmp_path: Path, monkeypatch) -> None:
+    """Invariant four: a run must leave knowledge behind for later runs."""
+
+    import autoevolve.cli.app as app_module
+
+    calls: list[tuple[Path, str]] = []
+
+    class FakeEndpoint:
+        pass
+
+    distiller = types.ModuleType("autoevolve.mutate.distiller")
+
+    def distill_run(home, run_id, endpoint, top_k=5):
+        calls.append((home, run_id))
+        return [{"text": "tiling beat vectorizing here"}]
+
+    distiller.distill_run = distill_run
+    models = types.ModuleType("autoevolve.mutate.models")
+    models.resolve_endpoint = lambda tier: FakeEndpoint()
+    monkeypatch.setitem(sys.modules, "autoevolve.mutate.distiller", distiller)
+    monkeypatch.setitem(sys.modules, "autoevolve.mutate.models", models)
+
+    app_module._distill_discoveries(tmp_path, "rabc1234567")
+
+    assert calls == [(tmp_path, "rabc1234567")]
+
+
+def test_distillation_failure_never_fails_a_finished_run(tmp_path: Path, monkeypatch) -> None:
+    import autoevolve.cli.app as app_module
+
+    models = types.ModuleType("autoevolve.mutate.models")
+
+    def boom(tier):
+        raise RuntimeError("endpoint unreachable")
+
+    models.resolve_endpoint = boom
+    monkeypatch.setitem(sys.modules, "autoevolve.mutate.models", models)
+
+    app_module._distill_discoveries(tmp_path, "rabc1234567")

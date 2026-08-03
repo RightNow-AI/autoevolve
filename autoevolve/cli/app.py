@@ -302,6 +302,29 @@ def _drive_workers(
     return summaries
 
 
+def _distill_discoveries(home: Path, run_id: str) -> None:
+    """Turn this run's best lineage into discoveries later runs can sample.
+
+    This is the mechanism that makes knowledge compound across runs. It is
+    best effort: a run that produced real results must never be reported as
+    failed because distillation could not reach a model.
+    """
+
+    try:
+        from autoevolve.mutate.distiller import distill_run
+        from autoevolve.mutate.models import resolve_endpoint
+
+        endpoint = resolve_endpoint("strong") or resolve_endpoint("cheap")
+        if endpoint is None:
+            return
+        found = distill_run(home, run_id, endpoint)
+    except Exception as exc:  # noqa: BLE001 - never fail a finished run on this
+        typer.echo(f"discovery distillation skipped: {exc}", err=True)
+        return
+    if found:
+        typer.echo(f"distilled {len(found)} discoveries for future runs.")
+
+
 def _print_worker_summaries(summaries: list[Any]) -> None:
     """Report what the workers did. A summary line never fails a finished run."""
 
@@ -334,6 +357,7 @@ def _build_get_operator(
 
 
 def _finish_and_print(engine: Any, home: Path, run_id: str) -> None:
+    _distill_discoveries(home, run_id)
     out_dir = artifact_dir(run_id)
     paths = artifact_paths(out_dir)
     try:
