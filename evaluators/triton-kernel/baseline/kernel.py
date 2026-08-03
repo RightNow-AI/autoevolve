@@ -1,8 +1,15 @@
-"""Vector-add-and-scale seed with a lazy Triton implementation.
+"""Vector-add-and-scale seed with a lazy GPU implementation.
 
 Candidate contract:
-run(x, y, alpha, real=False) returns x + alpha * y as a NumPy array.
+run(x, y, alpha, real=False) returns x + alpha * y.
+  real=False returns a NumPy array on the CPU.
+  real=True MUST return a CUDA tensor. Returning a CPU result in real mode
+  is rejected by the evaluator, because throughput measured on the CPU must
+  never be reported as a GPU number.
 mock_schedule(n) returns a dictionary containing a numeric score.
+
+Any backend works in real mode: Triton, plain torch, CuPy. Triton ships no
+Windows wheel, so the seed uses torch when Triton is unavailable.
 """
 
 from __future__ import annotations
@@ -36,17 +43,26 @@ def run(
     real: bool = False,
 ) -> np.ndarray:
     """Run the NumPy path or lazily compile and launch the Triton kernel."""
-    x_array = np.asarray(x, dtype=np.float32)
-    y_array = np.asarray(y, dtype=np.float32)
     if not real:
-        return x_array + alpha * y_array
+        return np.asarray(x, dtype=np.float32) + alpha * np.asarray(y, dtype=np.float32)
 
+    import torch
+
+    device = torch.device("cuda")
+    # In real mode the evaluator may hand over device-resident tensors so the
+    # timing excludes host transfer. Accept either form.
+    x_array = x if torch.is_tensor(x) else np.asarray(x, dtype=np.float32)
+    y_array = y if torch.is_tensor(y) else np.asarray(y, dtype=np.float32)
     try:
-        import torch
         import triton
         import triton.language as tl
     except ImportError:
-        return ref(x_array, y_array, alpha)
+        # No Triton on this platform. Measure a real device kernel through
+        # torch instead of silently computing on the CPU, which the evaluator
+        # rejects in real mode.
+        x_tensor = torch.as_tensor(x_array, device=device)
+        y_tensor = torch.as_tensor(y_array, device=device)
+        return torch.add(x_tensor, y_tensor, alpha=alpha)
 
     @triton.jit
     def vector_add_scale_kernel(
@@ -63,7 +79,6 @@ def run(
         y_values = tl.load(y_ptr + offsets, mask=mask)
         tl.store(output_ptr + offsets, x_values + scale * y_values, mask=mask)
 
-    device = torch.device("cuda")
     x_tensor = torch.as_tensor(x_array, device=device)
     y_tensor = torch.as_tensor(y_array, device=device)
     output = torch.empty_like(x_tensor)
@@ -77,5 +92,5 @@ def run(
         BLOCK_SIZE=BLOCK,
         num_warps=num_warps,
     )
-    return output.cpu().numpy()
+    return output
 # EVOLVE-BLOCK-END

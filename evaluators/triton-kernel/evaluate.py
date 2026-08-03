@@ -76,12 +76,31 @@ def _reference_module() -> ModuleType:
 
 
 def _real_mode_available() -> bool:
+    """Real measurement needs a CUDA device, not one particular kernel language.
+
+    The certificate is numerical parity against the reference plus elapsed
+    time on this device. A candidate may reach that through Triton, plain
+    torch, CuPy, or anything else it can import, so requiring Triton here
+    would strand working hardware in mock mode. Triton ships no Windows
+    wheel, which is exactly that situation.
+    """
+
     if os.environ.get("AUTOEVOLVE_FORCE_TRITON_MOCK") == "1":
         return False
-    if importlib.util.find_spec("triton") is None or importlib.util.find_spec("torch") is None:
+    if importlib.util.find_spec("torch") is None:
         return False
-    torch = importlib.import_module("torch")
-    return bool(torch.cuda.is_available())
+    try:
+        torch = importlib.import_module("torch")
+        return bool(torch.cuda.is_available())
+    except Exception:
+        return False
+
+
+def available_backends() -> tuple[str, ...]:
+    """Kernel backends a candidate may import in real mode on this machine."""
+
+    names = ("triton", "torch", "cupy", "numba")
+    return tuple(name for name in names if importlib.util.find_spec(name) is not None)
 
 
 def _run_candidate(
@@ -96,10 +115,48 @@ def _run_candidate(
         output = candidate.run(x.copy(), y.copy(), alpha, real=real)
     except Exception as exc:
         raise EvalError(f"candidate execution failed: {exc}") from exc
+    if real:
+        _require_device_result(output)
+        output = output.detach().to("cpu")
     array = np.asarray(output, dtype=np.float32)
     if array.shape != x.shape:
         raise EvalError(f"candidate returned shape {array.shape}, expected {x.shape}")
     return array
+
+
+def _require_device_result(output: object) -> None:
+    """Reject a real-mode result that never touched the GPU.
+
+    A candidate that quietly falls back to CPU still produces correct
+    numbers, so parity alone would pass it and the reported throughput
+    would be a CPU measurement published as a GPU one. Real mode therefore
+    requires a CUDA tensor, which is exact evidence of where the work ran.
+    This check reads an attribute and never synchronizes, so it is safe to
+    call inside the timing loop.
+    """
+
+    device = getattr(output, "device", None)
+    if device is None or getattr(device, "type", None) != "cuda":
+        raise EvalError(
+            "real mode requires the result to be a CUDA tensor so the "
+            "measurement provably ran on the device; got "
+            f"{type(output).__name__} on device {device}"
+        )
+
+
+def _launch_for_timing(
+    candidate: ModuleType,
+    x: np.ndarray,
+    y: np.ndarray,
+    alpha: float,
+) -> None:
+    """Launch the candidate on the device with no host transfer in the loop."""
+
+    try:
+        output = candidate.run(x, y, alpha, real=True)
+    except Exception as exc:
+        raise EvalError(f"candidate execution failed: {exc}") from exc
+    _require_device_result(output)
 
 
 def _check_parity(candidate: ModuleType, cases: list[Case], *, real: bool) -> None:
@@ -151,20 +208,58 @@ def _mock_score(candidate: ModuleType, candidate_dir: Path, sizes: list[int]) ->
     return sum(scores) / len(scores)
 
 
+def _benchmark_elements() -> int:
+    """Element count for the throughput workload.
+
+    The parity fixtures are deliberately tiny so correctness checks stay
+    fast. Timing them would measure kernel launch overhead and the host
+    transfer rather than throughput, which for a memory-bound operation can
+    never approach the device roofline and would make the metric
+    meaningless. Throughput therefore uses a separate, device-resident
+    workload large enough that the kernel dominates.
+    """
+
+    raw = os.environ.get("AUTOEVOLVE_KERNEL_ELEMENTS")
+    if raw:
+        try:
+            value = int(raw)
+        except ValueError as exc:
+            raise EvalError("AUTOEVOLVE_KERNEL_ELEMENTS must be an integer") from exc
+        if value < 1 << 16:
+            raise EvalError("AUTOEVOLVE_KERNEL_ELEMENTS must be at least 65536")
+        return value
+    return 1 << 24
+
+
 def _measure_real(candidate: ModuleType, cases: list[Case]) -> tuple[float, float]:
+    """Time the candidate on device-resident data, excluding host transfer."""
+
     torch = importlib.import_module("torch")
+    device = torch.device("cuda")
+    elements = _benchmark_elements()
+    generator = torch.Generator(device=device).manual_seed(20260803)
+    x_tensor = torch.rand(elements, device=device, dtype=torch.float32, generator=generator)
+    y_tensor = torch.rand(elements, device=device, dtype=torch.float32, generator=generator)
+    alpha = float(cases[0][3]) if cases else 1.0
+
+    for _ in range(3):
+        _launch_for_timing(candidate, x_tensor, y_tensor, alpha)
+    torch.cuda.synchronize()
+
+    repeats = 20
     elapsed_values: list[float] = []
     for _ in range(3):
         start = torch.cuda.Event(enable_timing=True)
         end = torch.cuda.Event(enable_timing=True)
         start.record()
-        for _, x, y, alpha in cases:
-            _run_candidate(candidate, x, y, alpha, real=True)
+        for _ in range(repeats):
+            _launch_for_timing(candidate, x_tensor, y_tensor, alpha)
         end.record()
         torch.cuda.synchronize()
-        elapsed_values.append(float(start.elapsed_time(end)))
+        elapsed_values.append(float(start.elapsed_time(end)) / repeats)
+
     candidate_ms = max(min(elapsed_values), 1e-9)
-    total_flops = float(sum(2 * x.size for _, x, _, _ in cases))
+    total_flops = 2.0 * float(elements)
     tflops = total_flops / (candidate_ms / 1_000.0) / 1e12
     return tflops, candidate_ms
 
