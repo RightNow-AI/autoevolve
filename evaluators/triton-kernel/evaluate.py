@@ -194,3 +194,8 @@ def ceiling() -> dict[str, float | str] | None:
         "value": roofline_tflops,
         "method": "roofline: memory-bound",
     }
+
+# Primary metric declaration consumed by the engine when locking a contract.
+# Mock mode exposes only mock_ metrics, so the declaration follows the mode.
+METRIC = "tflops" if _real_mode_available() else "mock_score"
+MAXIMIZE = True

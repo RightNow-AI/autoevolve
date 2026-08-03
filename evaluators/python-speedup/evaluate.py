@@ -134,3 +134,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
 def ceiling() -> dict[str, float | str] | None:
     """Return no fixed ceiling because the plateau policy governs this task."""
     return None
+
+# Primary metric declaration consumed by the engine when locking a contract.
+METRIC = "speedup"
+MAXIMIZE = True

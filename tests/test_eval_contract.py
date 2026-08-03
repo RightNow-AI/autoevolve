@@ -41,3 +41,14 @@ def test_load_evaluator_surfaces_import_failure(tmp_path: Path) -> None:
 
     with pytest.raises(EvalError, match="RuntimeError: import exploded"):
         load_evaluator(evaluator_dir)
+
+
+def test_loader_carries_metric_declaration(toy_evaluator_dir=None):
+    from pathlib import Path
+
+    from autoevolve.eval.contract import load_evaluator
+
+    toy = Path(__file__).parent / "fixtures" / "eval_toy"
+    evaluator = load_evaluator(toy)
+    assert evaluator.metric == "score"
+    assert evaluator.maximize is True

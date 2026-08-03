@@ -32,13 +32,19 @@ _ALLOWED_ENV = frozenset(
 
 @dataclass(frozen=True)
 class Evaluator:
-    """Validated evaluator metadata that is safe to hold in the engine process."""
+    """Validated evaluator metadata that is safe to hold in the engine process.
+
+    metric and maximize are the evaluator's own primary-metric declaration.
+    When present, the engine locks the contract to them instead of guessing.
+    """
 
     dir: Path
     stages: list[StageSpec]
     gate: str
     has_ceiling: bool
     spec_text: str
+    metric: str | None = None
+    maximize: bool | None = None
 
     def ceiling(self) -> dict[str, Any] | None:
         """Load the optional ceiling in an isolated runner process."""
@@ -176,6 +182,12 @@ def load_evaluator(evaluator_dir: Path) -> Evaluator:
     has_ceiling = payload.get("has_ceiling")
     if not isinstance(has_ceiling, bool):
         raise EvalError("evaluator description has invalid has_ceiling metadata")
+    metric = payload.get("metric")
+    if metric is not None and (not isinstance(metric, str) or not metric):
+        raise EvalError("evaluator METRIC must be a non-empty string when declared")
+    maximize = payload.get("maximize")
+    if maximize is not None and not isinstance(maximize, bool):
+        raise EvalError("evaluator MAXIMIZE must be a bool when declared")
 
     return Evaluator(
         dir=directory,
@@ -183,6 +195,8 @@ def load_evaluator(evaluator_dir: Path) -> Evaluator:
         gate=gate,
         has_ceiling=has_ceiling,
         spec_text=spec_text,
+        metric=metric,
+        maximize=maximize,
     )
 
 

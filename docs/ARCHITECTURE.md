@@ -187,7 +187,10 @@ checked on every submit and flip run status when exhausted.
 ```python
 eval.contract.load_evaluator(evaluator_dir: Path) -> Evaluator
     # Evaluator: .dir, .stages: list[StageSpec], .gate: str,
-    #            .ceiling() -> dict | None, .spec_text: str
+    #            .ceiling() -> dict | None, .spec_text: str,
+    #            .metric: str | None, .maximize: bool | None
+    # metric and maximize mirror the evaluator's METRIC and MAXIMIZE
+    # declarations; open_run locks the contract to them when present.
 eval.cascade.run_cascade(evaluator, candidate_dir: Path) -> EvalOutcome
 eval.sandbox.run_stage(evaluator_dir, candidate_dir, stage: int,
                        spec: StageSpec) -> dict[str, float]   # raises EvalError

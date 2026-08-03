@@ -54,3 +54,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
 
     source = (candidate_dir / "solution.py").read_text(encoding="utf-8")
     return {"correct": 1.0, "score": 1000.0 / max(len(source), 1)}
+
+# Primary metric declaration consumed by the engine when locking a contract.
+METRIC = "score"
+MAXIMIZE = True

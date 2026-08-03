@@ -26,6 +26,8 @@ from autoevolve.eval.contract import StageSpec, EvalError
 
 STAGES: list[StageSpec]   # cascade, cheap to expensive, each with timeout_s
 GATE: str                 # name of the boolean correctness metric (1.0 or 0.0)
+METRIC: str               # OPTIONAL: the primary metric the contract locks to
+MAXIMIZE: bool            # OPTIONAL: the primary metric's direction
 
 def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     """Measure the candidate. Raise EvalError(reason) on gate failure.
@@ -35,6 +37,13 @@ def ceiling() -> dict | None:      # OPTIONAL
     """Theoretical max, e.g. roofline. {"metric": ..., "value": ...,
     "method": "..."} or None."""
 ```
+
+Declare METRIC and MAXIMIZE. Without them the engine falls back to the
+ceiling's metric, then to the alphabetically first non-gate metric with
+maximize true, and a guessed direction can reward the wrong thing. Every
+bundled pack declares both. METRIC may be computed at import time when the
+measured metric depends on the environment (the triton pack declares tflops
+on GPU and mock_score in mock mode).
 
 ## 3. Rules (non-negotiable)
 

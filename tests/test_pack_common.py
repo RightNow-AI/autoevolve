@@ -57,3 +57,17 @@ def test_pack_contract_and_baseline_stage_zero(
     assert spec_text.strip()
     assert evaluator.GATE in spec_text
     assert headline_metric in spec_text
+
+
+def test_every_pack_declares_primary_metric(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A pack without METRIC and MAXIMIZE lets the engine guess the wrong hill."""
+
+    monkeypatch.setenv("AUTOEVOLVE_FORCE_TRITON_MOCK", "1")
+    for pack_name, _entry, _headline in PACKS:
+        module = _load_evaluator(pack_name)
+        metric = getattr(module, "METRIC", None)
+        maximize = getattr(module, "MAXIMIZE", None)
+        assert isinstance(metric, str) and metric, f"{pack_name} must declare METRIC"
+        assert isinstance(maximize, bool), f"{pack_name} must declare MAXIMIZE"
+        scores = module.evaluate(EVALUATORS / pack_name / "baseline", stage=0)
+        assert metric in scores, f"{pack_name} METRIC must be measured at stage 0"

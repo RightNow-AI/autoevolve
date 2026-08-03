@@ -93,3 +93,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
 def ceiling() -> dict[str, float | str] | None:
     """Return no ceiling because exact optimal tour costs are not computed."""
     return None
+
+# Primary metric declaration consumed by the engine when locking a contract.
+METRIC = "tour_cost"
+MAXIMIZE = False

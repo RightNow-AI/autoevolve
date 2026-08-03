@@ -79,15 +79,19 @@ def _r2(rows: list[Row], predictions: list[float]) -> float:
 
 
 def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
-    """Gate finite train predictions, then score held-out fit and complexity."""
+    """Gate finite train predictions, then score held-out fit and complexity.
+
+    Both stages return the full metric set. The dataset is one hundred
+    points, so the held-out pass is effectively free, and the engine locks
+    contracts against stage 0 baselines, which therefore must include the
+    primary metric. Stage 1 remains the confirmation stage.
+    """
     if stage < 0 or stage >= len(STAGES):
         raise EvalError(f"unknown stage {stage}")
     candidate = _load_module(candidate_dir)
     train = _load_rows("train.json")
     _predict(candidate, train, "train")
     complexity = _complexity(candidate_dir)
-    if stage == 0:
-        return {GATE: 1.0, "complexity": float(complexity)}
     heldout = _load_rows("heldout.json")
     heldout_predictions = _predict(candidate, heldout, "heldout")
     r2_heldout = _r2(heldout, heldout_predictions)
@@ -103,3 +107,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
 def ceiling() -> dict[str, float | str] | None:
     """Return no fixed ceiling because the AST penalty depends on the candidate."""
     return None
+
+# Primary metric declaration consumed by the engine when locking a contract.
+METRIC = "fitness"
+MAXIMIZE = True

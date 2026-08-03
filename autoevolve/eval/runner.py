@@ -83,7 +83,19 @@ def _describe(evaluator_dir: Path) -> dict[str, Any]:
     ceiling = getattr(module, "ceiling", None)
     if ceiling is not None and not callable(ceiling):
         raise TypeError("evaluate.py ceiling must be callable when defined")
-    return {"stages": stage_payloads, "gate": gate, "has_ceiling": callable(ceiling)}
+    metric = getattr(module, "METRIC", None)
+    if metric is not None and (not isinstance(metric, str) or not metric):
+        raise TypeError("evaluate.py METRIC must be a non-empty string when defined")
+    maximize = getattr(module, "MAXIMIZE", None)
+    if maximize is not None and not isinstance(maximize, bool):
+        raise TypeError("evaluate.py MAXIMIZE must be a bool when defined")
+    return {
+        "stages": stage_payloads,
+        "gate": gate,
+        "has_ceiling": callable(ceiling),
+        "metric": metric,
+        "maximize": maximize,
+    }
 
 
 def _ceiling(evaluator_dir: Path) -> dict[str, Any] | None:

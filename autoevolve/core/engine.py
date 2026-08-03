@@ -172,8 +172,9 @@ class Engine:
         def configured(name: str, default: Any = None) -> Any:
             if template is not None:
                 return getattr(template, name)
-            if hasattr(evaluator, name):
-                return getattr(evaluator, name)
+            attr = getattr(evaluator, name, None)
+            if attr is not None:
+                return attr
             return spec.get(name, default)
 
         metric = configured("metric")
