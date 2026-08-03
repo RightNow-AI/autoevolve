@@ -211,7 +211,9 @@ def test_submit_child_gate_pass_updates_archive_and_bandit(home: Path) -> None:
     assert float(arm["mean_gain"]) == pytest.approx(1.0)
 
 
-def test_gate_fail_records_zero_and_touches_neither_archive_nor_bandit(home: Path) -> None:
+def test_gate_fail_records_zero_leaves_archive_and_penalizes_the_operator(home: Path) -> None:
+    """A broken operator must pay for it, or it stays selected forever."""
+
     engine, _, evaluator_dir = _make_engine(
         home,
         _contract(),
@@ -244,7 +246,9 @@ def test_gate_fail_records_zero_and_touches_neither_archive_nor_bandit(home: Pat
             "SELECT pulls, improvements FROM operators WHERE domain = 'unit-test'"
         ).fetchall()
         events = load_events(conn, run_id, "gate_failed")
-    assert all(int(row["pulls"]) == 0 and int(row["improvements"]) == 0 for row in arms)
+    charged = [row for row in arms if int(row["pulls"]) > 0]
+    assert len(charged) == 1, "the failing operator must be charged a pull"
+    assert int(charged[0]["improvements"]) == 0
     assert events[-1]["payload"]["reason"] == "parity mismatch"
 
 
@@ -318,11 +322,14 @@ def test_budget_exhaustion_flips_status(home: Path) -> None:
     assert engine.run_status(run_id)["status"] == "budget_exhausted"
 
 
-def test_plateau_flips_after_configured_non_improvements(home: Path) -> None:
+def test_plateau_announces_but_does_not_close_the_run(home: Path) -> None:
+    """A plateau switches sampling to exploration. Only target or budget ends a run."""
+
     engine, _, evaluator_dir = _make_engine(
         home,
         _contract(plateau_n=2),
         [
+            _outcome(1.0),
             _outcome(1.0),
             _outcome(1.0),
             _outcome(1.0),
@@ -350,9 +357,25 @@ def test_plateau_flips_after_configured_non_improvements(home: Path) -> None:
         "diff",
         {"candidate.py": "attempt = 2\n"},
     )
-    assert second_result["status"] == "plateau"
-    assert second_result["plateau"]
+    assert second_result["status"] == "open", "a plateau must not abandon the budget"
+    assert second_result["plateau"] is True
     assert engine.run_status(run_id)["plateau"]["non_improving"] == 2
+    with connection(home) as conn:
+        announcements = len(load_events(conn, run_id, "plateau_detected"))
+    assert announcements == 1
+
+    third = engine.next_parent(run_id, 0)
+    engine.submit_child(
+        run_id,
+        third.parent.id,
+        "diff",
+        {"candidate.py": "attempt = 3\n"},
+    )
+    with connection(home) as conn:
+        repeated = len(load_events(conn, run_id, "plateau_detected"))
+    assert repeated == announcements, (
+        "the plateau episode must be announced once, not on every submission"
+    )
 
 
 def test_run_status_paths_and_event_sequences_are_stable(home: Path) -> None:

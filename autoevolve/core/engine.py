@@ -740,9 +740,13 @@ class Engine:
             (run_id,),
         ).fetchone()
         last_improvement = int(row["seq"]) if row["seq"] is not None else -1
+        # Only gate-passing submissions count. A broken operator emitting 150
+        # rejects is an operator problem, handled by penalizing its bandit arm,
+        # not evidence that the search has run out of ideas.
         count_row = conn.execute(
             "SELECT COUNT(*) AS count FROM events "
-            "WHERE run_id = ? AND kind = 'child_submitted' AND seq > ?",
+            "WHERE run_id = ? AND kind = 'child_submitted' AND seq > ? "
+            "AND json_extract(payload_json, '$.gate_passed') = 1",
             (run_id, last_improvement),
         ).fetchone()
         non_improving = int(count_row["count"])
@@ -774,15 +778,43 @@ class Engine:
             status = "budget_exhausted"
             event_kind = "budget_exhausted"
             event_payload = {"program_id": program_id, "remaining": remaining}
-        elif plateau["reached"]:
-            status = "plateau"
-            event_kind = "plateau_detected"
-            event_payload = {"program_id": program_id, **plateau}
         if status != "open":
             conn.execute("UPDATE runs SET status = ? WHERE id = ?", (status, run["id"]))
             append_event(conn, str(run["id"]), str(event_kind), event_payload)
             append_event(conn, str(run["id"]), "run_closed", {"status": status})
+        elif plateau["reached"] and not self._plateau_announced(conn, str(run["id"])):
+            # A plateau no longer ends the run. It switches sampling into
+            # exploration, because closing at 150 non-improving submissions
+            # abandoned budget that could still find something. The run ends
+            # on target or budget only.
+            append_event(
+                conn,
+                str(run["id"]),
+                "plateau_detected",
+                {"program_id": program_id, **plateau},
+            )
         return status, plateau, remaining
+
+    @staticmethod
+    def _plateau_announced(conn: Any, run_id: str) -> bool:
+        """Report whether this plateau episode was already announced.
+
+        A new archive improvement ends an episode, so the check is scoped to
+        events after the most recent improvement.
+        """
+
+        row = conn.execute(
+            "SELECT MAX(seq) AS seq FROM events "
+            "WHERE run_id = ? AND kind = 'archive_improved'",
+            (run_id,),
+        ).fetchone()
+        since = int(row["seq"]) if row["seq"] is not None else -1
+        announced = conn.execute(
+            "SELECT COUNT(*) AS count FROM events "
+            "WHERE run_id = ? AND kind = 'plateau_detected' AND seq > ?",
+            (run_id, since),
+        ).fetchone()
+        return int(announced["count"]) > 0
 
     def submit_child(
         self,
@@ -944,7 +976,21 @@ class Engine:
                 },
             )
             improved = False
+            parent_scores = archive.scores_for_program(conn, parent_id)
+            if contract.metric not in parent_scores:
+                raise RuntimeError(f"parent {parent_id} has no contract metric score")
+            parent_fitness = archive.fitness(contract, parent_scores[contract.metric])
             if not gate_passed:
+                # Charge the operator for the failure. Skipping this update let
+                # an operator that emits broken code keep the mean gain from its
+                # few successes and stay selected forever.
+                bandit.update_operator(
+                    conn,
+                    contract.domain,
+                    operator,
+                    parent_fitness,
+                    child_fitness,
+                )
                 append_event(
                     conn,
                     run_id,
@@ -957,13 +1003,6 @@ class Engine:
                     },
                 )
             else:
-                parent_scores = archive.scores_for_program(conn, parent_id)
-                if contract.metric not in parent_scores:
-                    raise RuntimeError(f"parent {parent_id} has no contract metric score")
-                parent_fitness = archive.fitness(
-                    contract,
-                    parent_scores[contract.metric],
-                )
                 arm = bandit.update_operator(
                     conn,
                     contract.domain,

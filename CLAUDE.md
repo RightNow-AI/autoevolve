@@ -123,8 +123,12 @@ events(run_id, seq, kind, payload_json, created_at)         -- append-only, driv
 4. Evaluate in the sandbox cascade (§6). Correctness gate first. Gate fail ⇒ score 0.
 5. `submit_child` → insert program + scores + edges, update archive cell if improved,
    update bandit, append event.
-6. Repeat until: target hit, budget spent, or plateau (no archive improvement in N
-   evals — N from contract, default 150).
+6. Repeat until: target hit or budget spent. A plateau (no archive improvement
+   in N gate-passing evals, N from contract, default 150) does NOT end the run:
+   it announces `plateau_detected` once and switches sampling to exploration.
+   Amended 2026-08-03: closing on plateau abandoned unspent budget, and two
+   measured runs stopped at 153 of 3000 evaluations having found nothing more
+   only because the counter also charged gate failures against the search.
 
 Determinism: every run is replayable from the db (seeds, operator choices, and code
 refs are all recorded). `autoevolve report` reconstructs everything from the db —

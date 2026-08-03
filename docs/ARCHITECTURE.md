@@ -178,8 +178,12 @@ checked on every submit and flip run status when exhausted.
   decisions are recorded in event payloads. replay(run_id) re-derives every
   recorded choice from the db and asserts equality. No wall-clock dependence
   in any decision path.
-- Plateau: no archive_improved event within contract.plateau_n submissions
-  closes the run with status "plateau".
+- Plateau: no archive_improved event within contract.plateau_n GATE-PASSING
+  submissions. It announces `plateau_detected` once per episode and switches
+  sampling to exploration; it does not close the run. Only target_hit and
+  budget exhaustion close a run. Gate failures are excluded from the count
+  because a broken operator is an operator problem, answered by penalizing its
+  bandit arm, not evidence the search is out of ideas.
 - EVOLVE-BLOCK (core/evolve_blocks.py): markers are lines containing
   "EVOLVE-BLOCK-START" / "EVOLVE-BLOCK-END". frozen_equal(parent_text,
   child_text) -> bool compares text outside marked regions.
