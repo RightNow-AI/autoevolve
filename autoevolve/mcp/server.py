@@ -123,6 +123,7 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
         max_cost_usd: float | None = None,
         workers: int = 4,
         seed: int | None = None,
+        target: float | None = None,
     ) -> dict[str, Any]:
         """Open and lock an evolution run for a measured goal.
 
@@ -149,6 +150,7 @@ def build_server(engine: object | None = None, home: Path | None = None) -> MCPS
                     budget=budget,
                     workers=workers,
                     seed=seed,
+                    target=target,
                 )
             )
         except Exception as exc:

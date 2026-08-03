@@ -76,6 +76,10 @@ def run_command(
     ] = None,
     workers: Annotated[int, typer.Option("--workers", min=1, help="Number of islands.")] = 4,
     seed: Annotated[int | None, typer.Option("--seed", help="Replay seed.")] = None,
+    target: Annotated[
+        float | None,
+        typer.Option("--target", help="Metric value that ends the run as target_hit."),
+    ] = None,
     operators: Annotated[
         str,
         typer.Option("--operators", help="Comma-separated operator allowlist."),
@@ -100,6 +104,7 @@ def run_command(
             budget=budget,
             workers=workers,
             seed=seed,
+            target=target,
         )
         run_id = str(opened["run_id"])
         if opened.get("status") == "infeasible" or bool(opened.get("infeasible")):

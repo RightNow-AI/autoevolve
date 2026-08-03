@@ -417,3 +417,30 @@ def test_candidate_files_skip_bytecode_and_vcs_artifacts(tmp_path):
     files = _candidate_files(tmp_path)
 
     assert files == {"solution.py": "x = 1\n"}
+
+
+def test_open_run_target_override_locks_contract_and_stops_on_hit(home: Path) -> None:
+    """An explicit target wins over evaluator config and ends the run at the hit."""
+
+    engine, cascade, evaluator_dir = _make_engine(
+        home,
+        _contract(target=99.0),
+        [_outcome(1.0), _outcome(1.0), _outcome(1.0), _outcome(5.5)],
+    )
+    opened = engine.open_run(
+        "reach five",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=10),
+        seed=7,
+        target=5.0,
+    )
+    assert opened["contract"].target == 5.0
+
+    run_id = opened["run_id"]
+    engine.join_run(run_id, "test")
+    bundle = engine.next_parent(run_id, 0)
+    result = engine.submit_child(
+        run_id, bundle.parent.id, "diff", {"candidate.py": "value = 2\n"}
+    )
+    assert result["gate_passed"]
+    assert engine.run_status(run_id)["status"] == "target_hit"

@@ -120,7 +120,9 @@ the MCP tool set exactly:
 
 ```python
 open_run(goal_text, evaluator_ref=None, budget: Budget, workers: int = 4,
-         seed: int | None = None) -> dict   # {run_id, contract}
+         seed: int | None = None, target: float | None = None) -> dict
+    # {run_id, contract}; target overrides evaluator config and ends the
+    # run as target_hit when a gate-passing child reaches it
 get_contract(run_id) -> Contract
 join_run(run_id, runtime: str) -> dict     # {island: int}
 next_parent(run_id, island: int) -> ParentBundle

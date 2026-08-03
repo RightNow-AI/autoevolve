@@ -160,6 +160,7 @@ class Engine:
         budget: Budget,
         outcomes: list[EvalOutcome],
         ceiling: dict[str, Any] | None,
+        target_override: float | None = None,
     ) -> tuple[Contract, dict[str, float]]:
         template = getattr(evaluator, "contract", None)
         if template is not None and not isinstance(template, Contract):
@@ -209,7 +210,11 @@ class Engine:
             maximize=bool(configured("maximize", True)),
             baseline=medians[metric],
             target=(
-                float(configured("target")) if configured("target") is not None else None
+                float(target_override)
+                if target_override is not None
+                else float(configured("target"))
+                if configured("target") is not None
+                else None
             ),
             gate=gate,
             budget=budget,
@@ -251,8 +256,14 @@ class Engine:
         budget: Budget | None = None,
         workers: int = 4,
         seed: int | None = None,
+        target: float | None = None,
     ) -> dict[str, Any]:
-        """Measure a seed, lock a contract, and create a durable island population."""
+        """Measure a seed, lock a contract, and create a durable island population.
+
+        target, when given, overrides any evaluator-configured target and is
+        the value the run stops on. None means maximize until budget or
+        plateau.
+        """
 
         if budget is None:
             raise ValueError("run budget is required")
@@ -275,6 +286,7 @@ class Engine:
             budget,
             outcomes,
             ceiling,
+            target_override=target,
         )
         run_id = new_id("r")
         program_id = new_id("p")

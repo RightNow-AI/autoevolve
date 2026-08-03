@@ -135,6 +135,7 @@ class FakeEngine:
         budget: object | None = None,
         workers: int = 4,
         seed: int | None = None,
+        target: float | None = None,
     ) -> object:
         assert budget is not None
         typed_budget = cast(Any, budget)
@@ -247,6 +248,7 @@ def test_tool_input_schemas_preserve_exact_arguments_and_defaults() -> None:
         "max_cost_usd",
         "workers",
         "seed",
+        "target",
     }
     assert open_schema["required"] == ["goal_text"]
     assert open_schema["properties"]["workers"]["default"] == 4
