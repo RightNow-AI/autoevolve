@@ -13,6 +13,7 @@ evolution phase. Exits 0 with a PASS line and the run id on success.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import re
@@ -63,6 +64,8 @@ class FakeGitHub(BaseHTTPRequestHandler):
             self._reply({"default_branch": "main"})
         elif method == "GET" and re.fullmatch(r"/branches/.+", suffix):
             self._reply({"name": "main", "commit": {"sha": "base0000000"}})
+        elif method == "GET" and re.fullmatch(r"/git/ref/.+", suffix):
+            self._reply({"ref": suffix.removeprefix("/git/ref/"), "object": {"sha": "base0000000"}})
         elif method == "POST" and suffix == "/git/refs":
             self._reply({"ref": body.get("ref"), "object": {"sha": "base0000000"}}, status=201)
         elif method == "PATCH" and suffix.startswith("/git/refs/"):
@@ -168,15 +171,15 @@ def main() -> None:
         assert len(opened_comments) == 1, f"expected 1 proposal comment, saw {len(opened_comments)}"
         assert "CONTRACT" in opened_comments[0], "proposal comment must carry the contract block"
         db_path = home / "autoevolve.db"
-        assert not db_path.exists() or not sqlite3.connect(db_path).execute(
-            "select count(*) from runs"
-        ).fetchone()[0], "opened handler must not execute anything"
+        if db_path.exists():
+            with contextlib.closing(sqlite3.connect(db_path)) as check:
+                count = check.execute("select count(*) from runs").fetchone()[0]
+            assert not count, "opened handler must not execute anything"
         print("PASS opened: one proposal comment, zero execution")
 
         _run_action(labeled, api_url, home, REPO_ROOT)
-        runs = sqlite3.connect(db_path).execute(
-            "select id, status from runs"
-        ).fetchall()
+        with contextlib.closing(sqlite3.connect(db_path)) as db_check:
+            runs = db_check.execute("select id, status from runs").fetchall()
         assert len(runs) == 1, f"expected exactly one run, saw {runs}"
         run_id, status = runs[0]
         terminal_comments = _comments()[1:]

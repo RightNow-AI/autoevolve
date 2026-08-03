@@ -118,4 +118,44 @@ list` shows all four packs.
 
 NOT done: kernel-frontier cells share the triton evaluator fixtures because
 the evaluator does not read AUTOEVOLVE_CELL yet; documented in its spec. No
-campaign has been run beyond proxy smoke in tests.
+campaign has been run beyond proxy smoke in tests. (Resolved later the same
+day by the review fix wave: the pack now selects fixture groups per cell.)
+
+## U8 proofs (2026-08-03)
+
+Proof 2, the flagship demo: run r8d0a8d799d locked contract metric speedup
+target 10 and closed target_hit at a measured 10.90x on evaluation 16 of a
+200 budget, diff operator only, seed 47. Artifacts (gif, mp4, posters,
+dashboard, report) rendered from the store and shipped in docs/gallery. The
+winning program discovered numpy vectorization inside the EVOLVE-BLOCK and
+wrapped arrays to keep the equality gate passing.
+
+Proof 3, any agent joins: run rda6528a177 was served over MCP streamable
+HTTP and worked simultaneously by a real Claude Code session and a real
+Codex session; the islands table records both runtimes and both submitted
+gate-checked programs. PROOF-3 PASS with 4 non-seed programs.
+
+Proof 1, issue mode end to end: the action entrypoint ran against a local
+fake GitHub API with everything else real: consent-gated proposal comment,
+approval verification, baseline, locked contract, evolution, terminal
+comment, artifact-committing PR calls. PROOF-1 PASS run r59ff8810dd: one
+proposal comment with zero pre-approval execution, then a full approved
+run closing budget_exhausted with a terminal comment and a four-file PR.
+
+Live-run finds that became fixes during proofs: bytecode in candidate
+loading, the CLI loop wiring, the wrong-metric contract guess (METRIC and
+MAXIMIZE declarations), max_completion_tokens and temperature endpoint
+adaptivity, skipped-cycle resilience and logging, serve --http port landing
+in the home parameter, and the issue-mode operators allowlist. Every one
+shipped with a regression test.
+
+## Adversarial review wave (2026-08-03)
+
+Twenty-six agents, five dimensions, one adversarial verifier per finding:
+20 confirmed findings, 1 refuted, recorded in
+docs/reviews/2026-08-03-adversarial-review.md. All 20 fixed the same day
+across two Codex fix lanes (core mechanics, sandbox layer) and one inline
+wave (consent boundary, PR gate filter, config target, metric shadowing,
+lint coverage, doc drift), except one accepted known-minor (synthetic viz
+fixture payloads). Suite grew from 214 to 233 tests, all green with ruff
+clean on every merge.

@@ -17,12 +17,16 @@ anywhere.
   codex exec flags verified from codex-cli 0.146.0; claude -p flags and skill
   frontmatter from live docs. These facts are baked into the U3/U4 briefs.
 
-## Remaining after lane merges
+## Final state (end of day 2026-08-03)
 
-- U9 campaigns lane (launch after wave merges; brief not yet written).
-- U8 proofs run by the orchestrator with real executions.
-- Final ultracode review workflow, fixes, README gallery from real runs,
-  journal entries per unit.
+v0 DONE per CLAUDE.md section 15: all U0 through U9 merged, all U8 proofs
+green (proof 1 r59ff8810dd, proof 2 r8d0a8d799d at 10.90x target_hit,
+proof 3 rda6528a177 dual runtime), 233 tests green with ruff clean, README
+gallery from real runs, adversarial review of 26 agents with 20 findings
+fixed same day (docs/reviews/2026-08-03-adversarial-review.md). No remote
+configured; nothing was pushed anywhere. Lane clones AutoEvolve-* may
+linger until the codex companion releases directory handles; safe to
+delete afterward.
 
 ## Merge discipline
 
