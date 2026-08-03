@@ -25,7 +25,11 @@ class FakeGitHub:
     def list_labels(self, issue_number: int) -> list[dict[str, str]]:
         self._record("list_labels")
         self.calls.append(("list_labels", issue_number))
-        return [{"name": "evolve"}, {"name": "evolve:approved"}]
+        return getattr(
+            self,
+            "labels_response",
+            [{"name": "evolve"}, {"name": "evolve:approved"}],
+        )
 
     def get_actor_permission(self, username: str) -> dict[str, str]:
         self._record("permission")
@@ -96,7 +100,8 @@ def test_opened_posts_one_proposal_and_never_touches_execution(
     event = _fixture("issue_opened.json")
     client = FakeGitHub()
 
-    def fake_synth(goal: str, workdir: Path) -> Path:
+    def fake_synth(goal: str, workdir: Path, *, load: bool) -> Path:
+        assert load is False, "opened path must never load (execute) generated code"
         evaluator = workdir / "evaluator"
         evaluator.mkdir()
         (evaluator / "evaluate.py").write_text(
@@ -302,3 +307,83 @@ def _fixture(name: str) -> dict[str, Any]:
 
 def _unexpected(*args: Any, **kwargs: Any) -> Any:
     raise AssertionError("Execution seam must not be called")
+
+
+def test_opened_with_real_synthesis_spawns_no_subprocess(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """The consent boundary, behaviorally: pre-approval synthesis is text only.
+
+    The real synthesize pipeline runs with a scripted endpoint; any attempt to
+    start a child process (the describe/evaluate runner) fails the test.
+    """
+
+    import subprocess
+
+    from tests.fakes import FakeEndpoint
+
+    scripted = (
+        "### FILE: spec.md\n```md\nGenerated spec. gate: gate. metric: score.\n```\n"
+        "### FILE: evaluate.py\n```python\n"
+        "from autoevolve.eval.contract import StageSpec\n"
+        "STAGES = [StageSpec('smoke', timeout_s=10.0)]\n"
+        "GATE = 'gate'\n"
+        "def evaluate(candidate_dir, stage=0):\n    return {'gate': 1.0, 'score': 1.0}\n"
+        "```\n"
+        "### FILE: baseline/solution.py\n```python\nvalue = 1\n```\n"
+        "### FILE: fixtures/cases.json\n```json\n{}\n```\n"
+    )
+    endpoint = FakeEndpoint([scripted])
+
+    import autoevolve.mutate.models as models_module
+
+    monkeypatch.setattr(models_module, "resolve_endpoint", lambda tier: endpoint)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("opened path spawned a subprocess")
+
+    monkeypatch.setattr(subprocess, "run", forbidden)
+    monkeypatch.setattr(subprocess, "Popen", forbidden)
+
+    event = _fixture("issue_opened.json")
+    client = FakeGitHub()
+    result = action.dispatch(
+        "issues",
+        event,
+        client,
+        home=tmp_path / "home",
+        workdir=tmp_path,
+    )
+
+    assert result == 0
+    comments = [c for c in client.calls if c[0] == "comment"]
+    assert len(comments) == 1
+
+
+def test_approved_declines_when_label_was_removed_before_reverification(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """Re-verification is the gate: a stale labeled event must not execute."""
+
+    event = _fixture("issue_labeled_approved.json")
+    client = FakeGitHub()
+    client.labels_response = [{"name": "evolve"}]
+
+    monkeypatch.setattr(action, "_new_engine", _unexpected)
+    monkeypatch.setattr(action, "_run_loop", _unexpected)
+    monkeypatch.setattr(action, "_render_run", _unexpected)
+
+    result = action.dispatch(
+        "issues",
+        event,
+        client,
+        home=tmp_path / "home",
+        workdir=tmp_path,
+    )
+
+    assert result == 0
+    comments = [c for c in client.calls if c[0] == "comment"]
+    assert len(comments) == 1
+    assert "does not currently have" in comments[0][2]

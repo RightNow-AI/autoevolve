@@ -465,8 +465,12 @@ def _configured_loader(
 
         base = load_evaluator(path)
         override = _CONTRACT_OVERRIDES.get(config.name)
-        metric = override[0] if override is not None else None
-        maximize = override[1] if override is not None else True
+        if override is not None:
+            metric, maximize = override
+        else:
+            metric = getattr(base, "metric", None)
+            declared = getattr(base, "maximize", None)
+            maximize = declared if declared is not None else True
         return _ConfiguredEvaluator(
             base=base,
             domain=config.domain,

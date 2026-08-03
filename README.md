@@ -14,7 +14,7 @@ evidence-backed explanation of the ceiling. Both are successful outcomes.
 
 The goal above was "make the image pipeline at least 10x faster" (run r8d0a8d799d)
 with outputs required identical. The engine locked a contract with metric
-speedup, target 10, and a correctness gate on exact output equality. Evolution
+speedup and target 10 for run r8d0a8d799d, gated on exact output equality. Evolution
 reached a measured 10.90x speedup at evaluation 16 of 200 in run r8d0a8d799d,
 using only the cheap diff operator, seed 47, replayable. The winning program
 discovered numpy vectorization inside the mutable region and wrapped its

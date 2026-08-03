@@ -103,7 +103,7 @@ def handle_opened(client: GitHubClient, issue: dict[str, Any], *, workdir: Path)
 
     def synthesize_source(goal: str) -> str:
         with tempfile.TemporaryDirectory(prefix="autoevolve-gh-proposal-") as raw_dir:
-            evaluator = _synthesize_evaluator(goal, Path(raw_dir))
+            evaluator = _synthesize_evaluator(goal, Path(raw_dir), load=False)
             source = evaluator if evaluator.is_file() else evaluator / "evaluate.py"
             if not source.is_file():
                 raise ValueError("Synthesis did not produce evaluate.py.")
@@ -176,7 +176,7 @@ def handle_approved(
                 raise ValueError(f"Configured evaluator does not exist: {configured_evaluator}")
         else:
             evaluator_temp = tempfile.TemporaryDirectory(prefix="autoevolve-gh-approved-")
-            evaluator_ref = _synthesize_evaluator(goal, Path(evaluator_temp.name))
+            evaluator_ref = _synthesize_evaluator(goal, Path(evaluator_temp.name), load=True)
         print(f"[autoevolve-gh] evaluator ready for issue {issue_number}")
 
         engine = _new_engine(home)
@@ -189,6 +189,7 @@ def handle_approved(
             evaluator_ref=evaluator_ref,
             budget=budget,
             workers=int(config["workers"]),
+            target=_optional_float(config.get("target")),
         )
         run_id = str(opened["run_id"])
         contract = opened.get("contract")
@@ -272,14 +273,16 @@ def handle_approved(
             evaluator_temp.cleanup()
 
 
-def _synthesize_evaluator(goal: str, workdir: Path) -> Path:
+def _synthesize_evaluator(goal: str, workdir: Path, *, load: bool) -> Path:
+    """load=False keeps the consent boundary: pre-approval synthesis never
+    executes generated code, it only produces source for human review."""
     from autoevolve.mutate.models import resolve_endpoint
     from autoevolve.synth.pipeline import synthesize
 
     endpoint = resolve_endpoint("strong") or resolve_endpoint("cheap")
     if endpoint is None:
         raise ValueError("Evaluator synthesis requires a configured model endpoint.")
-    return Path(synthesize(goal, workdir, endpoint))
+    return Path(synthesize(goal, workdir, endpoint, load=load))
 
 
 def _new_engine(home: Path) -> Any:

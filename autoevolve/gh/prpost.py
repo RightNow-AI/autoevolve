@@ -136,16 +136,18 @@ def _winning_code_directory(home: Path, run_id: str) -> Path:
             raise ValueError(f"Run {run_id} does not exist in the AutoEvolve store.")
         contract = json.loads(str(run[0]))
         metric = str(contract["metric"])
+        gate = str(contract["gate"])
         direction = "DESC" if bool(contract.get("maximize", True)) else "ASC"
         query = f"""
             SELECT p.code_ref
             FROM programs AS p
             JOIN scores AS s ON s.program_id = p.id
-            WHERE p.run_id = ? AND s.metric = ?
+            JOIN scores AS g ON g.program_id = p.id AND g.stage = s.stage
+            WHERE p.run_id = ? AND s.metric = ? AND g.metric = ? AND g.value = 1.0
             ORDER BY s.stage DESC, s.value {direction}, p.created_at ASC
             LIMIT 1
         """
-        winner = connection.execute(query, (run_id, metric)).fetchone()
+        winner = connection.execute(query, (run_id, metric, gate)).fetchone()
     if winner is None:
         raise ValueError(f"Run {run_id} has no scored candidate.")
     code_ref = Path(str(winner[0]))

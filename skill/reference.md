@@ -124,6 +124,10 @@ Each inspiration is:
 | `files` | `dict[str, str]` | required | Full contents of every changed or new relative path. |
 | `notes` | `str` | `""` | Concise mutation reasoning. |
 
+A submission that violates EVOLVE-BLOCK discipline is rejected without
+creating a program: the result is `{"rejected": true, "reason": str}`. Check
+for the `rejected` key before reading score fields.
+
 | return field | type |
 |---|---|
 | `program_id` | `str` |
@@ -177,7 +181,7 @@ dictionary instead of a list.
 |---|---|---|
 | `status` | `str` | Running or recorded closure state. |
 | `curve` | `list[[int, float]]` | Evaluation index and best fitness points. |
-| `plateau` | `bool` | Whether plateau closure has been reached. |
+| `plateau` | `dict` | `{"limit": int, "non_improving": int, "reached": bool}`. |
 | `budget_remaining` | `dict` | Remaining configured bounds. |
 | `islands` | JSON-safe | Engine island summary. |
 | `artifacts.gif` | `str \| null` | Progress animation path. |

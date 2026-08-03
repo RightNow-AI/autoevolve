@@ -22,6 +22,11 @@ MEASURED_CLAIM_PATTERNS = (
         r"(?:TFLOPS|tok/s)\s*\d+(?:\.\d+)?)",
         re.IGNORECASE,
     ),
+    re.compile(
+        r"(?:\b(?:faster|speedup)\b.{0,20}(?<![\w.])\d+(?:\.\d+)?|"
+        r"(?<![\w.])\d+(?:\.\d+)?.{0,20}\b(?:faster|speedup)\b)",
+        re.IGNORECASE,
+    ),
 )
 
 

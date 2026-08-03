@@ -213,9 +213,12 @@ Use this concrete cycle:
   },
   "result": [
     {
-      "discovery_id": "disc_07",
-      "summary": "Cache immutable parse results after the parity gate.",
-      "run_id": "run_older"
+      "id": "d1234567890",
+      "domain": "python-speedup",
+      "text": "Cache immutable parse results after the parity gate.",
+      "source_run": "r1234567890",
+      "source_programs": ["p1234567890"],
+      "created_at": "2026-08-03T00:00:00+00:00"
     }
   ]
 }

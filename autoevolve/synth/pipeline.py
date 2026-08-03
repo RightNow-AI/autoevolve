@@ -13,8 +13,20 @@ from autoevolve.synth.domains import classify_domain
 from autoevolve.synth.prompts_synth import repair_prompt, synthesis_prompt
 
 
-def synthesize(goal_text: str, workdir: Path, endpoint: ModelEndpoint) -> Path:
-    """Generate, structurally validate, and load one evaluator directory."""
+def synthesize(
+    goal_text: str,
+    workdir: Path,
+    endpoint: ModelEndpoint,
+    *,
+    load: bool = True,
+) -> Path:
+    """Generate, structurally validate, and optionally load one evaluator directory.
+
+    load=False skips executing the generated evaluate.py entirely. The GitHub
+    opened handler uses it so no issue-derived code runs before the
+    evolve:approved consent label; only text generation and structural checks
+    happen pre-approval.
+    """
 
     evaluator_dir = workdir / "evaluator"
     if evaluator_dir.exists() and any(evaluator_dir.iterdir()):
@@ -38,7 +50,8 @@ def synthesize(goal_text: str, workdir: Path, endpoint: ModelEndpoint) -> Path:
         try:
             files = _validated_files(output)
             _replace_evaluator_dir(evaluator_dir, files)
-            _load_evaluator(evaluator_dir)
+            if load:
+                _load_evaluator(evaluator_dir)
             return evaluator_dir
         except EvalError as exc:
             last_error = exc
