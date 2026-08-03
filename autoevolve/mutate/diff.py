@@ -21,14 +21,29 @@ class DiffOperator:
                 "OPENAI_API_KEY with AUTOEVOLVE_MODEL_CHEAP or AUTOEVOLVE_MODEL"
             )
         prompt = build_diff_prompt(bundle, ctx.contract)
-        response = endpoint.chat(
-            [
-                {"role": "system", "content": "You are a precise code mutation operator."},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.2,
-        )
+        messages = [
+            {"role": "system", "content": "You are a precise code mutation operator."},
+            {"role": "user", "content": prompt},
+        ]
+        response = endpoint.chat(messages, temperature=0.2)
         blocks = parse_search_replace(response)
+        if not blocks:
+            correction = (
+                "Your reply contained no valid SEARCH/REPLACE blocks. Reply again with "
+                "ONLY blocks in exactly this shape, nothing else:\n"
+                "<<<<<<< SEARCH relative/path.py\n"
+                "exact lines copied from the file\n"
+                "=======\n"
+                "replacement lines\n"
+                ">>>>>>> REPLACE"
+            )
+            messages = [
+                *messages,
+                {"role": "assistant", "content": response},
+                {"role": "user", "content": correction},
+            ]
+            response = endpoint.chat(messages, temperature=0.2)
+            blocks = parse_search_replace(response)
         files, applied, failed = apply_search_replace(bundle.parent_files, blocks)
         if applied == 0:
             raise OperatorError(f"diff applied zero blocks; failed={failed}")

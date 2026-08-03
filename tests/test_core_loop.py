@@ -131,3 +131,65 @@ def test_worker_loop_rejects_negative_cycle_cap(home: Path) -> None:
     )["run_id"]
     with pytest.raises(ValueError, match="non-negative"):
         run_worker_loop(engine, run_id, lambda _: object(), max_cycles=-1)
+
+
+def test_loop_skips_cycles_on_skip_cycle_errors(home: Path) -> None:
+    """An operator failure carrying skip_cycle must not kill the loop."""
+
+    class SkipError(Exception):
+        skip_cycle = True
+
+    class FlakyOperator:
+        name = "diff"
+
+        def __init__(self):
+            self.calls = 0
+
+        def propose(self, bundle, ctx):
+            self.calls += 1
+            if self.calls == 1:
+                raise SkipError("bad model response")
+            return Proposal({"candidate.py": "value = 3\n"}, "recovered")
+
+    engine, _cascade, evaluator_dir = _engine(home)
+    run_id = engine.open_run(
+        "skip once then recover",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=1),
+        seed=23,
+    )["run_id"]
+    operator = FlakyOperator()
+
+    summary = run_worker_loop(engine, run_id, lambda name: operator, max_cycles=4)
+
+    assert summary["skips"] == 1
+    assert summary["submissions"] == 1
+    assert operator.calls == 2
+
+
+def test_loop_raises_after_consecutive_skip_cap(
+    home: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from autoevolve.core import loop as loop_module
+
+    class SkipError(Exception):
+        skip_cycle = True
+
+    class AlwaysSkip:
+        name = "diff"
+
+        def propose(self, bundle, ctx):
+            raise SkipError("never works")
+
+    monkeypatch.setattr(loop_module, "_MAX_CONSECUTIVE_SKIPS", 3)
+    engine, _cascade, evaluator_dir = _engine(home)
+    run_id = engine.open_run(
+        "always skipping",
+        evaluator_ref=evaluator_dir,
+        budget=Budget(max_evals=5),
+        seed=29,
+    )["run_id"]
+
+    with pytest.raises(RuntimeError, match="consecutive skipped cycles"):
+        run_worker_loop(engine, run_id, lambda name: AlwaysSkip())

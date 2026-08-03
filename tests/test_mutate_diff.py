@@ -90,3 +90,23 @@ changed
 
     with pytest.raises(OperatorError, match="zero blocks"):
         DiffOperator().propose(_bundle(), _context(endpoint, tmp_path))
+
+
+def test_diff_retries_once_with_correction_when_no_blocks_parse(tmp_path):
+    """One off-format model reply gets a single corrective round trip."""
+
+    good_block = (
+        "<<<<<<< SEARCH main.py\n"
+        "value = 1\n"
+        "=======\n"
+        "value = 2\n"
+        ">>>>>>> REPLACE\n"
+    )
+    endpoint = FakeEndpoint(["I made the code faster, trust me.", good_block])
+
+    proposal = DiffOperator().propose(_bundle(), _context(endpoint, tmp_path))
+
+    assert "value = 2" in proposal.files["main.py"]
+    assert len(endpoint.calls) == 2
+    correction_turn = endpoint.calls[1]
+    assert any("no valid SEARCH/REPLACE blocks" in m["content"] for m in correction_turn)

@@ -8,6 +8,8 @@ from typing import Any
 
 from autoevolve.core.engine import Engine
 
+_MAX_CONSECUTIVE_SKIPS = 25
+
 
 def run_worker_loop(
     engine: Engine,
@@ -33,6 +35,8 @@ def run_worker_loop(
         island = assignment["island"]
     cycles = 0
     submissions = 0
+    skips = 0
+    consecutive_skips = 0
     last_result: dict[str, Any] | None = None
 
     while max_cycles is None or cycles < max_cycles:
@@ -53,7 +57,20 @@ def run_worker_loop(
             cycle=cycles,
             workdir=engine.home,
         )
-        proposal = propose(bundle, context)
+        try:
+            proposal = propose(bundle, context)
+        except Exception as exc:
+            if not getattr(exc, "skip_cycle", False):
+                raise
+            consecutive_skips += 1
+            skips += 1
+            cycles += 1
+            if consecutive_skips >= _MAX_CONSECUTIVE_SKIPS:
+                raise RuntimeError(
+                    f"{consecutive_skips} consecutive skipped cycles; last reason: {exc}"
+                ) from exc
+            continue
+        consecutive_skips = 0
         files = getattr(proposal, "files", None)
         if not isinstance(files, dict):
             raise TypeError(f"operator {operator_name!r} returned no file mapping")
@@ -76,6 +93,7 @@ def run_worker_loop(
         "island": island,
         "cycles": cycles,
         "submissions": submissions,
+        "skips": skips,
         "last_result": last_result,
         "status": final_status["status"],
         "artifacts": final_status["artifacts"],

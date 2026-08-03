@@ -25,7 +25,14 @@ class OperatorContext:
 
 
 class OperatorError(Exception):
-    """An expected operator failure that should skip the current cycle."""
+    """An expected operator failure that should skip the current cycle.
+
+    skip_cycle is the structural contract the core loop checks without
+    importing this package: any exception carrying a truthy skip_cycle is a
+    skipped cycle, not a crash.
+    """
+
+    skip_cycle = True
 
     def __init__(self, reason: str) -> None:
         super().__init__(reason)
