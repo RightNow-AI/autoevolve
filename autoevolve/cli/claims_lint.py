@@ -69,10 +69,17 @@ def scan_repository(root: Path) -> list[ClaimViolation]:
 
 
 def scan_claims(paths: Iterable[Path]) -> list[ClaimViolation]:
-    """Return measured-claim violations outside fenced code blocks."""
+    """Return measured-claim violations outside fenced code blocks.
+
+    A file whose name carries a run id is a verbatim generated run artifact
+    (a copied report in a gallery); the artifact itself is the grounding, so
+    it is skipped rather than line-checked.
+    """
 
     violations: list[ClaimViolation] = []
     for path in sorted(Path(item) for item in paths):
+        if RUN_ID_PATTERN.search(path.name):
+            continue
         violations.extend(_scan_file(path))
     return violations
 

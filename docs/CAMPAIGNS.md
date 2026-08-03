@@ -70,7 +70,8 @@ campaigns/<name>/
   multiplier like 10x [no-claim], a percentage gain, TFLOPS, tok/s, or the words faster
   or speedup next to a number) must contain a run id (pattern r[0-9a-f]{10})
   or the explicit marker [no-claim] for illustrative text. A violating line
-  fails the suite.
+  fails the suite. Files whose name carries a run id are verbatim generated
+  run artifacts and are skipped; the artifact itself is the grounding.
 - The campaign report generator labels every result candidate, rediscovery,
   or discovery per docs/HONESTY.md. discovery requires held-out or replicated
   validation recorded in the db plus the exact run id, enforced in the report
