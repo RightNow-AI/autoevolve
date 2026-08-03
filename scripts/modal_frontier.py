@@ -252,6 +252,64 @@ def search_gpu(
 
 
 @app.function(image=image, volumes={"/store": store}, timeout=900)
+def status_all() -> dict:
+    """Report every problem store in one container instead of one each."""
+
+    import json as _json
+    import sqlite3
+    from pathlib import Path
+
+    store.reload()
+    report: dict[str, dict] = {}
+    roots = [Path("/store")] + sorted(p for p in Path("/store").iterdir() if p.is_dir())
+    for root in roots:
+        db_path = root / "autoevolve" / "autoevolve.db"
+        if not db_path.is_file():
+            continue
+        name = "legacy" if root == Path("/store") else root.name
+        try:
+            conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+            rows = conn.execute(
+                "SELECT id, status, contract_json FROM runs ORDER BY created_at DESC LIMIT 1"
+            ).fetchall()
+            if not rows:
+                continue
+            run_id, status, contract = rows[0]
+            spec = _json.loads(contract)
+            metric, gate = spec["metric"], spec["gate"]
+            order = "DESC" if spec["maximize"] else "ASC"
+            best_row = conn.execute(
+                f"SELECT s.value FROM scores s JOIN programs p ON p.id = s.program_id "
+                f"JOIN scores g ON g.program_id = p.id AND g.stage = s.stage "
+                f"WHERE p.run_id = ? AND s.metric = ? AND g.metric = ? AND g.value = 1.0 "
+                f"ORDER BY s.value {order} LIMIT 1",
+                (run_id, metric, gate),
+            ).fetchone()
+            programs = conn.execute(
+                "SELECT COUNT(*) FROM programs WHERE run_id = ?", (run_id,)
+            ).fetchone()[0]
+            mix = dict(
+                conn.execute(
+                    "SELECT operator, COUNT(*) FROM programs WHERE run_id = ? GROUP BY operator",
+                    (run_id,),
+                ).fetchall()
+            )
+            conn.close()
+            report[name] = {
+                "run_id": run_id,
+                "status": status,
+                "metric": metric,
+                "best": best_row[0] if best_row else None,
+                "programs": programs,
+                "operators": mix,
+            }
+        except sqlite3.Error as exc:
+            report[name] = {"error": str(exc)}
+    print(_json.dumps(report, indent=2), flush=True)
+    return report
+
+
+@app.function(image=image, volumes={"/store": store}, timeout=900)
 def best(run_id: str | None = None, store_name: str = "default") -> dict:
     """Report the best measured result on one problem store without a rerun."""
 
