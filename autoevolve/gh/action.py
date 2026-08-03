@@ -232,6 +232,7 @@ def handle_approved(
             run_id,
             workdir=workdir,
             workers=int(config["workers"]),
+            evaluator_dir=evaluator_ref,
             on_submission=on_submission,
         )
         status = engine.run_status(run_id)
@@ -293,15 +294,16 @@ def _run_loop(
     *,
     workdir: Path,
     workers: int,
+    evaluator_dir: Path | None = None,
     on_submission: Callable[[dict[str, Any] | None], None],
 ) -> dict[str, Any] | None:
     from autoevolve.core.loop import run_worker_loop
+    from autoevolve.mutate.compose import build_get_operator, build_local_evaluator
 
     return run_worker_loop(
         engine,
         run_id,
-        workdir=workdir,
-        workers=workers,
+        build_get_operator(None, build_local_evaluator(evaluator_dir)),
         on_submission=on_submission,
     )
 

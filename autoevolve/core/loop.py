@@ -17,6 +17,7 @@ def run_worker_loop(
     get_operator: Callable[[str], object],
     max_cycles: int | None = None,
     island: int | None = None,
+    on_submission: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Run mutation cycles until closure or an optional deterministic cycle cap.
 
@@ -86,6 +87,8 @@ def run_worker_loop(
         cycles += 1
         if not last_result.get("rejected", False):
             submissions += 1
+            if on_submission is not None:
+                on_submission(last_result)
 
     final_status = engine.run_status(run_id)
     return {

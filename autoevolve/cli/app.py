@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import importlib
 import json
-import tempfile
 from collections.abc import Callable
 from pathlib import Path
 from typing import Annotated, Any
@@ -254,74 +253,23 @@ def _parse_operators(raw: str) -> list[str]:
     return list(dict.fromkeys(names))
 
 
+def _build_local_evaluator(evaluator_dir: Path | None) -> Callable[[dict[str, str]], Any] | None:
+    """Patchable seam over the shared composition helper."""
+
+    from autoevolve.mutate.compose import build_local_evaluator
+
+    return build_local_evaluator(evaluator_dir)
+
+
 def _build_get_operator(
     operator_names: list[str] | None,
     evaluator_dir: Path | None,
 ) -> Callable[[str], object]:
-    """Compose mutate operators with their runtime services for the core loop.
+    """Compose mutate operators with their runtime services for the core loop."""
 
-    The loop supplies only the contract, a per-cycle RNG, and the engine home.
-    This closure resolves model endpoints once, builds a real local evaluator
-    callable when the evaluator directory is known, and enforces the operator
-    allowlist by substitution. The returned operator reports its own name so
-    the loop records what actually ran.
-    """
+    from autoevolve.mutate.compose import build_get_operator
 
-    from autoevolve.mutate.base import OperatorContext
-    from autoevolve.mutate.models import resolve_endpoint
-    from autoevolve.mutate.registry import get_operator
-
-    endpoint_cheap = resolve_endpoint("cheap")
-    endpoint_strong = resolve_endpoint("strong")
-    evaluate_locally = _build_local_evaluator(evaluator_dir)
-
-    class _BoundOperator:
-        def __init__(self, inner: Any) -> None:
-            self._inner = inner
-            self.name = str(getattr(inner, "name", "unknown"))
-
-        def propose(self, bundle: Any, ctx: Any) -> Any:
-            full = OperatorContext(
-                contract=ctx.contract,
-                rng=ctx.rng,
-                endpoint_cheap=endpoint_cheap,
-                endpoint_strong=endpoint_strong,
-                evaluate_locally=evaluate_locally,
-                workdir=Path(ctx.workdir),
-            )
-            return self._inner.propose(bundle, full)
-
-    def factory(name: str) -> object:
-        effective = name
-        if operator_names and name not in operator_names:
-            effective = operator_names[0]
-        return _BoundOperator(get_operator(effective))
-
-    return factory
-
-
-def _build_local_evaluator(
-    evaluator_dir: Path | None,
-) -> Callable[[dict[str, str]], Any] | None:
-    """A callable evaluating candidate files through the real sandbox cascade."""
-
-    if evaluator_dir is None:
-        return None
-    from autoevolve.eval.cascade import run_cascade
-    from autoevolve.eval.contract import load_evaluator
-
-    evaluator = load_evaluator(evaluator_dir)
-
-    def evaluate_locally(files: dict[str, str]) -> Any:
-        with tempfile.TemporaryDirectory(prefix="autoevolve-local-eval-") as tmp:
-            root = Path(tmp)
-            for relative, content in files.items():
-                target = root / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(content, encoding="utf-8")
-            return run_cascade(evaluator, root)
-
-    return evaluate_locally
+    return build_get_operator(operator_names, _build_local_evaluator(evaluator_dir))
 
 
 def _finish_and_print(engine: Any, home: Path, run_id: str) -> None:
