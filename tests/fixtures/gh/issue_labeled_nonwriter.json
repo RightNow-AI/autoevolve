@@ -1,0 +1,15 @@
+{
+  "action": "labeled",
+  "issue": {
+    "number": 42,
+    "title": "evolve: reduce allocation count",
+    "body": "Keep behavior identical.\n\n```autoevolve\nevaluator: evaluators/allocation-count\nbudget_evals: 30\nworkers: 1\n```",
+    "labels": [
+      {"id": 1001, "name": "evolve"},
+      {"id": 1002, "name": "evolve:approved"}
+    ]
+  },
+  "label": {"id": 1002, "name": "evolve:approved"},
+  "repository": {"full_name": "acme/demo"},
+  "sender": {"login": "external-user"}
+}

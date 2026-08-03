@@ -1,0 +1,26 @@
+# Create the `evolve` and `evolve:approved` labels first. The approval label records
+# maintainer consent to execute the reviewed evaluator and start evolution.
+name: AutoEvolve issue mode
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  issues: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Handle AutoEvolve issue event
+        run: uv run python -m autoevolve.gh.action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

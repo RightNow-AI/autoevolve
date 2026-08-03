@@ -1,0 +1,15 @@
+{
+  "action": "labeled",
+  "issue": {
+    "number": 41,
+    "title": "evolve: make the parser faster",
+    "body": "Improve parser throughput.",
+    "labels": [
+      {"id": 1001, "name": "evolve"},
+      {"id": 1003, "name": "needs-triage"}
+    ]
+  },
+  "label": {"id": 1003, "name": "needs-triage"},
+  "repository": {"full_name": "acme/demo"},
+  "sender": {"login": "maintainer"}
+}
