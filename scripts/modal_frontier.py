@@ -186,8 +186,13 @@ def best(run_id: str | None = None, store_name: str = "default") -> dict:
     store.reload()
     db_path = Path(f"/store/{store_name}/autoevolve/autoevolve.db")
     if not db_path.is_file():
-        print("no store yet", flush=True)
-        return {"error": "no store yet"}
+        # Runs started before stores were namespaced live at the volume root.
+        legacy = Path("/store/autoevolve/autoevolve.db")
+        if legacy.is_file():
+            db_path = legacy
+        else:
+            print(f"no store at {db_path}", flush=True)
+            return {"error": f"no store at {db_path}"}
     conn = sqlite3.connect(db_path)
     if run_id is None:
         row = conn.execute("SELECT id FROM runs ORDER BY created_at DESC LIMIT 1").fetchone()
