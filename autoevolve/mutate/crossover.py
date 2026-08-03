@@ -49,6 +49,11 @@ class CrossoverOperator:
                 choices.append(f"{path}#region{region_index}={choice}")
             files[path] = _join_regions(primary.frozen, selected)
 
+        if files == bundle.parent_files:
+            # Every region coin landed on the primary, so this is the parent
+            # verbatim. Submitting it would spend an evaluation to re-measure
+            # something already in the archive.
+            raise OperatorError("crossover produced the parent unchanged")
         note = ", ".join(choices) if choices else "no shared mutable regions"
         return Proposal(files=files, notes=f"crossover: {note}")
 

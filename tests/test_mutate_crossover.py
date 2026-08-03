@@ -84,3 +84,38 @@ def test_crossover_requires_second_parent(tmp_path):
 
     with pytest.raises(OperatorError, match="requires a crossover parent"):
         CrossoverOperator().propose(bundle, _context(tmp_path))
+
+
+def test_crossover_refuses_to_resubmit_the_parent_unchanged():
+    """All-primary coin flips reproduce the parent; spending an eval on that is waste."""
+
+    from pathlib import Path
+
+    body = "# EVOLVE-BLOCK-START\nvalue = 1\n# EVOLVE-BLOCK-END\n"
+    other = "# EVOLVE-BLOCK-START\nvalue = 2\n# EVOLVE-BLOCK-END\n"
+    parent = Program("p1", "r1", None, "seed", "ref1", 0, "0", "now")
+    partner = Program("p2", "r1", None, "diff", "ref2", 1, "0", "now")
+
+    class AlwaysPrimary(random.Random):
+        def random(self) -> float:
+            return 0.0
+
+    bundle = ParentBundle(
+        parent=parent,
+        parent_files={"main.py": body},
+        crossover_parent=partner,
+        crossover_files={"main.py": other},
+    )
+    ctx = OperatorContext(
+        contract=Contract(
+            "g", "d", "score", True, None, None, "correct", Budget(max_evals=5)
+        ),
+        rng=AlwaysPrimary(0),
+        endpoint_cheap=None,
+        endpoint_strong=None,
+        evaluate_locally=None,
+        workdir=Path("."),
+    )
+
+    with pytest.raises(OperatorError, match="parent unchanged"):
+        CrossoverOperator().propose(bundle, ctx)

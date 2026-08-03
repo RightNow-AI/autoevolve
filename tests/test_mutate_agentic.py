@@ -68,7 +68,7 @@ def test_agentic_reads_back_edit_and_appends_local_evaluation(monkeypatch, tmp_p
     assert calls == [
         (
             [
-                "claude",
+                "C:/bin/claude.exe",
                 "-p",
                 agentic.AGENT_TASK_PROMPT,
                 "--permission-mode",
@@ -90,7 +90,10 @@ def test_agentic_reads_back_edit_and_appends_local_evaluation(monkeypatch, tmp_p
     assert evaluations == [proposal.files]
     assert "runtime=claude changed=1" in proposal.notes
     assert '"gate_passed":true' in proposal.notes
-    assert "Recent failure notes" in (workspace / "PROMPT.md").read_text(encoding="utf-8")
+    written = (tmp_path / "agentic-p1" / "PROMPT.md").read_text(encoding="utf-8")
+    assert "Recent gate failures in this run" in written
+    assert "Parent scores:" in written
+    assert "Best scores in this run:" in written
 
 
 def test_agentic_raises_when_agent_makes_no_change(monkeypatch, tmp_path):
@@ -116,16 +119,16 @@ def test_runtime_selection_respects_explicit_and_auto_modes(monkeypatch):
     monkeypatch.setattr(
         agentic.shutil, "which", lambda name: "C:/bin/codex.exe" if name == "codex" else None
     )
-    assert agentic._select_runtime() == "codex"
+    assert agentic._select_runtime() == ("codex", "C:/bin/codex.exe")
 
     monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "auto")
     monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
-    assert agentic._select_runtime() == "claude"
+    assert agentic._select_runtime() == ("claude", "C:/bin/claude.exe")
 
     monkeypatch.setattr(
         agentic.shutil, "which", lambda name: "C:/bin/codex.exe" if name == "codex" else None
     )
-    assert agentic._select_runtime() == "codex"
+    assert agentic._select_runtime() == ("codex", "C:/bin/codex.exe")
 
 
 def test_verified_claude_and_codex_commands_are_exact(tmp_path):

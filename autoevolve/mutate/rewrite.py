@@ -21,11 +21,22 @@ class RewriteOperator:
                 "OPENAI_API_KEY with AUTOEVOLVE_MODEL_STRONG or AUTOEVOLVE_MODEL"
             )
         prompt = build_rewrite_prompt(bundle, ctx.contract)
+        # A rewrite emits whole files, so the default 4096 cap truncates the
+        # response mid-file. The unclosed fence is then rejected by the parser
+        # and the cycle silently skips, which made this operator near-inert on
+        # anything but tiny programs. Size the budget to the input instead.
+        mutable_chars = sum(
+            len(content)
+            for content in bundle.parent_files.values()
+            if "EVOLVE-BLOCK-START" in content
+        )
+        max_tokens = max(8192, min(32768, (mutable_chars // 2) + 4096))
         response = endpoint.chat(
             [
                 {"role": "system", "content": "You are a disciplined full-file code rewriter."},
                 {"role": "user", "content": prompt},
             ],
+            max_tokens=max_tokens,
             temperature=0.5,
         )
         parsed = parse_file_blocks(response)

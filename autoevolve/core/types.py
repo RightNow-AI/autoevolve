@@ -124,3 +124,10 @@ class ParentBundle:
     crossover_parent: Program | None = None
     crossover_files: dict[str, str] | None = None
     parent_sample_seq: int | None = None
+    # Feedback the operator needs to steer. Without these the model is asked to
+    # improve something without being told how it scored, what the best score
+    # is, or why the previous attempts failed.
+    parent_scores: dict[str, float] = field(default_factory=dict)
+    best_scores: dict[str, float] = field(default_factory=dict)
+    inspiration_files: list[dict[str, str]] = field(default_factory=list)
+    recent_failures: list[str] = field(default_factory=list)

@@ -40,7 +40,7 @@ class AgenticOperator:
     name = "agentic"
 
     def propose(self, bundle: ParentBundle, ctx: OperatorContext) -> Proposal:
-        runtime = _select_runtime()
+        runtime, executable = _select_runtime()
         timeout_s = _agent_timeout()
         workspace = ctx.workdir / f"agentic-{bundle.parent.id}"
         _prepare_workspace(workspace, ctx.workdir)
@@ -55,7 +55,7 @@ class AgenticOperator:
             _agent_contract(bundle, ctx), encoding="utf-8"
         )
 
-        command = _agent_command(runtime, workspace)
+        command = _agent_command(runtime, workspace, executable)
         try:
             completed = run_agent_process(command, workspace, timeout_s)
         except subprocess.TimeoutExpired as exc:
@@ -97,20 +97,30 @@ class AgenticOperator:
         return Proposal(files=files, notes=" ".join(notes))
 
 
-def _select_runtime() -> str:
+def _select_runtime() -> tuple[str, str]:
+    """Return the runtime name and the executable path to spawn.
+
+    The resolved path matters. shutil.which honors PATHEXT and happily finds
+    codex.cmd, but CreateProcess only appends .exe, so spawning the bare name
+    raises FileNotFoundError. That surfaced as a skipped cycle rather than an
+    error, which is why every agentic mutation silently failed on Windows npm
+    installs while the preflight check reported the runtime as present.
+    """
+
     requested = os.getenv("AUTOEVOLVE_AGENT_RUNTIME", "auto").strip().lower()
     if requested not in {"auto", "claude", "codex"}:
         raise OperatorError("AUTOEVOLVE_AGENT_RUNTIME must be claude, codex, or auto")
     if requested in {"claude", "codex"}:
-        if shutil.which(requested) is None:
+        resolved = shutil.which(requested)
+        if resolved is None:
             raise OperatorError(
                 f"AUTOEVOLVE_AGENT_RUNTIME={requested}, but {requested} is not on PATH"
             )
-        return requested
-    if shutil.which("claude"):
-        return "claude"
-    if shutil.which("codex"):
-        return "codex"
+        return requested, resolved
+    for name in ("claude", "codex"):
+        resolved = shutil.which(name)
+        if resolved:
+            return name, resolved
     raise OperatorError("no agent runtime found; install claude or codex")
 
 
@@ -125,10 +135,11 @@ def _agent_timeout() -> float:
     return timeout_s
 
 
-def _agent_command(runtime: str, workspace: Path) -> list[str]:
+def _agent_command(runtime: str, workspace: Path, executable: str | None = None) -> list[str]:
+    program = executable or runtime
     if runtime == "claude":
         return [
-            "claude",
+            program,
             "-p",
             AGENT_TASK_PROMPT,
             "--permission-mode",
@@ -143,7 +154,7 @@ def _agent_command(runtime: str, workspace: Path) -> list[str]:
             "json",
         ]
     return [
-        "codex",
+        program,
         "exec",
         "--skip-git-repo-check",
         "-s",
@@ -182,7 +193,9 @@ def _safe_path(workspace: Path, relative_path: str) -> Path:
 def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
     contract = ctx.contract
     direction = "maximize" if contract.maximize else "minimize"
-    target = direction if contract.target is None else str(contract.target)
+    target = "no fixed target, push as far as possible" if contract.target is None else str(
+        contract.target
+    )
     inspiration_scores = [
         f"- {program.id} ({program.code_ref}): "
         + ", ".join(f"{key}={value}" for key, value in sorted(scores.items()))
@@ -194,14 +207,25 @@ def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
             "# Mutation contract",
             "",
             f"Goal: {contract.goal}",
-            f"Metric: {contract.metric}",
+            f"Metric: {contract.metric} ({direction})",
             f"Target: {target}",
+            f"Baseline: {contract.baseline if contract.baseline is not None else 'unmeasured'}",
             f"Gate: {contract.gate}",
             f"Parent: {bundle.parent.id}",
-            "Parent score evidence:",
-            *(inspiration_scores or ["- No scores were supplied in ParentBundle."]),
-            "Recent failure notes:",
-            f"- {bundle.operator_hint or 'None supplied.'}",
+            "Parent scores: "
+            + (
+                ", ".join(f"{k}={v}" for k, v in sorted(bundle.parent_scores.items()))
+                or "not recorded"
+            ),
+            "Best scores in this run: "
+            + (
+                ", ".join(f"{k}={v}" for k, v in sorted(bundle.best_scores.items()))
+                or "not recorded"
+            ),
+            "Other elites in the population and their scores:",
+            *(inspiration_scores or ["- None available yet."]),
+            "Recent gate failures in this run, do not repeat them:",
+            *([f"- {reason}" for reason in bundle.recent_failures] or ["- None recorded."]),
             "Prior discoveries:",
             *(discoveries or ["- None supplied."]),
             "",

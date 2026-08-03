@@ -577,6 +577,13 @@ class Engine:
                 str(run["domain"]),
                 str(run["goal_text"]),
             )
+            best_elite = max(
+                elites,
+                key=lambda item: item.fitness,
+                default=None,
+            )
+            best_scores = dict(best_elite.scores) if best_elite is not None else {}
+            recent_failures = self._recent_failures(conn, run_id)
 
         return ParentBundle(
             parent=choice.elite.program,
@@ -591,7 +598,36 @@ class Engine:
                 self.store.get(crossover.program.code_ref) if crossover is not None else None
             ),
             parent_sample_seq=parent_sample_seq,
+            parent_scores=dict(choice.elite.scores),
+            best_scores=best_scores,
+            inspiration_files=[
+                self.store.get(elite.program.code_ref) for elite in inspiration_elites
+            ],
+            recent_failures=recent_failures,
         )
+
+    @staticmethod
+    def _recent_failures(conn: Any, run_id: str, limit: int = 3) -> list[str]:
+        """Return the most recent gate failure reasons for operator feedback.
+
+        A mutation that cannot see why the last attempts failed repeats them.
+        """
+
+        rows = conn.execute(
+            "SELECT payload_json FROM events WHERE run_id = ? AND kind = 'gate_failed' "
+            "ORDER BY seq DESC LIMIT ?",
+            (run_id, limit),
+        ).fetchall()
+        reasons: list[str] = []
+        for row in rows:
+            try:
+                payload = json.loads(str(row["payload_json"]))
+            except (TypeError, ValueError):
+                continue
+            reason = payload.get("reason") or payload.get("error")
+            if isinstance(reason, str) and reason:
+                reasons.append(reason)
+        return reasons
 
     @staticmethod
     def _pending_sample(
