@@ -12,8 +12,11 @@ module re-derives every quantity that reaches a metric.
 from __future__ import annotations
 
 import importlib.util
+import inspect
+import operator
 import os
 import sys
+import time
 from pathlib import Path
 
 from autoevolve.eval.contract import EvalError, StageSpec
@@ -30,6 +33,17 @@ try:
     ORDER = int(_CELL.rsplit("-", 1)[1])
 except (IndexError, ValueError) as _exc:  # pragma: no cover - configuration error
     raise EvalError(f"AUTOEVOLVE_CELL must look like order-<n>, got {_CELL!r}") from _exc
+
+
+def _search_budget_s() -> float:
+    """Seconds a candidate may spend searching inside build().
+
+    A stage timeout is a total loss rather than partial credit, so the budget
+    handed to the candidate is deliberately below the wall clock to leave room
+    for verification and process teardown.
+    """
+
+    return max(1.0, STAGES[0].timeout_s * 0.75)
 
 
 def _normalize_marks(raw: object) -> tuple[int, ...]:
@@ -49,11 +63,17 @@ def _normalize_marks(raw: object) -> tuple[int, ...]:
         ) from exc
     marks: list[int] = []
     for index, item in enumerate(items):
-        if type(item) is not int:
+        # Accept any exact integer, including numpy integers, so a
+        # numpy-backed search is not rejected on the way out. bool is a
+        # subclass of int and is refused explicitly.
+        if isinstance(item, bool):
+            raise EvalError(f"mark {index} must be an integer, got bool")
+        try:
+            marks.append(int(operator.index(item)))
+        except TypeError as exc:
             raise EvalError(
-                f"mark {index} must be a plain int, got {type(item).__name__}"
-            )
-        marks.append(item)
+                f"mark {index} must be an integer, got {type(item).__name__}"
+            ) from exc
     return tuple(marks)
 
 
@@ -105,8 +125,15 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     build = getattr(module, "build", None)
     if not callable(build):
         raise EvalError("ruler.py must define callable build()")
+    # Hand the candidate a real compute budget. build() may search until the
+    # deadline and return its best incumbent; a closed-form construction that
+    # ignores the argument still works.
+    deadline = time.monotonic() + _search_budget_s()
     try:
-        raw = build(ORDER)
+        if len(inspect.signature(build).parameters) >= 2:
+            raw = build(ORDER, deadline)
+        else:
+            raw = build(ORDER)
     except Exception as exc:
         raise EvalError(f"build() raised: {exc}") from exc
     marks = _normalize_marks(raw)
