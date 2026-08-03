@@ -237,7 +237,7 @@ def serve_command(
     server = importlib.import_module("autoevolve.mcp.server")
 
     if http:
-        server.serve_http(port)
+        server.serve_http(port=port)
     else:
         server.serve_stdio()
 

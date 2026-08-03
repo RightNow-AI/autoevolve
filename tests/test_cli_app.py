@@ -124,7 +124,8 @@ def test_serve_lazily_wires_stdio_and_http(monkeypatch) -> None:
     def serve_stdio() -> None:
         calls.append(("stdio", None))
 
-    def serve_http(port: int) -> None:
+    def serve_http(home=None, port: int = 8747, host: str = "127.0.0.1") -> None:
+        assert home is None, "port must never arrive positionally as home"
         calls.append(("http", port))
 
     server_module = types.ModuleType("autoevolve.mcp.server")
