@@ -1,0 +1,14 @@
+{
+  "name": "ramsey-lower-bound",
+  "domain": "ramsey-lower-bound",
+  "evaluator": "evaluators/ramsey",
+  "cells": [
+    {"key": "k3-smoke", "env": {"AUTOEVOLVE_CELL": "k3-smoke"}, "target": 5},
+    {"key": "k4-climb", "env": {"AUTOEVOLVE_CELL": "k4-climb"}, "target": 17},
+    {"key": "k5-frontier", "env": {"AUTOEVOLVE_CELL": "k5-frontier"}, "target": 45}
+  ],
+  "proxy_budget": {"max_evals": 80},
+  "full_budget": {"max_evals": 1200},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
