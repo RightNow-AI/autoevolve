@@ -1,0 +1,213 @@
+"""Headless Claude Code or Codex mutation operator.
+
+Claude CLI reference: https://code.claude.com/docs/en/cli-reference
+Codex command flags were verified from codex-cli 0.146.0 help output.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import os
+import shutil
+import subprocess
+from pathlib import Path
+
+from autoevolve.core.types import ParentBundle, Proposal
+from autoevolve.mutate.base import OperatorContext, OperatorError
+
+AGENT_TASK_PROMPT = "read PROMPT.md and improve the code per its contract"
+
+
+def run_agent_process(
+    cmd: list[str], cwd: Path, timeout_s: float
+) -> subprocess.CompletedProcess[str]:
+    """Run the selected headless coding agent through one patchable seam."""
+
+    return subprocess.run(
+        cmd,
+        cwd=cwd,
+        timeout=timeout_s,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
+class AgenticOperator:
+    """Let a headless coding agent edit a scratch copy of the parent."""
+
+    name = "agentic"
+
+    def propose(self, bundle: ParentBundle, ctx: OperatorContext) -> Proposal:
+        runtime = _select_runtime()
+        timeout_s = _agent_timeout()
+        workspace = ctx.workdir / f"agentic-{bundle.parent.id}"
+        _prepare_workspace(workspace, ctx.workdir)
+
+        for relative_path, content in bundle.parent_files.items():
+            target = _safe_path(workspace, relative_path)
+            if target.name == "PROMPT.md" and target.parent == workspace:
+                raise OperatorError("parent file path PROMPT.md conflicts with the agent contract")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(content, encoding="utf-8")
+        (workspace / "PROMPT.md").write_text(
+            _agent_contract(bundle, ctx), encoding="utf-8"
+        )
+
+        command = _agent_command(runtime, workspace)
+        try:
+            completed = run_agent_process(command, workspace, timeout_s)
+        except subprocess.TimeoutExpired as exc:
+            raise OperatorError(f"{runtime} agent timed out after {timeout_s:g} seconds") from exc
+        except OSError as exc:
+            raise OperatorError(f"failed to start {runtime} agent: {exc}") from exc
+        if completed.returncode != 0:
+            detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
+            raise OperatorError(f"{runtime} agent exited {completed.returncode}: {detail}")
+
+        files: dict[str, str] = {}
+        changed = 0
+        for relative_path, original in bundle.parent_files.items():
+            target = _safe_path(workspace, relative_path)
+            if not target.is_file():
+                raise OperatorError(f"{runtime} agent removed parent file {relative_path}")
+            content = target.read_text(encoding="utf-8")
+            files[relative_path] = content
+            changed += content != original
+        if changed == 0:
+            raise OperatorError("agent made no changes")
+
+        notes = [f"agentic: runtime={runtime} changed={changed}"]
+        if ctx.evaluate_locally is not None:
+            outcome = ctx.evaluate_locally(files)
+            notes.append(
+                "local_eval="
+                + json.dumps(
+                    {
+                        "gate_passed": outcome.gate_passed,
+                        "scores": outcome.scores,
+                        "stage_reached": outcome.stage_reached,
+                        "error": outcome.error,
+                    },
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
+            )
+        return Proposal(files=files, notes=" ".join(notes))
+
+
+def _select_runtime() -> str:
+    requested = os.getenv("AUTOEVOLVE_AGENT_RUNTIME", "auto").strip().lower()
+    if requested not in {"auto", "claude", "codex"}:
+        raise OperatorError("AUTOEVOLVE_AGENT_RUNTIME must be claude, codex, or auto")
+    if requested in {"claude", "codex"}:
+        if shutil.which(requested) is None:
+            raise OperatorError(
+                f"AUTOEVOLVE_AGENT_RUNTIME={requested}, but {requested} is not on PATH"
+            )
+        return requested
+    if shutil.which("claude"):
+        return "claude"
+    if shutil.which("codex"):
+        return "codex"
+    raise OperatorError("no agent runtime found; install claude or codex")
+
+
+def _agent_timeout() -> float:
+    raw = os.getenv("AUTOEVOLVE_AGENTIC_TIMEOUT_S", "600")
+    try:
+        timeout_s = float(raw)
+    except ValueError as exc:
+        raise OperatorError("AUTOEVOLVE_AGENTIC_TIMEOUT_S must be a positive number") from exc
+    if not math.isfinite(timeout_s) or timeout_s <= 0:
+        raise OperatorError("AUTOEVOLVE_AGENTIC_TIMEOUT_S must be a positive number")
+    return timeout_s
+
+
+def _agent_command(runtime: str, workspace: Path) -> list[str]:
+    if runtime == "claude":
+        return [
+            "claude",
+            "-p",
+            AGENT_TASK_PROMPT,
+            "--permission-mode",
+            "acceptEdits",
+            "--allowedTools",
+            "Read",
+            "Edit",
+            "Write",
+            "--max-turns",
+            "12",
+            "--output-format",
+            "json",
+        ]
+    return [
+        "codex",
+        "exec",
+        "--skip-git-repo-check",
+        "-s",
+        "workspace-write",
+        "-C",
+        str(workspace),
+        "-o",
+        str(workspace / "last-message.txt"),
+        AGENT_TASK_PROMPT,
+    ]
+
+
+def _prepare_workspace(workspace: Path, workdir: Path) -> None:
+    workdir.mkdir(parents=True, exist_ok=True)
+    resolved_root = workdir.resolve()
+    resolved_workspace = workspace.resolve()
+    if resolved_workspace.parent != resolved_root:
+        raise OperatorError("agent workspace escaped the configured workdir")
+    if workspace.exists():
+        shutil.rmtree(workspace)
+    workspace.mkdir(parents=True)
+
+
+def _safe_path(workspace: Path, relative_path: str) -> Path:
+    relative = Path(relative_path)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise OperatorError(f"unsafe parent file path: {relative_path}")
+    target = workspace / relative
+    try:
+        target.resolve().relative_to(workspace.resolve())
+    except ValueError as exc:
+        raise OperatorError(f"unsafe parent file path: {relative_path}") from exc
+    return target
+
+
+def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
+    contract = ctx.contract
+    direction = "maximize" if contract.maximize else "minimize"
+    target = direction if contract.target is None else str(contract.target)
+    inspiration_scores = [
+        f"- {program.id} ({program.code_ref}): "
+        + ", ".join(f"{key}={value}" for key, value in sorted(scores.items()))
+        for program, scores in bundle.inspirations[:3]
+    ]
+    discoveries = [f"- {item}" for item in bundle.discoveries]
+    return "\n".join(
+        (
+            "# Mutation contract",
+            "",
+            f"Goal: {contract.goal}",
+            f"Metric: {contract.metric}",
+            f"Target: {target}",
+            f"Gate: {contract.gate}",
+            f"Parent: {bundle.parent.id}",
+            "Parent score evidence:",
+            *(inspiration_scores or ["- No scores were supplied in ParentBundle."]),
+            "Recent failure notes:",
+            f"- {bundle.operator_hint or 'None supplied.'}",
+            "Prior discoveries:",
+            *(discoveries or ["- None supplied."]),
+            "",
+            "You may edit files in place. Change ONLY content between lines containing "
+            "EVOLVE-BLOCK-START and EVOLVE-BLOCK-END. Preserve marker lines and every "
+            "byte outside those regions. Do not add or remove parent files. Finish after "
+            "making the strongest contract-respecting improvement you can.",
+        )
+    )
