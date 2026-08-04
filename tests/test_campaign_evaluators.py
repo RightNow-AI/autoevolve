@@ -49,8 +49,16 @@ def test_binpack_baseline_passes_and_duplicate_mutant_fails(
     evaluator = _load(ALGORITHM / "evaluate.py", f"test_campaign_binpack_{cell}")
     scores = evaluator.evaluate(ALGORITHM / "baseline")
 
-    assert scores == {"valid": 1.0, "bins_used": scores["bins_used"]}
+    # The two program-structure descriptors ride alongside the score so the
+    # archive keeps distinct heuristic shapes instead of collapsing to one cell.
+    assert scores == {
+        "valid": 1.0,
+        "bins_used": scores["bins_used"],
+        "mutable_lines": scores["mutable_lines"],
+        "call_diversity": scores["call_diversity"],
+    }
     assert scores["bins_used"] > 0.0
+    assert scores["mutable_lines"] > 0.0
     with pytest.raises(EvalError, match="exactly once"):
         evaluator.evaluate(ALGORITHM / "fixtures" / "mutants" / "duplicate")
 

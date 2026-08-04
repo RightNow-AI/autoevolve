@@ -10,6 +10,7 @@ from types import ModuleType
 from typing import Any
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.descriptors import SOURCE_DESCRIPTORS, source_metrics
 
 STAGES: list[StageSpec] = [StageSpec(name="exact-binpack", timeout_s=15.0)]
 GATE = "valid"
@@ -92,7 +93,11 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         except Exception as exc:
             raise EvalError(f"{key} candidate execution failed: {exc}") from exc
         total_bins += _validate_bins(bins, items, capacity, key)
-    return {GATE: 1.0, "bins_used": float(total_bins)}
+    return {
+        GATE: 1.0,
+        "bins_used": float(total_bins),
+        **source_metrics(candidate_dir, "model.py"),
+    }
 
 
 def ceiling() -> dict[str, float | str] | None:
@@ -100,3 +105,9 @@ def ceiling() -> dict[str, float | str] | None:
 
     return None
 
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent. These describe the shape of the program rather than how well it
+# scored, so two different approaches at the same score both survive.
+DESCRIPTORS = SOURCE_DESCRIPTORS

@@ -9,6 +9,7 @@ from pathlib import Path
 from types import ModuleType
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.descriptors import SOURCE_DESCRIPTORS, source_metrics
 
 STAGES: list[StageSpec] = [
     StageSpec(name="small-instances", timeout_s=20.0),
@@ -87,7 +88,12 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         tour = _validated_tour(candidate, name, points)
         costs.append(_tour_cost(points, tour))
     total = sum(costs)
-    return {GATE: 1.0, "tour_cost": total, "mean_cost": total / len(costs)}
+    return {
+        GATE: 1.0,
+        "tour_cost": total,
+        "mean_cost": total / len(costs),
+        **source_metrics(candidate_dir, "heuristic.py"),
+    }
 
 
 def ceiling() -> dict[str, float | str] | None:
@@ -97,3 +103,9 @@ def ceiling() -> dict[str, float | str] | None:
 # Primary metric declaration consumed by the engine when locking a contract.
 METRIC = "tour_cost"
 MAXIMIZE = False
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent. These describe the shape of the program rather than how well it
+# scored, so two different approaches at the same score both survive.
+DESCRIPTORS = SOURCE_DESCRIPTORS

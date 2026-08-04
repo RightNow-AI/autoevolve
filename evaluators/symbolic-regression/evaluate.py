@@ -10,6 +10,7 @@ from pathlib import Path
 from types import ModuleType
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.descriptors import SOURCE_DESCRIPTORS, source_metrics
 
 STAGES: list[StageSpec] = [
     StageSpec(name="train-gate", timeout_s=15.0),
@@ -101,6 +102,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         "r2_heldout": r2_heldout,
         "complexity": float(complexity),
         "fitness": fitness,
+        **source_metrics(candidate_dir, "model.py"),
     }
 
 
@@ -111,3 +113,10 @@ def ceiling() -> dict[str, float | str] | None:
 # Primary metric declaration consumed by the engine when locking a contract.
 METRIC = "fitness"
 MAXIMIZE = True
+
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent. These describe the shape of the program rather than how well it
+# scored, so two different approaches at the same score both survive.
+DESCRIPTORS = SOURCE_DESCRIPTORS

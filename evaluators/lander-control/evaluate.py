@@ -12,6 +12,7 @@ from types import ModuleType
 from typing import NamedTuple, cast
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.descriptors import SOURCE_DESCRIPTORS, source_metrics
 
 
 def _load_trusted_numpy() -> ModuleType:
@@ -347,9 +348,17 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         METRIC: fuel_efficiency,
         "mean_touchdown_speed": mean_touchdown_speed,
         "scenarios_landed": float(len(touchdowns)),
+        **source_metrics(candidate_dir, "policy.py"),
     }
 
 
 def ceiling() -> dict[str, float | str] | None:
     """Return no claimed fuel optimum for this control problem."""
     return None
+
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent. These describe the shape of the program rather than how well it
+# scored, so two different approaches at the same score both survive.
+DESCRIPTORS = SOURCE_DESCRIPTORS

@@ -13,6 +13,7 @@ from typing import cast
 import numpy as np
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.descriptors import SOURCE_DESCRIPTORS, source_metrics
 
 STAGES: list[StageSpec] = [
     StageSpec(name="single-seed-proxy", timeout_s=30.0),
@@ -432,6 +433,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         "train_loss": _mean(train_losses),
         "val_accuracy": _mean(validation_accuracies),
         "steps": float(STEPS),
+        **source_metrics(candidate_dir, "rule.py"),
     }
 
 
@@ -439,3 +441,10 @@ def ceiling() -> dict[str, float | str] | None:
     """Return no ceiling because the synthetic task's Bayes error is unknown."""
 
     return None
+
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent. These describe the shape of the program rather than how well it
+# scored, so two different approaches at the same score both survive.
+DESCRIPTORS = SOURCE_DESCRIPTORS
