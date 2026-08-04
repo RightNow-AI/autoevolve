@@ -261,23 +261,41 @@ def status_all() -> dict:
     """Report every problem store in one container instead of one each."""
 
     import json as _json
+    import shutil
     import sqlite3
+    import tempfile
     from pathlib import Path
 
     store.reload()
     report: dict[str, dict] = {}
     roots = [Path("/store")] + sorted(p for p in Path("/store").iterdir() if p.is_dir())
+    scratch = Path(tempfile.mkdtemp())
     for root in roots:
         db_path = root / "autoevolve" / "autoevolve.db"
-        if not db_path.is_file():
-            continue
         name = "legacy" if root == Path("/store") else root.name
+        if not db_path.is_file():
+            # Say so rather than skipping. A store that vanishes from this
+            # report reads as "not launched" when it may be "launched and
+            # broken", and that ambiguity has cost this project whole runs.
+            report[name] = {"error": "no database at " + str(db_path)}
+            continue
         try:
-            conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+            # Copy the database and its write-ahead log somewhere writable,
+            # then open it normally. A read-only connection cannot build the
+            # shared-memory index a WAL needs, so it reports the last
+            # checkpoint and a live run looks like an empty one.
+            local = scratch / f"{name}.db"
+            shutil.copyfile(db_path, local)
+            for suffix in ("-wal", "-shm"):
+                side = db_path.with_name(db_path.name + suffix)
+                if side.is_file():
+                    shutil.copyfile(side, local.with_name(local.name + suffix))
+            conn = sqlite3.connect(local)
             rows = conn.execute(
                 "SELECT id, status, contract_json FROM runs ORDER BY created_at DESC LIMIT 1"
             ).fetchall()
             if not rows:
+                report[name] = {"error": "database present but no run was ever opened"}
                 continue
             run_id, status, contract = rows[0]
             spec = _json.loads(contract)
