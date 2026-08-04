@@ -44,7 +44,11 @@ def test_mock_baseline_passes_numpy_parity_without_gpu_imports(
     scores = evaluator.evaluate(PACK / "baseline")
     assert scores["mock_parity"] == 1.0
     assert scores["mock_score"] > 0.0
-    assert set(scores) == {"mock_parity", "mock_score"}
+    # The launch-shape descriptors are reported in both modes so the archive
+    # keeps distinct tile and warp choices instead of collapsing to one cell.
+    assert set(scores) == {"mock_parity", "mock_score", "block_log2", "warp_log2"}
+    assert scores["block_log2"] > 0.0
+    assert scores["warp_log2"] >= 0.0
     assert _gpu_modules() == before
 
 

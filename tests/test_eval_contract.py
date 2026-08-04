@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -60,16 +63,48 @@ def test_evaluator_ceiling_blocks_network_call() -> None:
         evaluator.ceiling()
 
 
+
+def _process_is_alive(pid: int) -> bool:
+    """Whether a process id still names a running process on this platform."""
+
+    if sys.platform == "win32":
+        completed = subprocess.run(
+            ["tasklist", "/FI", f"PID eq {pid}", "/NH"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return str(pid) in completed.stdout
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
 def test_describe_timeout_kills_spawned_grandchild(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     monkeypatch.setattr(contract_module, "_RUNNER_TIMEOUT_S", 0.5)
-    started = time.monotonic()
+    pid_file = tmp_path / "grandchild.pid"
+    monkeypatch.setenv("AUTOEVOLVE_GRANDCHILD_PID_FILE", str(pid_file))
 
     with pytest.raises(EvalError, match="evaluator describe timed out after 30s"):
         load_evaluator(SPAWN_IMPORT_EVALUATOR)
 
-    assert time.monotonic() - started < 5.0
+    # Assert the process died, rather than inferring it from how quickly the
+    # call returned. Elapsed time measures machine load as much as it measures
+    # the kill, and this test failed on a busy machine where the kill worked.
+    pid = int(pid_file.read_text(encoding="utf-8"))
+    deadline = time.monotonic() + 20.0
+    while time.monotonic() < deadline:
+        if not _process_is_alive(pid):
+            break
+        time.sleep(0.1)
+    assert not _process_is_alive(pid), f"grandchild {pid} outlived the describe timeout"
 
 
 def test_loader_carries_metric_declaration() -> None:

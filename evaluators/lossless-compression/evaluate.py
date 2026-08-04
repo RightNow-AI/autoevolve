@@ -194,6 +194,8 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     compress = _required_function(compressor_module, "compress")
     original_bytes = 0
     compressed_bytes = 0
+    sample_ratios: list[float] = []
+    alphabet: set[int] = set()
 
     for sample_index, (sample_name, sample) in enumerate(samples):
         try:
@@ -227,6 +229,9 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
 
         original_bytes += len(sample)
         compressed_bytes += len(blob)
+        if sample and blob:
+            sample_ratios.append(len(sample) / len(blob))
+        alphabet.update(blob)
 
     if compressed_bytes <= 0:
         raise EvalError("candidate produced no compressed bytes")
@@ -235,9 +240,28 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
         METRIC: original_bytes / compressed_bytes,
         "compressed_bytes": float(compressed_bytes),
         "original_bytes": float(original_bytes),
+        "ratio_spread": (max(sample_ratios) - min(sample_ratios)) if sample_ratios else 0.0,
+        "blob_alphabet": len(alphabet) / 256.0,
     }
 
 
 def ceiling() -> dict[str, float | str] | None:
     """Return no certified ceiling for a general lossless compressor."""
     return None
+
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent, which is the largest defect this project has found.
+#
+# Both are structural rather than quality measures. ratio_spread is the gap
+# between the candidate's best and worst sample, which separates a generalist
+# from a coder tuned to one kind of input; neither is better, and the archive
+# should hold both. blob_alphabet is the fraction of the 256 byte values the
+# compressed output uses, which separates coder families: bit-packed
+# arithmetic output touches nearly every value, while a dictionary coder that
+# emits literals stays inside a narrow band.
+DESCRIPTORS = [
+    {"name": "ratio_spread", "metric": "ratio_spread", "bins": 6, "lo": 0.0, "hi": 6.0},
+    {"name": "blob_alphabet", "metric": "blob_alphabet", "bins": 8, "lo": 0.0, "hi": 1.0},
+]

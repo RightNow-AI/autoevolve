@@ -172,7 +172,13 @@ def _check_parity(candidate: ModuleType, cases: list[Case], *, real: bool) -> No
             raise EvalError(f"case {name} failed parity; max absolute error {difference}")
 
 
-def _static_mock_score(entry_path: Path, sizes: list[int]) -> float:
+def _launch_constants(entry_path: Path) -> tuple[int, int]:
+    """Read the tile size and warp count the candidate declared.
+
+    These describe the launch shape, so they are read from the source rather
+    than from anything the candidate reports at run time.
+    """
+
     tree = ast.parse(entry_path.read_text(encoding="utf-8"), filename=str(entry_path))
     constants: dict[str, int] = {}
     for node in tree.body:
@@ -185,7 +191,20 @@ def _static_mock_score(entry_path: Path, sizes: list[int]) -> float:
     block = constants.get("BLOCK", 256)
     warps = constants.get("num_warps", 4)
     if block <= 0 or warps <= 0:
-        raise EvalError("mock launch constants must be positive")
+        raise EvalError("launch constants must be positive")
+    return block, warps
+
+
+def _launch_descriptors(candidate_dir: Path) -> dict[str, float]:
+    block, warps = _launch_constants(candidate_dir / "kernel.py")
+    return {
+        "block_log2": math.log2(block),
+        "warp_log2": math.log2(warps),
+    }
+
+
+def _static_mock_score(entry_path: Path, sizes: list[int]) -> float:
+    block, warps = _launch_constants(entry_path)
     utilization = [size / (math.ceil(size / block) * block) for size in sizes]
     warp_balance = min(warps, 4) / max(warps, 4)
     return float(sum(utilization) / len(utilization) * warp_balance)
@@ -282,6 +301,7 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
     candidate = _load_module(candidate_dir)
     real = _real_mode_available()
     _check_parity(candidate, cases, real=real)
+    descriptors = _launch_descriptors(candidate_dir)
     if not real:
         return {
             GATE: 1.0,
@@ -290,9 +310,10 @@ def evaluate(candidate_dir: Path, stage: int = 0) -> dict[str, float]:
                 candidate_dir,
                 [x.size for _, x, _, _ in cases],
             ),
+            **descriptors,
         }
     tflops, candidate_ms = _measure_real(candidate, cases)
-    return {GATE: 1.0, "tflops": tflops, "candidate_ms": candidate_ms}
+    return {GATE: 1.0, "tflops": tflops, "candidate_ms": candidate_ms, **descriptors}
 
 
 def ceiling() -> dict[str, float | str] | None:
@@ -319,3 +340,17 @@ def ceiling() -> dict[str, float | str] | None:
 # Mock mode exposes only mock_ metrics, so the declaration follows the mode.
 METRIC = "tflops" if _real_mode_available() else "mock_score"
 MAXIMIZE = True
+
+# MAP-elites behavior descriptors. Without these every candidate lands in one
+# archive cell and the search degenerates into hill climbing on a single
+# incumbent.
+#
+# Both describe the launch shape a candidate chose, not how fast it ran. A
+# kernel is defined by its tile size and how much parallelism it asks the
+# device for, and two kernels with the same throughput today can sit at
+# opposite ends of that space with very different room left to improve. The
+# archive should hold both rather than discarding one for being a tie.
+DESCRIPTORS = [
+    {"name": "block_log2", "metric": "block_log2", "bins": 8, "lo": 3.0, "hi": 14.0},
+    {"name": "warp_log2", "metric": "warp_log2", "bins": 5, "lo": 0.0, "hi": 5.0},
+]
