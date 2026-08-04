@@ -91,8 +91,20 @@ def search(n: int, seed: int, seconds: float) -> tuple[int, list[int]] | None:
     started = time.time()
     temperature = 3.0
     steps = 0
+    next_report = started + 60.0
     while time.time() - started < seconds:
         steps += 1
+        now = time.time()
+        if now >= next_report:
+            # Report while running. A search that only speaks at the end gives
+            # no way to tell a descending cost from a stuck one.
+            rate = steps / max(now - started, 1e-9)
+            print(
+                f"  n={n} seed={seed} t={now - started:.0f}s cost={cost} best={best} "
+                f"temp={temperature:.2f} flips/s={rate:.0f}",
+                flush=True,
+            )
+            next_report = now + 60.0
         u = rng.randrange(n)
         v = rng.randrange(n)
         while v == u:
