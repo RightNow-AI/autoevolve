@@ -86,7 +86,7 @@ def search(
     hours: float = 6.0,
     target: float | None = None,
     operators: str = "diff,rewrite,crossover",
-    store: str = "default",
+    store_name: str = "default",
 ) -> dict:
     """Run one long frontier search and leave the store on the volume."""
 
@@ -98,8 +98,8 @@ def search(
     # filesystem, where locking is unreliable and corruption would take the
     # database holding every result with it.
     env = dict(os.environ)
-    env["AUTOEVOLVE_HOME"] = f"/store/{store}/autoevolve"
-    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store}/runs"
+    env["AUTOEVOLVE_HOME"] = f"/store/{store_name}/autoevolve"
+    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store_name}/runs"
     if cell:
         env["AUTOEVOLVE_CELL"] = cell
 
@@ -201,7 +201,7 @@ def search_gpu(
     parallel: int = 6,
     seed: int = 1,
     hours: float = 3.0,
-    store: str = "kernel",
+    store_name: str = "kernel",
 ) -> dict:
     """Evolve a GPU kernel where the answer cannot be recalled.
 
@@ -218,8 +218,8 @@ def search_gpu(
     import subprocess
 
     env = dict(os.environ)
-    env["AUTOEVOLVE_HOME"] = f"/store/{store}/autoevolve"
-    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store}/runs"
+    env["AUTOEVOLVE_HOME"] = f"/store/{store_name}/autoevolve"
+    env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store_name}/runs"
 
     probe = subprocess.run(
         ["uv", "run", "python", "-c", "import torch;print(torch.cuda.get_device_name(0))"],
