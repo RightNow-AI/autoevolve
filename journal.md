@@ -159,3 +159,23 @@ wave (consent boundary, PR gate filter, config target, metric shadowing,
 lint coverage, doc drift), except one accepted known-minor (synthetic viz
 fixture payloads). Suite grew from 214 to 233 tests, all green with ruff
 clean on every merge.
+
+## Live-run defect wave (2026-08-04)
+
+Three defects found by watching real runs, none visible to a green suite,
+recorded in docs/reviews/2026-08-04-live-run-defects.md. The describe probe
+and the sandbox built their child environments from two private copies of one
+allowlist, and the copies drifted, so a frontier pack that reads its cell at
+import time as docs/FRONTIER.md requires could not be described and therefore
+could not run at all. The Ramsey campaign sat at zero programs behind a store
+that looked idle. The agentic operator was judging its mutation by the agent's
+exit code, so seven consecutive cycles discarded finished edits because a
+SessionEnd hook in the host's plugin config failed in a headless subprocess.
+The Modal status report dropped any store it could not read, which is what let
+the first defect hide.
+
+All three fixed with regression tests that fail against the old code. Suite
+grew from 298 to 304.
+
+Every one of the three lived in the seam between a component and the thing
+that reports on it, not in the logic any test covered.
