@@ -64,33 +64,35 @@ def test_agentic_reads_back_edit_and_appends_local_evaluation(monkeypatch, tmp_p
 
     proposal = AgenticOperator().propose(_bundle(), _context(tmp_path, evaluate))
 
-    workspace = tmp_path / "agentic-p1"
-    assert calls == [
-        (
-            [
-                "C:/bin/claude.exe",
-                "-p",
-                agentic.AGENT_TASK_PROMPT,
-                "--permission-mode",
-                "acceptEdits",
-                "--allowedTools",
-                "Read",
-                "Edit",
-                "Write",
-                "--max-turns",
-                "12",
-                "--output-format",
-                "json",
-            ],
-            workspace,
-            600.0,
-        )
+    assert len(calls) == 1
+    command, workspace, timeout_s = calls[0]
+    assert command == [
+        "C:/bin/claude.exe",
+        "-p",
+        agentic.AGENT_TASK_PROMPT,
+        "--permission-mode",
+        "acceptEdits",
+        "--allowedTools",
+        "Read",
+        "Edit",
+        "Write",
+        "--max-turns",
+        "12",
+        "--output-format",
+        "json",
     ]
+    assert timeout_s == 600.0
+    # Unique per cycle so a retry never has to delete a directory the previous
+    # agent may still hold open, which is a PermissionError on Windows.
+    assert workspace.parent == tmp_path
+    assert workspace.name.startswith("agentic-p1-")
     assert proposal.files["main.py"].splitlines()[1] == "value = 2"
     assert evaluations == [proposal.files]
     assert "runtime=claude changed=1" in proposal.notes
     assert '"gate_passed":true' in proposal.notes
-    written = (tmp_path / "agentic-p1" / "PROMPT.md").read_text(encoding="utf-8")
+    workspaces = sorted(tmp_path.glob("agentic-p1-*"))
+    assert len(workspaces) == 1, "each cycle gets its own workspace"
+    written = (workspaces[0] / "PROMPT.md").read_text(encoding="utf-8")
     assert "Recent gate failures in this run" in written
     assert "Parent scores:" in written
     assert "Best scores in this run:" in written

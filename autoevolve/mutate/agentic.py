@@ -11,6 +11,7 @@ import math
 import os
 import shutil
 import subprocess
+import uuid
 from pathlib import Path
 
 from autoevolve.core.types import ParentBundle, Proposal
@@ -42,7 +43,9 @@ class AgenticOperator:
     def propose(self, bundle: ParentBundle, ctx: OperatorContext) -> Proposal:
         runtime, executable = _select_runtime()
         timeout_s = _agent_timeout()
-        workspace = ctx.workdir / f"agentic-{bundle.parent.id}"
+        # Unique per cycle. Reusing one directory per parent meant a retry had
+        # to delete a tree the previous agent might still hold open.
+        workspace = ctx.workdir / f"agentic-{bundle.parent.id}-{uuid.uuid4().hex[:8]}"
         _prepare_workspace(workspace, ctx.workdir)
 
         for relative_path, content in bundle.parent_files.items():
@@ -174,8 +177,11 @@ def _prepare_workspace(workspace: Path, workdir: Path) -> None:
     if resolved_workspace.parent != resolved_root:
         raise OperatorError("agent workspace escaped the configured workdir")
     if workspace.exists():
-        shutil.rmtree(workspace)
-    workspace.mkdir(parents=True)
+        # A previous agent process can still hold a handle here on Windows,
+        # where deleting an open directory raises PermissionError. That is not
+        # a mutation failure, so it must never propagate and kill the worker.
+        shutil.rmtree(workspace, ignore_errors=True)
+    workspace.mkdir(parents=True, exist_ok=True)
 
 
 def _safe_path(workspace: Path, relative_path: str) -> Path:
