@@ -101,7 +101,7 @@ class AgenticOperator:
                     f"{runtime} agent timed out after {timeout_s:g} seconds "
                     "without changing anything"
                 )
-            detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
+            detail = _failure_detail(completed)
             if completed.returncode != 0:
                 raise OperatorError(
                     f"{runtime} agent exited {completed.returncode} without "
@@ -130,6 +130,33 @@ class AgenticOperator:
                 )
             )
         return Proposal(files=files, notes=" ".join(notes))
+
+
+def _failure_detail(completed: subprocess.CompletedProcess[str]) -> str:
+    """Report why the agent failed, not the first 500 bytes of its telemetry.
+
+    The claude runtime answers with a JSON envelope whose `result` field holds
+    the human readable cause and whose usage counters come first. Truncating
+    the raw envelope therefore preserved the counters and threw away the
+    reason, which left a run recording 104 identical failures that said
+    nothing about what went wrong.
+    """
+
+    stdout = (completed.stdout or "").strip()
+    if stdout.startswith("{"):
+        try:
+            payload = json.loads(stdout)
+        except json.JSONDecodeError:
+            payload = None
+        if isinstance(payload, dict):
+            parts = [
+                str(payload[key])
+                for key in ("result", "terminal_reason", "subtype")
+                if payload.get(key)
+            ]
+            if parts:
+                return " | ".join(parts)[:800]
+    return (completed.stderr or stdout or "no output").strip()[:800]
 
 
 def _select_runtime() -> tuple[str, str]:

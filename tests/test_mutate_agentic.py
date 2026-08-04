@@ -1,4 +1,5 @@
-﻿import random
+import json
+import random
 import subprocess
 from dataclasses import replace
 from pathlib import Path
@@ -358,3 +359,36 @@ def test_a_very_long_spec_is_truncated_and_says_so() -> None:
 
     assert "spec truncated here" in "\n".join(rendered)
 
+
+
+def test_failure_detail_reports_the_reason_not_the_telemetry(monkeypatch, tmp_path):
+    """The runtime puts usage counters first and the cause last.
+
+    Truncating the raw envelope kept the counters and discarded the reason,
+    which left one run recording 104 identical failures that said nothing.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+    envelope = json.dumps(
+        {
+            "is_error": True,
+            "duration_api_ms": 0,
+            "usage": {"input_tokens": 0, "output_tokens": 0},
+            "terminal_reason": "api_error",
+            "result": "Credit balance is too low",
+        }
+    )
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(cmd, 1, stdout=envelope, stderr="")
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    with pytest.raises(OperatorError, match="Credit balance is too low"):
+        AgenticOperator().propose(
+            _bundle(),
+            _context(tmp_path, lambda files: EvalOutcome(True, {"score": 1.0}, 0)),
+        )

@@ -18,3 +18,5 @@ LANE-PROGRESS.md
 autoevolve-runs/
 scripts/proofs/*.log
 scripts/proofs/*-last.txt
+
+paper/
