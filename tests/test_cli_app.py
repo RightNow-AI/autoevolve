@@ -70,7 +70,17 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
             return {"status": "budget_exhausted"}
 
     def fake_loop(engine, run_id, get_operator, max_cycles=None, island=None, operators=None):
-        calls.append(("loop", {"run_id": run_id, "get_operator": get_operator, "island": island}))
+        calls.append(
+            (
+                "loop",
+                {
+                    "run_id": run_id,
+                    "get_operator": get_operator,
+                    "island": island,
+                    "operators": operators,
+                },
+            )
+        )
         return {"submissions": 1, "skips": 0}
 
     engine_module = types.ModuleType("autoevolve.core.engine")
@@ -120,6 +130,15 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
     get_operator = loop_calls[0]["get_operator"]
     assert get_operator("diff").name == "diff"
     assert get_operator("crossover").name == "diff"
+    assert loop_calls[0]["operators"] == ("diff", "rewrite")
+    # join must parse its allowlist the same way run does. Handing the raw
+    # string straight through iterated it character by character, so
+    # "agentic" arrived as the operator "a" and every joined worker died.
+    join_get_operator = loop_calls[1]["get_operator"]
+    assert join_get_operator("diff").name == "agentic"
+    # The bandit has to see the allowlist too, or it hints an arm this worker
+    # cannot serve and the pull lands on the wrong one.
+    assert loop_calls[1]["operators"] == ("agentic",)
 
 
 def test_serve_lazily_wires_stdio_and_http(monkeypatch) -> None:

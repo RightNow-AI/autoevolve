@@ -178,6 +178,7 @@ def join_command(
     from autoevolve.core.engine import Engine
     from autoevolve.core.loop import run_worker_loop
 
+    operator_names = _parse_operators(operators) if operators else None
     home = home_from_env()
     engine = Engine(home=home)
     try:
@@ -192,8 +193,13 @@ def join_command(
         run_worker_loop(
             engine,
             run_id,
-            _build_get_operator(operators, evaluator_dir),
+            _build_get_operator(operator_names, evaluator_dir),
             island=selected,
+            # The bandit has to see the same allowlist the worker can actually
+            # serve. Without this it hints an operator this worker will refuse,
+            # the worker silently substitutes another, and the pull is recorded
+            # against the wrong arm.
+            operators=tuple(operator_names) if operator_names else None,
         )
     except (KeyError, ValueError, RuntimeError) as exc:
         _abort(str(exc), code=1)
