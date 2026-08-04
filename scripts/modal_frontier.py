@@ -333,6 +333,85 @@ def status_all() -> dict:
 
 
 @app.function(image=image, volumes={"/store": store}, timeout=900)
+def verify(store_name: str = "default") -> dict:
+    """Report the best result at each stage, and the source of the best one.
+
+    Stages are not interchangeable evidence. A frontier pack screens cheaply at
+    stage 0 and proves at its last stage, where a Ramsey certificate is
+    re-derived in a fresh interpreter and checked by an exhaustive verifier
+    that must agree with two independent fast ones. A number that only ever
+    reached stage 0 is a candidate, not a result, and reporting the two the
+    same way is how a project talks itself into a claim it cannot defend.
+    """
+
+    import json as _json
+    import shutil
+    import sqlite3
+    import tempfile
+    from pathlib import Path
+
+    store.reload()
+    db_path = Path(f"/store/{store_name}/autoevolve/autoevolve.db")
+    if not db_path.is_file():
+        return {"error": f"no store at {db_path}"}
+    scratch = Path(tempfile.mkdtemp())
+    local = scratch / "read.db"
+    shutil.copyfile(db_path, local)
+    for suffix in ("-wal", "-shm"):
+        side = db_path.with_name(db_path.name + suffix)
+        if side.is_file():
+            shutil.copyfile(side, local.with_name(local.name + suffix))
+    conn = sqlite3.connect(local)
+    row = conn.execute("SELECT id, contract_json FROM runs ORDER BY created_at DESC LIMIT 1")
+    found = row.fetchone()
+    if found is None:
+        return {"error": "no runs"}
+    run_id, contract = found
+    spec = _json.loads(contract)
+    metric, gate = spec["metric"], spec["gate"]
+    order = "DESC" if spec["maximize"] else "ASC"
+
+    per_stage: dict[str, dict] = {}
+    stages = [
+        value
+        for (value,) in conn.execute(
+            "SELECT DISTINCT stage FROM scores s JOIN programs p ON p.id = s.program_id "
+            "WHERE p.run_id = ? ORDER BY stage",
+            (run_id,),
+        ).fetchall()
+    ]
+    for stage in stages:
+        best_row = conn.execute(
+            f"SELECT s.value, p.id, p.operator FROM scores s "
+            f"JOIN programs p ON p.id = s.program_id "
+            f"JOIN scores g ON g.program_id = p.id AND g.stage = s.stage "
+            f"WHERE p.run_id = ? AND s.stage = ? AND s.metric = ? AND g.metric = ? "
+            f"AND g.value = 1.0 ORDER BY s.value {order} LIMIT 1",
+            (run_id, stage, metric, gate),
+        ).fetchone()
+        gated = conn.execute(
+            "SELECT COUNT(*) FROM scores s JOIN programs p ON p.id = s.program_id "
+            "WHERE p.run_id = ? AND s.stage = ? AND s.metric = ? AND s.value = 1.0",
+            (run_id, stage, gate),
+        ).fetchone()[0]
+        per_stage[f"stage_{stage}"] = {
+            "best": best_row[0] if best_row else None,
+            "program_id": best_row[1] if best_row else None,
+            "operator": best_row[2] if best_row else None,
+            "gate_passed_count": gated,
+        }
+    report = {
+        "run_id": run_id,
+        "metric": metric,
+        "gate": gate,
+        "last_stage": max(stages) if stages else None,
+        "per_stage": per_stage,
+    }
+    print(_json.dumps(report, indent=2), flush=True)
+    return report
+
+
+@app.function(image=image, volumes={"/store": store}, timeout=900)
 def best(run_id: str | None = None, store_name: str = "default") -> dict:
     """Report the best measured result on one problem store without a rerun."""
 
