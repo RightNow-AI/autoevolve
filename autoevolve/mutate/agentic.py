@@ -145,6 +145,51 @@ def _select_runtime() -> tuple[str, str]:
     raise OperatorError("no agent runtime found; install claude or codex")
 
 
+#: Execution is the whole point of this operator. Without it the agent cannot
+#: measure anything, and on a search problem it has nothing to reason from: a
+#: probe on Golomb order 29 spent all twelve of its turns having seven Bash and
+#: PowerShell calls denied, hit the turn limit, and never made an edit.
+#:
+#: The trust boundary is worth stating plainly. This agent is engine side. It
+#: runs with the engine's privileges, exactly like the model operators, and it
+#: cannot certify its own work: the engine re-runs the whole cascade in the
+#: sandbox on the files the operator returns, so an agent's own evaluation is a
+#: note and never a score. What execution does change is that a campaign pack's
+#: goal text, which reaches the agent's prompt, becomes actionable. Run packs
+#: you trust, or narrow this list. See SECURITY.md.
+_DEFAULT_AGENT_TOOLS = ("Read", "Edit", "Write", "Bash")
+_DEFAULT_AGENT_TURNS = 40
+
+
+def _agent_tools() -> tuple[str, ...]:
+    """Tools the mutation agent may use, overridable for untrusted packs."""
+
+    raw = os.getenv("AUTOEVOLVE_AGENTIC_TOOLS", "").strip()
+    if not raw:
+        return _DEFAULT_AGENT_TOOLS
+    tools = tuple(name.strip() for name in raw.split(",") if name.strip())
+    if not tools:
+        raise OperatorError("AUTOEVOLVE_AGENTIC_TOOLS must name at least one tool")
+    return tools
+
+
+def _agent_turns() -> int:
+    """Turn budget for one mutation session.
+
+    Twelve was not enough to survive a few denied calls, let alone write code,
+    run it, read the result, and revise.
+    """
+
+    raw = os.getenv("AUTOEVOLVE_AGENTIC_TURNS", str(_DEFAULT_AGENT_TURNS))
+    try:
+        turns = int(raw)
+    except ValueError as exc:
+        raise OperatorError("AUTOEVOLVE_AGENTIC_TURNS must be a positive integer") from exc
+    if turns <= 0:
+        raise OperatorError("AUTOEVOLVE_AGENTIC_TURNS must be a positive integer")
+    return turns
+
+
 def _agent_timeout() -> float:
     raw = os.getenv("AUTOEVOLVE_AGENTIC_TIMEOUT_S", "600")
     try:
@@ -166,11 +211,9 @@ def _agent_command(runtime: str, workspace: Path, executable: str | None = None)
             "--permission-mode",
             "acceptEdits",
             "--allowedTools",
-            "Read",
-            "Edit",
-            "Write",
+            *_agent_tools(),
             "--max-turns",
-            "12",
+            str(_agent_turns()),
             "--output-format",
             "json",
             # A mutation subprocess must not run the host's interactive session
@@ -260,9 +303,16 @@ def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
             "Prior discoveries:",
             *(discoveries or ["- None supplied."]),
             "",
+            "You may run code. Write a scratch script somewhere outside this "
+            "directory, execute it, and read the result. On a search problem that "
+            "is the point: prototype a construction, measure it, keep what wins. "
+            "Do not guess a recalled answer when you can compute a better one.",
+            "",
             "You may edit files in place. Change ONLY content between lines containing "
             "EVOLVE-BLOCK-START and EVOLVE-BLOCK-END. Preserve marker lines and every "
-            "byte outside those regions. Do not add or remove parent files. Finish after "
-            "making the strongest contract-respecting improvement you can.",
+            "byte outside those regions. Do not add or remove parent files. Leave a "
+            "scratch file behind only outside this directory. Finish after making "
+            "the strongest contract-respecting improvement you can, and finish "
+            "having actually changed something.",
         )
     )

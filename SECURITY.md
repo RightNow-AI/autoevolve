@@ -61,6 +61,29 @@ section 4a and docs/FRONTIER.md section 5 state the rules.
 These limits are documented in docs/CONTRACT.md section 4 rather than
 hidden, because a sandbox people misjudge is worse than one they understand.
 
+## The agentic operator runs code, and that is deliberate
+
+The `agentic` operator spawns a headless Claude Code or Codex session to
+produce one mutation. That session can run commands. It has to: on a search
+problem an agent that cannot execute anything has nothing to reason from, and
+a probe on Golomb order 29 spent every turn having Bash calls denied and never
+made an edit.
+
+Two things follow, and both matter.
+
+The agent cannot certify its own work. It is engine side, like the model
+operators, and it returns files. The engine re-runs the whole evaluation
+cascade in the sandbox on those files, so the agent's own measurements are a
+note in the record and never a score. Giving it execution does not widen any
+path to a forged verdict.
+
+What execution does widen is prompt injection. A campaign pack's goal and spec
+text reach the agent's prompt, so with a shell available, text written by
+whoever authored that pack becomes text an agent may act on. Run packs you
+trust. `AUTOEVOLVE_AGENTIC_TOOLS` narrows the tool list, for example to
+`Read,Edit,Write`, and the operator still works, it just gets much weaker at
+anything that needs measurement.
+
 ## Scope
 
 In scope: sandbox escapes reachable from ordinary evaluator or candidate
