@@ -15,36 +15,12 @@ from pathlib import Path
 from typing import Any
 
 from autoevolve.core.types import EvalError, StageSpec
+from autoevolve.eval.childenv import build_child_env
 
 if sys.platform != "win32":
     import resource
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-_ALLOWED_ENV = frozenset(
-    {
-        "HOME",
-        "PATH",
-        "PYTHONHASHSEED",
-        "PYTHONIOENCODING",
-        "SYSTEMDRIVE",
-        "SYSTEMROOT",
-        "TEMP",
-        "TMP",
-        "USERPROFILE",
-    }
-)
-
-
-_ENGINE_ONLY_ENV = frozenset(
-    {
-        "AUTOEVOLVE_HOME",
-        "AUTOEVOLVE_ARTIFACTS_DIR",
-        "AUTOEVOLVE_LOCAL_BASE_URL",
-        "AUTOEVOLVE_LOCAL_MODEL",
-        "AUTOEVOLVE_AGENT_RUNTIME",
-        "AUTOEVOLVE_AGENTIC_TIMEOUT_S",
-    }
-)
 
 
 def _sandbox_env() -> dict[str, str]:
@@ -53,39 +29,11 @@ def _sandbox_env() -> dict[str, str]:
     The allowlist keeps secrets out of candidate reach. AUTOEVOLVE_ prefixed
     variables are configuration this project sets deliberately, and cells
     select their workload through them, so a campaign cannot express a
-    multi-cell campaign at all without them. Credential shaped names are
-    excluded even under that prefix, so configuration can never smuggle a
-    key into a candidate's environment.
+    multi-cell campaign at all without them. The rule lives in childenv so the
+    describe probe applies exactly the same one.
     """
 
-    env = {name: value for name, value in os.environ.items() if name in _ALLOWED_ENV}
-    for name, value in os.environ.items():
-        if name.startswith("AUTOEVOLVE_") and _is_candidate_visible(name):
-            env[name] = value
-    env.setdefault("PYTHONHASHSEED", "0")
-    env.setdefault("PYTHONIOENCODING", "utf-8")
-    env["PYTHONPATH"] = str(_REPO_ROOT)
-    # Belt and braces with the -P launch flag: either alone keeps the candidate
-    # directory off sys.path, and both together survive a launch site that
-    # forgets the flag.
-    env["PYTHONSAFEPATH"] = "1"
-    return env
-
-
-def _is_candidate_visible(name: str) -> bool:
-    """Workload configuration is visible; engine and model configuration is not.
-
-    AUTOEVOLVE_HOME points at the run database, so a candidate holding it
-    could edit its own scores directly. Model and endpoint settings are
-    likewise none of a candidate's business, and credential shaped names
-    never pass under any prefix.
-    """
-
-    if any(
-        token in name for token in ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")
-    ):
-        return False
-    return name not in _ENGINE_ONLY_ENV and not name.startswith("AUTOEVOLVE_MODEL")
+    return build_child_env()
 
 
 if sys.platform != "win32":

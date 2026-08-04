@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import math
-import os
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -12,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from autoevolve.core.types import EvalError, StageSpec
+from autoevolve.eval.childenv import build_child_env
 from autoevolve.eval.sandbox import _kill_process_tree, _start_isolated_process
 
 _RUNNER_TIMEOUT_S = 30.0
@@ -59,11 +59,15 @@ class Evaluator:
 
 
 def _runner_env() -> dict[str, str]:
-    env = {name: value for name, value in os.environ.items() if name in _ALLOWED_ENV}
-    env.setdefault("PYTHONHASHSEED", "0")
-    env.setdefault("PYTHONIOENCODING", "utf-8")
-    env["PYTHONPATH"] = str(_REPO_ROOT)
-    return env
+    """The describe probe gets the same environment the sandbox gets.
+
+    It must include AUTOEVOLVE_ workload configuration. An evaluator is
+    required to read its cell at import time so a candidate cannot choose the
+    instance it is judged against, and describe is an import, so withholding
+    the cell here makes such a pack undescribable and therefore unrunnable.
+    """
+
+    return build_child_env()
 
 
 def _stderr_suffix(stderr: str) -> str:

@@ -28,6 +28,7 @@ from autoevolve.cli.claims_lint import ClaimViolation, scan_repository
 from autoevolve.core.engine import Engine
 from autoevolve.core.loop import run_worker_loop
 from autoevolve.core.types import Budget, EvalOutcome
+from autoevolve.eval.childenv import is_workload_config
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CAMPAIGNS_ROOT = REPO_ROOT / "campaigns"
@@ -612,22 +613,23 @@ def _operator_factory(evaluator_dir: Path) -> Callable[[str], _OperatorAdapter]:
 
 @contextmanager
 def _cell_environment(values: Mapping[str, str]) -> Iterator[None]:
-    from autoevolve.eval import contract as contract_module
-    from autoevolve.eval import sandbox as sandbox_module
+    """Set a cell's variables for the duration of one run, then restore them.
+
+    This used to widen two private allowlists inside the evaluator modules so
+    the cell could reach the child process. That reached only campaign runs.
+    A plain `autoevolve run` on the same pack, which is how every long search
+    is launched, still lost the cell and could not even load the evaluator.
+    Workload configuration now passes by rule in autoevolve.eval.childenv, so
+    setting the variables is all this needs to do. Names are validated at load
+    time, so nothing set here can fail to arrive.
+    """
 
     prior_values = {name: os.environ.get(name) for name in values}
-    prior_contract = contract_module._ALLOWED_ENV
-    prior_sandbox = sandbox_module._ALLOWED_ENV
-    allowed = frozenset(values)
-    contract_module._ALLOWED_ENV = prior_contract | allowed
-    sandbox_module._ALLOWED_ENV = prior_sandbox | allowed
     try:
         for name, value in values.items():
             os.environ[name] = value
         yield
     finally:
-        contract_module._ALLOWED_ENV = prior_contract
-        sandbox_module._ALLOWED_ENV = prior_sandbox
         for name, previous in prior_values.items():
             if previous is None:
                 os.environ.pop(name, None)
@@ -806,6 +808,15 @@ def _parse_cells(value: object, path: Path) -> tuple[CampaignCell, ...]:
             if not isinstance(env_value, str):
                 raise CampaignError(
                     f"{path} cells[{index}].env values must be strings"
+                )
+            # Reject anything the evaluator child will never receive. Setting
+            # a name that cannot pass the child environment rule would leave
+            # the cell selecting nothing while the run looked healthy.
+            if not env_key.startswith("AUTOEVOLVE_") or not is_workload_config(env_key):
+                raise CampaignError(
+                    f"{path} cells[{index}].env name {env_key} cannot reach the "
+                    "evaluator; cell variables must start with AUTOEVOLVE_ and "
+                    "must not be engine or credential settings"
                 )
             env[env_key] = env_value
         target_raw = raw.get("target")
