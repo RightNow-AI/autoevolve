@@ -2,6 +2,36 @@
 
 Append-only. Negative results get the same block format as wins.
 
+## 2026-08-04, extension result: both 42 vertex certificates are dead ends
+
+Negative result, proved rather than searched.
+
+Adding a 43rd vertex to a K5-free 42 vertex colouring reduces exactly. Join the
+new vertex red to a set R and blue to the complement B. A monochromatic K5 that
+avoids the new vertex already lives in the 42 vertex graph, which has none. A
+red K5 through it is the new vertex plus a red K4 lying inside R, and a blue K5
+through it is a blue K4 inside B. So an extension exists if and only if the 42
+vertices split into R with no red K4 and B with no blue K4.
+
+That is a boolean problem in 42 variables, one clause per monochromatic K4.
+
+| certificate | red K4s | blue K4s | extends to 43 |
+|---|---|---|---|
+| n42-79e15fd6c25d1729 | 1169 | 1145 | no, UNSAT |
+| n42-ffb3b30e31b519e8 | 1164 | 1145 | no, UNSAT |
+
+`extend_certificate.py` decides this with DPLL and unit propagation, so UNSAT
+is a proof for that certificate and not a failed search.
+`extend_certificate_selftest.py` checks the solver against five cases with
+known answers and against exhaustive enumeration on 300 random instances, all
+of which agree.
+
+This says nothing about `R(5,5)` itself. It says these two graphs do not
+extend. Other 42 vertex K5-free colourings may. The search therefore needs
+structurally different 42 vertex certificates rather than more copies of the
+ones already found, and fewer monochromatic K4s means fewer constraints on the
+split. That redirection is now in the run's discovery ledger.
+
 ## 2026-08-04, k5-frontier, run r6ae4654984, local agentic workers
 
 Best: 42 vertices. Seed: 37. Operator: agentic. Matches literature.
