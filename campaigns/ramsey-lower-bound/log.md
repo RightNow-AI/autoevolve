@@ -2,6 +2,42 @@
 
 Append-only. Negative results get the same block format as wins.
 
+## 2026-08-04, k5-frontier, run r6ae4654984, local agentic workers
+
+Best: 42 vertices. Seed: 37. Operator: agentic. Matches literature.
+
+Tier: matched. A 42 vertex two-colouring with no monochromatic K5 witnesses
+`R(5,5) >= 43`, which is exactly the published lower bound [lit: Exoo, 1989].
+This equals that bound. It does not improve it. Improving it needs 43
+vertices.
+
+Two distinct certificates were produced by two different programs and both are
+in the repo:
+
+- `certificates/k5-frontier/n42-79e15fd6c25d1729.json`, program p3f5515a557,
+  436 red edges and 425 blue of 861 pairs
+- `certificates/k5-frontier/n42-ffb3b30e31b519e8.json`, program pc5c7e51728,
+  426 red edges and 435 blue of 861 pairs
+
+Both passed the pack's stage 1: replayed in a fresh interpreter with identical
+snapshots required, then an exhaustive check over every 5-subset that had to
+agree with two independent fast verifiers. Both were then re-checked by a
+verifier written separately from this pack, sharing none of its code, which
+brute forced all 850,668 subsets of size 5 in each and found no monochromatic
+K5 in either colour.
+
+Whether either graph is isomorphic to Exoo's is not established here and is
+not claimed. What is established is that two valid 42 vertex certificates
+exist in this repo and can be rechecked by anyone in about a minute.
+
+The method matters more than the number. The agent did not recall a
+construction: it wrote a parallel search over the factorisations of 42, ran
+`search42.py 7 6`, `14 3`, `21 2`, `6 7` and `3 14` concurrently alongside
+`run42.py` and `run_sym.py`, and produced two structurally different answers.
+A recalled graph would have produced one. This was only possible because the
+agentic operator was given the ability to execute code the same day; before
+that it had never produced a single accepted child.
+
 ## 2026-08-04, k5-frontier, run r2dcea50679
 
 Best: 41 vertices. Seed: 37. Operators: diff and rewrite. Below literature.
