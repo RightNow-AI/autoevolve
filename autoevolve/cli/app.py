@@ -374,9 +374,13 @@ def _build_get_operator(
 ) -> Callable[[str], object]:
     """Compose mutate operators with their runtime services for the core loop."""
 
-    from autoevolve.mutate.compose import build_get_operator
+    from autoevolve.mutate.compose import build_get_operator, load_spec_text
 
-    return build_get_operator(operator_names, _build_local_evaluator(evaluator_dir))
+    return build_get_operator(
+        operator_names,
+        _build_local_evaluator(evaluator_dir),
+        load_spec_text(evaluator_dir),
+    )
 
 
 def _finish_and_print(engine: Any, home: Path, run_id: str) -> None:

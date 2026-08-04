@@ -22,6 +22,11 @@ class OperatorContext:
     endpoint_strong: ModelEndpoint | None
     evaluate_locally: Callable[[dict[str, str]], EvalOutcome]
     workdir: Path
+    #: The pack's spec.md. It states what is measured, how much compute a
+    #: candidate may use, and what a valid certificate looks like, which is the
+    #: most informative thing anyone can hand a mutation operator. Operators
+    #: were guessing at all of it. Empty when the pack ships no spec.
+    spec_text: str = ""
 
 
 class OperatorError(Exception):

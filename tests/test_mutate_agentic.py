@@ -1,5 +1,6 @@
-import random
+﻿import random
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -313,3 +314,47 @@ def test_a_timeout_with_no_edit_is_still_a_failure(monkeypatch, tmp_path):
             _bundle(),
             _context(tmp_path, lambda files: EvalOutcome(True, {"score": 1.0}, 0)),
         )
+
+
+def test_the_agent_is_shown_the_packs_own_spec(monkeypatch, tmp_path):
+    """Two agent sessions returned the same construction, which is recall.
+
+    Neither had been shown the spec that says a candidate may search at
+    evaluation time, so recall was the only strategy on offer.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        (cwd / "main.py").write_text(
+            "# EVOLVE-BLOCK-START\nvalue = 2\n# EVOLVE-BLOCK-END\n",
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(cmd, 0, stdout="{}", stderr="")
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    context = _context(tmp_path, lambda files: EvalOutcome(True, {"score": 2.0}, 0))
+    context = replace(context, spec_text="A candidate gets 33.75 seconds of search.")
+
+    AgenticOperator().propose(_bundle(), context)
+
+    workspace = next(iter(tmp_path.glob("agentic-p1-*")))
+    prompt = (workspace / "PROMPT.md").read_text(encoding="utf-8")
+    assert "The evaluator's own spec" in prompt
+    assert "33.75 seconds of search" in prompt
+
+
+def test_a_pack_without_a_spec_adds_no_empty_section(monkeypatch, tmp_path):
+    assert agentic._render_spec("") == []
+    assert agentic._render_spec("   \n ") == []
+
+
+def test_a_very_long_spec_is_truncated_and_says_so() -> None:
+    rendered = agentic._render_spec("x" * (agentic._SPEC_BUDGET_CHARS + 500))
+
+    assert "spec truncated here" in "\n".join(rendered)
+

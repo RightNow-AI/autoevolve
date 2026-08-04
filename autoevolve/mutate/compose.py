@@ -43,9 +43,25 @@ def build_local_evaluator(
     return evaluate_locally
 
 
+def load_spec_text(evaluator_dir: Path | None) -> str:
+    """Read a pack's spec.md, which is read directly rather than through the
+    describe probe because only the text is wanted and a subprocess is not."""
+
+    if evaluator_dir is None:
+        return ""
+    path = Path(evaluator_dir) / "spec.md"
+    if not path.is_file():
+        return ""
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+
+
 def build_get_operator(
     operator_names: list[str] | None,
     evaluate_locally: Callable[[dict[str, str]], Any] | None = None,
+    spec_text: str = "",
 ) -> Callable[[str], object]:
     """Return the loop's get_operator with endpoints resolved once.
 
@@ -70,6 +86,7 @@ def build_get_operator(
                 endpoint_strong=endpoint_strong,
                 evaluate_locally=evaluate_locally,
                 workdir=Path(ctx.workdir),
+                spec_text=spec_text,
             )
             return self._inner.propose(bundle, full)
 

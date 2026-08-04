@@ -11,6 +11,10 @@ def test_operator_context_has_exact_public_field_order():
         "endpoint_strong",
         "evaluate_locally",
         "workdir",
+        # Defaulted, so it goes last and every existing construction site keeps
+        # working. Operators had never been shown the pack spec that says what
+        # is measured and how much compute a candidate may spend.
+        "spec_text",
     ]
 
 

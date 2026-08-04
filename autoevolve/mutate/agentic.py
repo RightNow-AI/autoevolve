@@ -278,6 +278,40 @@ def _safe_path(workspace: Path, relative_path: str) -> Path:
     return target
 
 
+#: How much of a pack spec to hand the agent. Long enough for the packs in this
+#: repo to arrive whole, short enough that no spec can crowd out the contract
+#: above it.
+_SPEC_BUDGET_CHARS = 12_000
+
+
+def _render_spec(spec_text: str) -> list[str]:
+    """Include the pack's own spec, which the operator had never been shown.
+
+    It states what is measured, how much compute a candidate may spend, and
+    what a valid answer looks like. Two independent agent sessions on the
+    Ramsey pack both returned exactly the same 41 vertex construction, which is
+    what recall looks like, and neither had been told that a candidate is
+    allowed 33 seconds of deterministic search.
+    """
+
+    text = spec_text.strip()
+    if not text:
+        return []
+    truncated = len(text) > _SPEC_BUDGET_CHARS
+    if truncated:
+        text = text[:_SPEC_BUDGET_CHARS].rstrip()
+    tail = ["", "[spec truncated here; read spec.md in the pack for the rest]"]
+    return [
+        "## The evaluator's own spec",
+        "",
+        "This is what actually measures you. Read it before changing anything.",
+        "",
+        text,
+        *(tail if truncated else []),
+        "",
+    ]
+
+
 def _agent_contract(
     bundle: ParentBundle, ctx: OperatorContext, timeout_s: float = 600.0
 ) -> str:
@@ -324,6 +358,7 @@ def _agent_contract(
             "Prior discoveries:",
             *(discoveries or ["- None supplied."]),
             "",
+            *_render_spec(ctx.spec_text),
             f"You have about {budget:.0f} seconds of wall clock, and this whole "
             f"session is killed at {timeout_s:.0f}. A kill discards everything you "
             "did, so it is worse than a small improvement. Land a working edit "
