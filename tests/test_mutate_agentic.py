@@ -230,3 +230,86 @@ def test_claude_session_hooks_are_disabled_for_a_mutation_subprocess():
     command = agentic._agent_command("claude", Path("C:/workspace"))
 
     assert command[command.index("--settings") + 1] == '{"hooks":{}}'
+
+
+def test_the_agent_is_told_its_wall_clock_budget(monkeypatch, tmp_path):
+    """An agent that does not know it is on a clock spends the whole clock.
+
+    Both of the first two cycles on Golomb order 29 ran the full timeout and
+    were killed mid-thought. A timeout is a total loss, not partial credit.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setenv("AUTOEVOLVE_AGENTIC_TIMEOUT_S", "900")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        (cwd / "main.py").write_text(
+            "# EVOLVE-BLOCK-START\nvalue = 2\n# EVOLVE-BLOCK-END\n",
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(cmd, 0, stdout="{}", stderr="")
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    AgenticOperator().propose(
+        _bundle(),
+        _context(tmp_path, lambda files: EvalOutcome(True, {"score": 2.0}, 0)),
+    )
+
+    workspace = next(iter(tmp_path.glob("agentic-p1-*")))
+    prompt = (workspace / "PROMPT.md").read_text(encoding="utf-8")
+    assert "780 seconds of wall clock" in prompt
+    assert "killed at 900" in prompt
+    assert "Land a working edit" in prompt
+
+
+def test_a_timeout_keeps_an_edit_the_agent_already_landed(monkeypatch, tmp_path):
+    """An edit landed at minute three survives being killed at minute fifteen.
+
+    Discarding it threw away two entire cycles on Golomb order 29. If the kill
+    caught the agent mid-write the file is broken, and a broken file fails its
+    gate, which is an ordinary result rather than a lost quarter hour.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        (cwd / "main.py").write_text(
+            "# EVOLVE-BLOCK-START\nvalue = 3\n# EVOLVE-BLOCK-END\n",
+            encoding="utf-8",
+        )
+        raise subprocess.TimeoutExpired(cmd, timeout_s)
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    proposal = AgenticOperator().propose(
+        _bundle(),
+        _context(tmp_path, lambda files: EvalOutcome(True, {"score": 3.0}, 0)),
+    )
+
+    assert proposal.files["main.py"].splitlines()[1] == "value = 3"
+    assert "agent_timeout=600s" in proposal.notes
+
+
+def test_a_timeout_with_no_edit_is_still_a_failure(monkeypatch, tmp_path):
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        raise subprocess.TimeoutExpired(cmd, timeout_s)
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    with pytest.raises(OperatorError, match="timed out after 600 seconds without changing"):
+        AgenticOperator().propose(
+            _bundle(),
+            _context(tmp_path, lambda files: EvalOutcome(True, {"score": 1.0}, 0)),
+        )

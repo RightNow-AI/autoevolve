@@ -55,14 +55,21 @@ class AgenticOperator:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
         (workspace / "PROMPT.md").write_text(
-            _agent_contract(bundle, ctx), encoding="utf-8"
+            _agent_contract(bundle, ctx, timeout_s), encoding="utf-8"
         )
 
         command = _agent_command(runtime, workspace, executable)
+        completed: subprocess.CompletedProcess[str] | None = None
         try:
             completed = run_agent_process(command, workspace, timeout_s)
-        except subprocess.TimeoutExpired as exc:
-            raise OperatorError(f"{runtime} agent timed out after {timeout_s:g} seconds") from exc
+        except subprocess.TimeoutExpired:
+            # Not fatal by itself. The agent has been editing in place the whole
+            # time, so an edit it landed at minute three survives being killed at
+            # minute fifteen. Discarding it threw away two entire cycles on
+            # Golomb order 29 for nothing. If the kill caught it mid-write the
+            # file is broken, and a broken file fails its gate, which is an
+            # ordinary result rather than a lost quarter hour.
+            completed = None
         except OSError as exc:
             raise OperatorError(f"failed to start {runtime} agent: {exc}") from exc
 
@@ -84,12 +91,17 @@ class AgenticOperator:
             content = target.read_text(encoding="utf-8")
             files[relative_path] = content
             changed += content != original
-        detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
         if missing:
             raise OperatorError(
                 f"{runtime} agent removed parent files: {', '.join(sorted(missing))}"
             )
         if changed == 0:
+            if completed is None:
+                raise OperatorError(
+                    f"{runtime} agent timed out after {timeout_s:g} seconds "
+                    "without changing anything"
+                )
+            detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
             if completed.returncode != 0:
                 raise OperatorError(
                     f"{runtime} agent exited {completed.returncode} without "
@@ -98,7 +110,9 @@ class AgenticOperator:
             raise OperatorError("agent made no changes")
 
         notes = [f"agentic: runtime={runtime} changed={changed}"]
-        if completed.returncode != 0:
+        if completed is None:
+            notes.append(f"agent_timeout={timeout_s:g}s")
+        elif completed.returncode != 0:
             notes.append(f"agent_exit={completed.returncode}")
         if ctx.evaluate_locally is not None:
             outcome = ctx.evaluate_locally(files)
@@ -264,8 +278,15 @@ def _safe_path(workspace: Path, relative_path: str) -> Path:
     return target
 
 
-def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
+def _agent_contract(
+    bundle: ParentBundle, ctx: OperatorContext, timeout_s: float = 600.0
+) -> str:
     contract = ctx.contract
+    # An agent that does not know it is on a clock spends the whole clock. Both
+    # of the first two cycles on Golomb order 29 ran the full 900 seconds and
+    # were killed mid-thought, and a timeout is a total loss, not partial
+    # credit: the work is discarded and the cycle is charged as a skip.
+    budget = max(timeout_s - 120.0, timeout_s * 0.6)
     direction = "maximize" if contract.maximize else "minimize"
     target = "no fixed target, push as far as possible" if contract.target is None else str(
         contract.target
@@ -303,10 +324,17 @@ def _agent_contract(bundle: ParentBundle, ctx: OperatorContext) -> str:
             "Prior discoveries:",
             *(discoveries or ["- None supplied."]),
             "",
+            f"You have about {budget:.0f} seconds of wall clock, and this whole "
+            f"session is killed at {timeout_s:.0f}. A kill discards everything you "
+            "did, so it is worse than a small improvement. Land a working edit "
+            "early, then keep improving it. Never leave the file mid-edit while "
+            "you go and think.",
+            "",
             "You may run code. Write a scratch script somewhere outside this "
             "directory, execute it, and read the result. On a search problem that "
             "is the point: prototype a construction, measure it, keep what wins. "
-            "Do not guess a recalled answer when you can compute a better one.",
+            "Do not guess a recalled answer when you can compute a better one. "
+            "Give any search you run a deadline well inside your own.",
             "",
             "You may edit files in place. Change ONLY content between lines containing "
             "EVOLVE-BLOCK-START and EVOLVE-BLOCK-END. Preserve marker lines and every "
