@@ -105,7 +105,10 @@ def test_run_and_join_lazily_wire_engine_and_worker_loop(
             "diff,rewrite",
         ],
     )
-    join_result = runner.invoke(app, ["join", "rfake000001", "--island", "1"])
+    join_result = runner.invoke(
+        app,
+        ["join", "rfake000001", "--island", "1", "--operators", "agentic"],
+    )
 
     assert run_result.exit_code == 0, run_result.output
     assert join_result.exit_code == 0, join_result.output

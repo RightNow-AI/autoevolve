@@ -162,8 +162,18 @@ def join_command(
         int | None,
         typer.Option("--island", min=0, help="Override the assigned island."),
     ] = None,
+    operators: Annotated[
+        str | None,
+        typer.Option("--operators", help="Comma-separated operator allowlist."),
+    ] = None,
 ) -> None:
-    """Join the current terminal to an existing run as a worker."""
+    """Join the current terminal to an existing run as a worker.
+
+    Workers are deliberately unequal. A terminal with a coding agent installed
+    can run the agentic operator; a container without one cannot. Naming the
+    allowlist here is how a strong worker joins a run that weaker workers are
+    already serving, instead of every worker having to be identical.
+    """
 
     from autoevolve.core.engine import Engine
     from autoevolve.core.loop import run_worker_loop
@@ -182,7 +192,7 @@ def join_command(
         run_worker_loop(
             engine,
             run_id,
-            _build_get_operator(None, evaluator_dir),
+            _build_get_operator(operators, evaluator_dir),
             island=selected,
         )
     except (KeyError, ValueError, RuntimeError) as exc:
