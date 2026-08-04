@@ -80,6 +80,8 @@ def test_agentic_reads_back_edit_and_appends_local_evaluation(monkeypatch, tmp_p
         "12",
         "--output-format",
         "json",
+        "--settings",
+        '{"hooks":{}}',
     ]
     assert timeout_s == 600.0
     # Unique per cycle so a retry never has to delete a directory the previous
@@ -148,6 +150,8 @@ def test_verified_claude_and_codex_commands_are_exact(tmp_path):
         "12",
         "--output-format",
         "json",
+        "--settings",
+        '{"hooks":{}}',
     ]
     assert agentic._agent_command("codex", tmp_path) == [
         "codex",
@@ -161,3 +165,66 @@ def test_verified_claude_and_codex_commands_are_exact(tmp_path):
         str(tmp_path / "last-message.txt"),
         agentic.AGENT_TASK_PROMPT,
     ]
+
+
+def test_edit_survives_a_nonzero_exit_from_session_teardown(monkeypatch, tmp_path):
+    """The edit on disk is the mutation; the exit code describes the session.
+
+    Every agentic cycle of the first real run finished its edit and then
+    exited 1 because a SessionEnd hook in the host's plugin config could not
+    resolve. Treating that as a mutation failure discarded good work each
+    time. The gate reads the code, so it decides.
+    """
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        (cwd / "main.py").write_text(
+            "# EVOLVE-BLOCK-START\nvalue = 2\n# EVOLVE-BLOCK-END\n",
+            encoding="utf-8",
+        )
+        return subprocess.CompletedProcess(
+            cmd,
+            1,
+            stdout="",
+            stderr='SessionEnd hook [node "${CLAUDE_PLUGIN_ROOT}/x.mjs"] failed: Hook cancelled',
+        )
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    proposal = AgenticOperator().propose(
+        _bundle(),
+        _context(tmp_path, lambda files: EvalOutcome(True, {"score": 2.0}, 0)),
+    )
+
+    assert proposal.files["main.py"].splitlines()[1] == "value = 2"
+    assert "agent_exit=1" in proposal.notes
+
+
+def test_nonzero_exit_with_no_edit_still_reports_the_agent_failure(monkeypatch, tmp_path):
+    monkeypatch.setenv("AUTOEVOLVE_AGENT_RUNTIME", "claude")
+    monkeypatch.setattr(agentic.shutil, "which", lambda name: f"C:/bin/{name}.exe")
+
+    def fake_process(
+        cmd: list[str], cwd: Path, timeout_s: float
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(cmd, 127, stdout="", stderr="command not found")
+
+    monkeypatch.setattr(agentic, "run_agent_process", fake_process)
+
+    with pytest.raises(OperatorError, match="exited 127 without changing anything"):
+        AgenticOperator().propose(
+            _bundle(),
+            _context(tmp_path, lambda files: EvalOutcome(True, {"score": 1.0}, 0)),
+        )
+
+
+def test_claude_session_hooks_are_disabled_for_a_mutation_subprocess():
+    """The host's interactive hooks are not part of a headless mutation."""
+
+    command = agentic._agent_command("claude", Path("C:/workspace"))
+
+    assert command[command.index("--settings") + 1] == '{"hooks":{}}'

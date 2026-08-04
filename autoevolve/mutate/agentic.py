@@ -65,23 +65,41 @@ class AgenticOperator:
             raise OperatorError(f"{runtime} agent timed out after {timeout_s:g} seconds") from exc
         except OSError as exc:
             raise OperatorError(f"failed to start {runtime} agent: {exc}") from exc
-        if completed.returncode != 0:
-            detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
-            raise OperatorError(f"{runtime} agent exited {completed.returncode}: {detail}")
 
+        # The edit on disk is the mutation. The exit code describes the agent
+        # session, which ends with teardown this operator does not care about:
+        # every agentic cycle of the first real run finished its edit and then
+        # exited 1 because a SessionEnd hook in the host's plugin config could
+        # not resolve, and good work was thrown away each time. A nonzero exit
+        # is recorded in the notes and left for the gate to judge, because the
+        # gate reads the code and the exit code does not.
         files: dict[str, str] = {}
         changed = 0
+        missing: list[str] = []
         for relative_path, original in bundle.parent_files.items():
             target = _safe_path(workspace, relative_path)
             if not target.is_file():
-                raise OperatorError(f"{runtime} agent removed parent file {relative_path}")
+                missing.append(relative_path)
+                continue
             content = target.read_text(encoding="utf-8")
             files[relative_path] = content
             changed += content != original
+        detail = (completed.stderr or completed.stdout or "no output").strip()[:500]
+        if missing:
+            raise OperatorError(
+                f"{runtime} agent removed parent files: {', '.join(sorted(missing))}"
+            )
         if changed == 0:
+            if completed.returncode != 0:
+                raise OperatorError(
+                    f"{runtime} agent exited {completed.returncode} without "
+                    f"changing anything: {detail}"
+                )
             raise OperatorError("agent made no changes")
 
         notes = [f"agentic: runtime={runtime} changed={changed}"]
+        if completed.returncode != 0:
+            notes.append(f"agent_exit={completed.returncode}")
         if ctx.evaluate_locally is not None:
             outcome = ctx.evaluate_locally(files)
             notes.append(
@@ -155,6 +173,13 @@ def _agent_command(runtime: str, workspace: Path, executable: str | None = None)
             "12",
             "--output-format",
             "json",
+            # A mutation subprocess must not run the host's interactive session
+            # hooks. They exist for a human's workflow, they can fail in a
+            # headless run, and a failing teardown hook makes the session exit
+            # nonzero after the edit is already on disk. The --bare flag also
+            # skips hooks but forces API key auth, which breaks an OAuth host.
+            "--settings",
+            '{"hooks":{}}',
         ]
     return [
         program,
