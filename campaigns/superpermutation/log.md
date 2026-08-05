@@ -34,3 +34,16 @@ The run continues with a target of 871, which no published construction
 reaches, so it cannot be satisfied by recall. The run's discovery ledger now
 states that the 872 constant is worthless here and describes the asymmetric
 travelling salesman formulation to search instead.
+
+## 2026-08-05 Modal ATSP search implementation
+
+This lane adds a real search over the 720 permutation nodes. It starts from randomized
+rotation-cycle and nearest-neighbor paths, then applies asymmetric Or-opt relocations, directed
+segment reversals, three-edge segment exchanges, simulated annealing, local descent, and restarts.
+Every printed length is checked by materializing the full string and independently scanning it for
+all 720 required substrings. Invalid candidates are rejected without printing a length.
+
+A verified length of 872 only matches the published Houston result [lit: Houston, 2014]. Only 871
+or shorter can improve the cited record. Such an object must still be reported first as an
+improvement candidate, with a fresh bounds check and independent verification before any stronger
+claim.
