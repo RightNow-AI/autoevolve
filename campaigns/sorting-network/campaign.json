@@ -1,0 +1,31 @@
+{
+  "name": "sorting-network",
+  "domain": "sorting-network",
+  "evaluator": "evaluators/sortnet",
+  "cells": [
+    {
+      "key": "n11-validation",
+      "env": {"AUTOEVOLVE_CELL": "n11-validation"},
+      "target": 35
+    },
+    {
+      "key": "n13-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n13-frontier"},
+      "target": 44
+    },
+    {
+      "key": "n16-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n16-frontier"},
+      "target": 59
+    },
+    {
+      "key": "n20-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n20-frontier"},
+      "target": 90
+    }
+  ],
+  "proxy_budget": {"max_evals": 40},
+  "full_budget": {"max_evals": 1200},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
