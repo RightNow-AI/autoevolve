@@ -1,0 +1,9 @@
+  n=40 seed=11 t=60s cost=311 best=255 temp=2.22 flips/s=25161
+  n=40 seed=11 t=120s cost=266 best=210 temp=1.65 flips/s=25442
+  n=40 seed=11 t=180s cost=201 best=155 temp=1.22 flips/s=26593
+  n=40 seed=11 t=240s cost=136 best=95 temp=0.90 flips/s=27581
+  n=40 seed=11 t=300s cost=102 best=69 temp=0.67 flips/s=25575
+  n=40 seed=11 t=360s cost=67 best=55 temp=0.50 flips/s=22707
+  n=40 seed=11 t=420s cost=51 best=49 temp=0.37 flips/s=20900
+  n=40 seed=11 t=480s cost=50 best=49 temp=0.27 flips/s=19562
+  n=40 seed=11 t=540s cost=50 best=49 temp=0.20 flips/s=18511

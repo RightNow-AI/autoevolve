@@ -75,6 +75,46 @@ def k5s_through(u: int, v: int, red: list[int], blue: list[int], n: int) -> tupl
     return triangles_in(red_common, red), triangles_in(blue_common, blue)
 
 
+def edges_in(mask: int, adjacency: list[int]) -> int:
+    """Count edges inside the vertex set `mask` under `adjacency`."""
+
+    verts = []
+    m = mask
+    while m:
+        low = m & -m
+        verts.append(low.bit_length() - 1)
+        m ^= low
+    return sum(bin(adjacency[u] & mask).count("1") for u in verts) // 2
+
+
+def k4s_through(u: int, v: int, red: list[int], blue: list[int], n: int) -> tuple[int, int]:
+    """Monochromatic K4s through edge uv.
+
+    A red K4 containing u and v is the pair plus a red edge inside the common
+    red neighbourhood, so this is the same shape as the K5 count one level
+    down. Used to steer the search toward colourings with few monochromatic
+    K4s, because the number of those is exactly the number of constraints the
+    43rd vertex has to satisfy.
+    """
+
+    full = (1 << n) - 1
+    others = full ^ (1 << u) ^ (1 << v)
+    return (
+        edges_in(red[u] & red[v] & others, red),
+        edges_in(blue[u] & blue[v] & others, blue),
+    )
+
+
+def brute_k4_cost(n: int, red: list[int]) -> int:
+    total = 0
+    for group in combinations(range(n), 4):
+        pairs = list(combinations(group, 2))
+        reds = sum(1 for a, b in pairs if red[a] >> b & 1)
+        if reds in (0, 6):
+            total += 1
+    return total
+
+
 def search(n: int, seed: int, seconds: float) -> tuple[int, list[int]] | None:
     rng = random.Random(seed)
     full = (1 << n) - 1

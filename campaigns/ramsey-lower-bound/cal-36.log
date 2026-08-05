@@ -1,0 +1,11 @@
+  n=36 seed=11 t=60s cost=188 best=125 temp=2.22 flips/s=30623
+  n=36 seed=11 t=120s cost=127 best=96 temp=1.65 flips/s=30905
+  n=36 seed=11 t=180s cost=96 best=72 temp=1.22 flips/s=32324
+  n=36 seed=11 t=240s cost=76 best=46 temp=0.90 flips/s=33544
+  n=36 seed=11 t=300s cost=49 best=30 temp=0.67 flips/s=30896
+  n=36 seed=11 t=360s cost=20 best=9 temp=0.50 flips/s=27415
+  n=36 seed=11 t=420s cost=19 best=4 temp=0.37 flips/s=25220
+  n=36 seed=11 t=480s cost=3 best=1 temp=0.27 flips/s=23692
+n=36 seed=11: best monochromatic K5 count = 0
+  re-counted from scratch: 0
+  CERTIFICATE WRITTEN: cal-36.json

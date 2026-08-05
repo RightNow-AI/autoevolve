@@ -1,0 +1,9 @@
+  n=41 seed=11 t=60s cost=350 best=306 temp=2.22 flips/s=24329
+  n=41 seed=11 t=120s cost=301 best=250 temp=1.65 flips/s=24431
+  n=41 seed=11 t=180s cost=214 best=167 temp=1.22 flips/s=25556
+  n=41 seed=11 t=240s cost=165 best=124 temp=0.90 flips/s=26504
+  n=41 seed=11 t=300s cost=109 best=93 temp=0.67 flips/s=24317
+  n=41 seed=11 t=360s cost=78 best=76 temp=0.50 flips/s=21571
+  n=41 seed=11 t=420s cost=73 best=73 temp=0.37 flips/s=19885
+  n=41 seed=11 t=480s cost=73 best=73 temp=0.27 flips/s=18678
+  n=41 seed=11 t=540s cost=73 best=73 temp=0.20 flips/s=17722
