@@ -1,0 +1,22 @@
+{
+  "bounds": [
+    {
+      "claim": "published lower bound for R(K3,K4,C4,C4)",
+      "value": "49",
+      "direction": "higher_is_better",
+      "who_and_year": "William J. Wesley, 2025",
+      "source_url": "https://arxiv.org/abs/2509.03784",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read Theorem 2 and confirm that the 48-vertex four-coloring proves R(K3,K4,C4,C4) >= 49"
+    },
+    {
+      "claim": "published upper bound for R(K3,K4,C4,C4)",
+      "value": "75",
+      "direction": "lower_is_better",
+      "who_and_year": "L. Boza and S. P. Radziszowski, 2025",
+      "source_url": "https://arxiv.org/abs/2509.03784",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the paragraph after Theorem 2 and confirm that it states the upper bound was improved to 75"
+    }
+  ]
+}

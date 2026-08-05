@@ -1,0 +1,21 @@
+{
+  "name": "multicolor-ramsey",
+  "domain": "multicolor-ramsey",
+  "evaluator": "evaluators/multiramsey",
+  "cells": [
+    {
+      "key": "n5-validation",
+      "env": {"AUTOEVOLVE_CELL": "n5-validation"},
+      "target": 5
+    },
+    {
+      "key": "n49-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n49-frontier"},
+      "target": 49
+    }
+  ],
+  "proxy_budget": {"max_evals": 40},
+  "full_budget": {"max_evals": 1200},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
