@@ -185,7 +185,51 @@ a negative control and its number must never be quoted as a result.
 
 ---
 
-## 8. What this record does not support
+## 8. E11: moving every workload off the laptop, and what that cost to prove
+
+Measured 2026-08-05. None of this is a discovery. It is recorded because the
+agentic operator was laptop-only until now, and it is the only operator that
+has ever produced a frontier result here, so this is what unblocked scale.
+
+| claim | evidence |
+|---|---|
+| The quality gate runs remotely | `scripts/modal_gate.py` returned `ruff_ok` true, `pytest_ok` true, 322 passed, 0 failed, in a container |
+| A coding agent runs remotely | codex-cli 0.146.1 installs in the image and authenticates from the `OPENAI_API_KEY` already present in the `autoevolve-model` secret |
+| It genuinely edits files | the agentic preflight returns `changed: true, ok: true` |
+
+Two failures had to be found first, and both are the same shape as the older
+defects in section 6: something reported success while doing nothing.
+
+The preflight first returned **exit code 0 with `changed: false`**. A probe of
+three documented invocations found why. With `-s workspace-write` codex prints
+"the filesystem sandbox failed on all attempts", exits 0, and changes nothing.
+`--full-auto` behaves identically. Only `--dangerously-bypass-approvals-and-sandbox`
+edits the file. Codex's own Linux sandbox cannot initialise in that image. The
+bypass is opt-in, off by default, and set only by the Modal entrypoint, where
+a disposable container holding one repo clone already provides the isolation.
+
+The remote gate then caught four defects before any search ran: three Modal
+entrypoints crash-looped because they resolved the repository HEAD at import
+time, which also happens inside a container that has no git, and one pack test
+asserted 8192 binary inputs against the n=11 cell whose correct count is 2048.
+
+### E12: batched GPU annealing, validated before it was believed
+
+`campaigns/ramsey-lower-bound/modal_gpu.py --mode selftest` on an NVIDIA A10G:
+
+- **5,376 delta comparisons** against a brute force reference that enumerates
+  every clique containing the flipped edge, for both K5 and K4, over n = 8 to
+  14, on evolving rather than fresh states. All exact.
+- n = 30 reached zero monochromatic K5s in 54.3 seconds, host-verified from
+  scratch, `stop_reason: zero_k5`.
+- **639,641 aggregate flips per second across 8,192 chains, 11.03x** the
+  measured single-chain CPU reference of 58,000.
+
+The exactness check is the point. A batched delta that drifted would announce
+certificates that do not exist, and this project has already been burned once
+by a search reporting something it could not re-verify.
+
+## 9. What this record does not support
 
 - No claim that any published bound was improved. E1 matches one; nothing beats one.
 - No claim of per-second, per-token, or per-dollar efficiency for any operator. Only per program, on the runs named.
