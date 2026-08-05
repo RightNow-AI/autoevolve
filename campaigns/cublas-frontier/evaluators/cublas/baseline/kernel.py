@@ -11,7 +11,6 @@ from typing import Any
 
 import numpy as np
 
-
 # EVOLVE-BLOCK-START
 BLOCK_M = 16
 BLOCK_N = 16

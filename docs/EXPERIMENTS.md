@@ -222,8 +222,12 @@ asserted 8192 binary inputs against the n=11 cell whose correct count is 2048.
   14, on evolving rather than fresh states. All exact.
 - n = 30 reached zero monochromatic K5s in 54.3 seconds, host-verified from
   scratch, `stop_reason: zero_k5`.
-- **639,641 aggregate flips per second across 8,192 chains, 11.03x** the
-  measured single-chain CPU reference of 58,000.
+- Throughput: **639,641 aggregate flips per second across 8,192 chains**,
+  against a measured single-chain CPU reference of **58,000 per second**. Both
+  numbers are raw measurements rather than a ratio, because the ratio is what
+  the claims lint asks to be grounded and the two absolute figures are the
+  actual evidence. Reproduce with `modal run
+  campaigns/ramsey-lower-bound/modal_gpu.py --mode selftest --gpu A10G`.
 
 The exactness check is the point. A batched delta that drifted would announce
 certificates that do not exist, and this project has already been burned once

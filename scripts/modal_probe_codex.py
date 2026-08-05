@@ -54,16 +54,12 @@ def probe() -> list[dict]:
         "file tools and then stop."
     )
 
+    base = [codex, "exec", "--skip-git-repo-check"]
+    bypass = "--dangerously-bypass-approvals-and-sandbox"
     variants: list[tuple[str, list[str]]] = [
-        ("workspace-write", [codex, "exec", "--skip-git-repo-check", "-s", "workspace-write", task]),
-        (
-            "danger-bypass",
-            [codex, "exec", "--skip-git-repo-check", "--dangerously-bypass-approvals-and-sandbox", task],
-        ),
-        (
-            "full-auto",
-            [codex, "exec", "--skip-git-repo-check", "--full-auto", task],
-        ),
+        ("workspace-write", [*base, "-s", "workspace-write", task]),
+        ("danger-bypass", [*base, bypass, task]),
+        ("full-auto", [*base, "--full-auto", task]),
     ]
 
     results: list[dict] = []
@@ -118,4 +114,8 @@ def main() -> None:
         print(f"  stdout: {row['stdout_tail'][-600:]}")
         print(f"  stderr: {row['stderr_tail'][-400:]}")
         print()
-    print(json.dumps([{k: v for k, v in r.items() if k != "stdout_tail"} for r in probe.remote()], indent=2)[:1500])
+    summary = [
+        {key: value for key, value in row.items() if key != "stdout_tail"}
+        for row in probe.remote()
+    ]
+    print(json.dumps(summary, indent=2)[:1500])
