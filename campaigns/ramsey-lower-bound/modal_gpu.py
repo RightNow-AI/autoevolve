@@ -28,19 +28,27 @@ DEFAULT_START_CERTIFICATE = (
 
 
 def _head_sha() -> str:
-    """Read the exact local commit that the remote image must contain."""
+    """Read the exact local commit that the remote image must contain.
 
-    result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True,
-        check=True,
-        cwd=str(Path(__file__).resolve().parents[2]),
-    )
+    Module level code runs twice: once locally to build the image, and again
+    inside the container when Modal imports this file. There is no git
+    repository in the container, so an unguarded call crash-loops every worker
+    before it starts. The commit is only needed locally anyway, because the
+    container already holds the code the build step checked out.
+    """
+
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=str(Path(__file__).resolve().parents[2]),
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return "main"
     sha = result.stdout.strip()
-    if len(sha) != 40:
-        raise RuntimeError(f"git returned an invalid HEAD SHA: {sha!r}")
-    return sha
+    return sha if len(sha) == 40 else "main"
 
 
 COMMIT = _head_sha()

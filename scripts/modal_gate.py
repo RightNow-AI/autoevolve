@@ -36,19 +36,26 @@ class GateReport(TypedDict):
 
 
 def _head_sha() -> str:
-    """Return the exact local commit that the Modal image must contain."""
+    """Return the exact local commit that the Modal image must contain.
 
-    result = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True,
-        check=True,
-        cwd=str(Path(__file__).resolve().parents[1]),
-    )
-    commit = result.stdout.strip()
-    if not commit:
-        raise RuntimeError("git rev-parse HEAD returned an empty commit")
-    return commit
+    Module level code runs twice: once locally to build the image, and again
+    inside the container when Modal imports this file. There is no git
+    repository in the container, so an unguarded call crash-loops every worker
+    before it starts. The commit is only needed locally anyway, because the
+    container already holds the code the build step checked out.
+    """
+
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=str(Path(__file__).resolve().parents[1]),
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return "main"
+    return result.stdout.strip() or "main"
 
 
 COMMIT = _head_sha()

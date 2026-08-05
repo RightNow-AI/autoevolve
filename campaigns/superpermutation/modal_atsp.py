@@ -8,6 +8,7 @@ modal run campaigns/superpermutation/modal_atsp.py --seed-count 32 --deadline-mi
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -89,16 +90,30 @@ def _read_ref(directories: tuple[Path, ...], ref_name: str) -> str:
 
 
 def _read_repo_head_sha(repo_root: Path) -> str:
-    """Read HEAD without invoking git on the founder laptop."""
+    """Read HEAD without invoking git on the founder laptop.
 
-    directories = _git_directories(repo_root)
-    head_value = (directories[0] / "HEAD").read_text(encoding="utf-8").strip()
+    Module level code runs twice: once locally to build the image, and again
+    inside the container when Modal imports this file. The container has no
+    git metadata, so an unguarded read crash-loops every worker before it
+    starts. The container does not need the value, because the build step
+    already checked out that exact commit and recorded it in the environment.
+    """
+
+    recorded = os.environ.get("AUTOEVOLVE_REPO_HEAD_SHA", "")
+    if _is_commit_sha(recorded.lower()):
+        return recorded.lower()
+    try:
+        directories = _git_directories(repo_root)
+        head_value = (directories[0] / "HEAD").read_text(encoding="utf-8").strip()
+    except (OSError, RuntimeError):
+        return "main"
     if head_value.startswith("ref: "):
-        return _read_ref(directories, head_value.removeprefix("ref: ").strip())
+        try:
+            return _read_ref(directories, head_value.removeprefix("ref: ").strip())
+        except (OSError, RuntimeError):
+            return "main"
     head_value = head_value.lower()
-    if not _is_commit_sha(head_value):
-        raise RuntimeError("repository HEAD is not a full commit SHA")
-    return head_value
+    return head_value if _is_commit_sha(head_value) else "main"
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
