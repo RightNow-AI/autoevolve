@@ -25,19 +25,28 @@ def _head_sha() -> str:
 
     import subprocess
 
+    # Module level code runs twice: locally to build the image, and again in
+    # the container when Modal imports this file. The container mounts it flat
+    # at /root, so indexing parents raises IndexError while building the cwd
+    # argument, before any guarded subprocess call. The container never needs
+    # the value, because the build step already checked that commit out.
+    try:
+        repo_root = Path(__file__).resolve().parents[2]
+    except IndexError:
+        return "main"
     try:
         completed = subprocess.run(
             ["git", "rev-parse", "HEAD"],
             capture_output=True,
             text=True,
             check=True,
-            cwd=str(Path(__file__).resolve().parents[2]),
+            cwd=str(repo_root),
         )
-    except (OSError, subprocess.CalledProcessError) as exc:
-        raise RuntimeError("cannot pin the Modal image without the repository HEAD SHA") from exc
+    except (OSError, subprocess.CalledProcessError):
+        return "main"
     commit = completed.stdout.strip()
     if len(commit) != 40 or any(character not in "0123456789abcdef" for character in commit):
-        raise RuntimeError(f"git returned an invalid repository HEAD SHA: {commit!r}")
+        return "main"
     return commit
 
 

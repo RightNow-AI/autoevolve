@@ -392,3 +392,33 @@ def test_failure_detail_reports_the_reason_not_the_telemetry(monkeypatch, tmp_pa
             _bundle(),
             _context(tmp_path, lambda files: EvalOutcome(True, {"score": 1.0}, 0)),
         )
+
+
+def test_codex_sandbox_bypass_is_opt_in_and_off_by_default(monkeypatch, tmp_path):
+    """Bypassing a sandbox is never a safe default, so it must be asked for.
+
+    Measured inside a Modal container: with -s workspace-write codex reports
+    that its filesystem sandbox failed on all attempts, exits 0, and changes
+    nothing, which is indistinguishable from a refusal. The flag is set only
+    where a disposable container already provides the isolation.
+    """
+
+    monkeypatch.delenv("AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX", raising=False)
+    default = agentic._agent_command("codex", tmp_path)
+    assert "-s" in default
+    assert "workspace-write" in default
+    assert "--dangerously-bypass-approvals-and-sandbox" not in default
+
+    monkeypatch.setenv("AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX", "1")
+    bypassed = agentic._agent_command("codex", tmp_path)
+    assert "--dangerously-bypass-approvals-and-sandbox" in bypassed
+    assert "workspace-write" not in bypassed
+    # The task and workspace routing must survive the switch either way.
+    assert bypassed[-1] == agentic.AGENT_TASK_PROMPT
+    assert str(tmp_path) in bypassed
+
+
+def test_the_sandbox_bypass_flag_never_reaches_a_candidate():
+    from autoevolve.eval.childenv import ENGINE_ONLY_ENV
+
+    assert "AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX" in ENGINE_ONLY_ENV

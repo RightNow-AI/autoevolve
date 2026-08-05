@@ -37,13 +37,20 @@ def _head_sha() -> str:
     container already holds the code the build step checked out.
     """
 
+    # Indexing parents raises IndexError while building the cwd argument when
+    # Modal mounts this file flat at /root, which happens before any guarded
+    # subprocess call and crash-loops the worker.
+    try:
+        repo_root = Path(__file__).resolve().parents[2]
+    except IndexError:
+        return "main"
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
             capture_output=True,
             text=True,
             check=True,
-            cwd=str(Path(__file__).resolve().parents[2]),
+            cwd=str(repo_root),
         )
     except (OSError, subprocess.CalledProcessError):
         return "main"

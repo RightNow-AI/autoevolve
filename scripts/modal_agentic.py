@@ -1,4 +1,4 @@
-"""Run the autoevolve agentic operator entirely on Modal.
+﻿"""Run the autoevolve agentic operator entirely on Modal.
 
 Usage:
     modal run scripts/modal_agentic.py::preflight_local
@@ -113,6 +113,9 @@ def preflight() -> dict[str, object]:
             "error": str(exc)[:800],
         }
     env["AUTOEVOLVE_AGENT_RUNTIME"] = "codex"
+    # Measured in this image: codex's own filesystem sandbox never starts here,
+    # so it exits 0 having changed nothing. The container is the isolation.
+    env["AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX"] = "1"
 
     with tempfile.TemporaryDirectory(prefix="autoevolve-codex-preflight-") as raw_workspace:
         workspace = Path(raw_workspace)
@@ -259,6 +262,9 @@ def agentic_search(
 
     env = _configure_codex()
     env["AUTOEVOLVE_AGENT_RUNTIME"] = "codex"
+    # Measured in this image: codex's own filesystem sandbox never starts here,
+    # so it exits 0 having changed nothing. The container is the isolation.
+    env["AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX"] = "1"
     env["AUTOEVOLVE_HOME"] = f"/store/{store_name}/autoevolve"
     env["AUTOEVOLVE_ARTIFACTS_DIR"] = f"/store/{store_name}/runs"
     env["AUTOEVOLVE_AGENTIC_TIMEOUT_S"] = "1800"

@@ -202,6 +202,18 @@ _DEFAULT_AGENT_TOOLS = ("Read", "Edit", "Write", "Bash")
 _DEFAULT_AGENT_TURNS = 40
 
 
+def _codex_sandbox_is_unavailable() -> bool:
+    """Whether codex's own filesystem sandbox cannot start in this environment.
+
+    Off by default, because bypassing a sandbox is never the safe default. It
+    is set deliberately by the Modal entrypoint, where the container already
+    provides the isolation and codex's internal sandbox provably does not
+    start.
+    """
+
+    return os.getenv("AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX", "").strip() == "1"
+
+
 def _agent_tools() -> tuple[str, ...]:
     """Tools the mutation agent may use, overridable for untrusted packs."""
 
@@ -265,18 +277,27 @@ def _agent_command(runtime: str, workspace: Path, executable: str | None = None)
             "--settings",
             '{"hooks":{}}',
         ]
-    return [
-        program,
-        "exec",
-        "--skip-git-repo-check",
-        "-s",
-        "workspace-write",
-        "-C",
-        str(workspace),
-        "-o",
-        str(workspace / "last-message.txt"),
-        AGENT_TASK_PROMPT,
-    ]
+    command = [program, "exec", "--skip-git-repo-check"]
+    if _codex_sandbox_is_unavailable():
+        # Measured inside a Modal container: with -s workspace-write codex
+        # reports "the filesystem sandbox failed on all attempts", exits 0, and
+        # changes nothing, which is indistinguishable from a refusal. Its own
+        # sandbox cannot initialise there. Bypassing it is only correct when
+        # something else already provides the isolation, which a disposable
+        # container holding one repo clone does.
+        command.append("--dangerously-bypass-approvals-and-sandbox")
+    else:
+        command.extend(["-s", "workspace-write"])
+    command.extend(
+        [
+            "-C",
+            str(workspace),
+            "-o",
+            str(workspace / "last-message.txt"),
+            AGENT_TASK_PROMPT,
+        ]
+    )
+    return command
 
 
 def _prepare_workspace(workspace: Path, workdir: Path) -> None:

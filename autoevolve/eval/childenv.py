@@ -1,4 +1,4 @@
-"""The one environment every evaluator child process gets.
+﻿"""The one environment every evaluator child process gets.
 
 Two child processes read this: the describe probe that loads an evaluator
 module to learn its contract, and the sandbox that judges a candidate. They
@@ -49,6 +49,7 @@ ENGINE_ONLY_ENV = frozenset(
         "AUTOEVOLVE_AGENTIC_TIMEOUT_S",
         "AUTOEVOLVE_AGENTIC_TOOLS",
         "AUTOEVOLVE_AGENTIC_TURNS",
+        "AUTOEVOLVE_AGENTIC_CODEX_NO_SANDBOX",
     }
 )
 
