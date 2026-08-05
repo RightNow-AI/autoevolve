@@ -1,0 +1,65 @@
+{
+  "default_cell": "odd-1000-validation",
+  "cells": [
+    {
+      "key": "odd-1000-validation",
+      "role": "validation",
+      "batch": 1,
+      "m": 1000,
+      "n": 1000,
+      "k": 1000,
+      "bias": false,
+      "activation": "none",
+      "seed": 73001,
+      "mock_batch": 1,
+      "mock_m": 17,
+      "mock_n": 19,
+      "mock_k": 23
+    },
+    {
+      "key": "skinny-4096x8-frontier",
+      "role": "frontier",
+      "batch": 1,
+      "m": 4096,
+      "n": 8,
+      "k": 4096,
+      "bias": false,
+      "activation": "none",
+      "seed": 73003,
+      "mock_batch": 1,
+      "mock_m": 37,
+      "mock_n": 3,
+      "mock_k": 29
+    },
+    {
+      "key": "batched-1024x32-frontier",
+      "role": "frontier",
+      "batch": 1024,
+      "m": 32,
+      "n": 32,
+      "k": 32,
+      "bias": false,
+      "activation": "none",
+      "seed": 73007,
+      "mock_batch": 5,
+      "mock_m": 7,
+      "mock_n": 7,
+      "mock_k": 7
+    },
+    {
+      "key": "fused-bias-relu-frontier",
+      "role": "frontier",
+      "batch": 1,
+      "m": 1024,
+      "n": 256,
+      "k": 1024,
+      "bias": true,
+      "activation": "relu",
+      "seed": 73009,
+      "mock_batch": 1,
+      "mock_m": 13,
+      "mock_n": 11,
+      "mock_k": 17
+    }
+  ]
+}
