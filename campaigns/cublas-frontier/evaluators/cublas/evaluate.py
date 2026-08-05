@@ -104,7 +104,10 @@ class Workload(NamedTuple):
     expected: Any
     # |A| @ |B|, which bounds accumulated rounding error even where the signed
     # sum cancels. A tolerance keyed to the output misjudges exactly that case.
-    magnitude: Any = None
+    # Required, not defaulted: one parity call site was missed and silently fell
+    # back to the weak check, so two GPU launches failed on a budget that was
+    # never applied. A missing value must be a loud error, not a quiet one.
+    magnitude: Any
 
 
 def _load_candidate(candidate_dir: Path) -> ModuleType:
@@ -361,8 +364,8 @@ def _assert_numpy_close(
     output: object,
     expected: np.ndarray,
     label: str,
-    magnitude: np.ndarray | None = None,
-    reduction_length: int = 1,
+    magnitude: np.ndarray,
+    reduction_length: int,
 ) -> None:
     """Compare against the float64 reference with a K-aware error budget.
 
@@ -391,10 +394,7 @@ def _assert_numpy_close(
     if actual.dtype != np.float32:
         raise EvalError(f"{label} returned dtype {actual.dtype}, expected float32")
     difference = np.abs(actual.astype(np.float64) - expected)
-    if magnitude is None:
-        allowance = ATOL + RTOL * np.abs(expected)
-    else:
-        allowance = ATOL + _gamma(reduction_length) * np.abs(magnitude)
+    allowance = ATOL + _gamma(reduction_length) * np.abs(magnitude)
     if not bool(np.all(difference <= allowance)):
         index = np.unravel_index(int(np.argmax(difference - allowance)), difference.shape)
         # Report the ratio and the reduction length too. A bare pair of numbers
@@ -435,14 +435,11 @@ def _assert_torch_close(
     output: Any,
     expected: Any,
     label: str,
-    magnitude: Any = None,
-    reduction_length: int = 1,
+    magnitude: Any,
+    reduction_length: int,
 ) -> None:
     difference = (output.to(dtype=torch.float64) - expected).abs()
-    if magnitude is None:
-        allowance = ATOL + RTOL * expected.abs()
-    else:
-        allowance = ATOL + _gamma(reduction_length) * magnitude.abs()
+    allowance = ATOL + _gamma(reduction_length) * magnitude.abs()
     failed = difference > allowance
     if bool(failed.any().item()):
         excess = difference - allowance
@@ -738,6 +735,8 @@ def _evaluate_real(candidate_dir: Path, cell: CellSpec, deadline: float) -> dict
         profile_output,
         profile_workload.expected,
         "candidate profile",
+        magnitude=profile_workload.magnitude,
+        reduction_length=cell.k,
     )
     if measured_launches == 0:
         raise EvalError("candidate performed no CUDA kernel launch on a fresh input")
