@@ -1,0 +1,31 @@
+{
+  "name": "cublas-frontier",
+  "domain": "cublas-frontier",
+  "evaluator": "evaluators/cublas",
+  "cells": [
+    {
+      "key": "odd-1000-validation",
+      "env": {"AUTOEVOLVE_CELL": "odd-1000-validation"},
+      "target": null
+    },
+    {
+      "key": "skinny-4096x8-frontier",
+      "env": {"AUTOEVOLVE_CELL": "skinny-4096x8-frontier"},
+      "target": null
+    },
+    {
+      "key": "batched-1024x32-frontier",
+      "env": {"AUTOEVOLVE_CELL": "batched-1024x32-frontier"},
+      "target": null
+    },
+    {
+      "key": "fused-bias-relu-frontier",
+      "env": {"AUTOEVOLVE_CELL": "fused-bias-relu-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 40, "wall_clock_s": 14400},
+  "full_budget": {"max_evals": 400, "wall_clock_s": 86400},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-rerun"],
+  "replicate_seeds": 3
+}

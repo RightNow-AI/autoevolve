@@ -1,0 +1,40 @@
+{
+  "bounds": [
+    {
+      "claim": "same-run cuBLAS latency for odd-1000-validation",
+      "value": "dynamic cublas_ms from the evaluator run",
+      "direction": "lower_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/odd-1000-validation/cublas_ms",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "rerun this cell on the named GPU and cite that run id and cublas_ms"
+    },
+    {
+      "claim": "same-run cuBLAS latency for skinny-4096x8-frontier",
+      "value": "dynamic cublas_ms from the evaluator run",
+      "direction": "lower_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/skinny-4096x8-frontier/cublas_ms",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "rerun this cell on the named GPU and cite that run id and cublas_ms"
+    },
+    {
+      "claim": "same-run cuBLAS latency for batched-1024x32-frontier",
+      "value": "dynamic cublas_ms from the evaluator run",
+      "direction": "lower_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/batched-1024x32-frontier/cublas_ms",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "rerun this cell on the named GPU and cite that run id and cublas_ms"
+    },
+    {
+      "claim": "same-run cuBLAS plus epilogue latency for fused-bias-relu-frontier",
+      "value": "dynamic cublas_ms from the evaluator run",
+      "direction": "lower_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/fused-bias-relu-frontier/cublas_ms",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "rerun this cell on the named GPU and cite that run id and cublas_ms"
+    }
+  ]
+}
