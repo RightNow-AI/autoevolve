@@ -1,4 +1,4 @@
-"""Strict same-run cuBLAS comparison with a CPU-only CI mock."""
+﻿"""Strict same-run cuBLAS comparison with a CPU-only CI mock."""
 
 from __future__ import annotations
 
@@ -27,8 +27,24 @@ MAXIMIZE = True
 PACK_DIR = Path(__file__).resolve().parent
 FIXTURE_PATH = PACK_DIR / "fixtures" / "cases.json"
 
+# Rounding error in a dot product grows with the reduction length, so the
+# budget is the standard backward error bound gamma_K = K * eps / (1 - K * eps)
+# applied to the sum of absolute products rather than to the output. A flat
+# tolerance failed cuBLAS itself at K = 4096, because cancellation makes the
+# output small while the accumulated error does not shrink with it.
+FLOAT32_EPS = 2.0**-24
+ERROR_BUDGET_SAFETY = 4.0
 RTOL = 5e-5
 ATOL = 2e-5
+
+
+def _gamma(reduction_length: int) -> float:
+    """Backward error factor for summing `reduction_length` float32 products."""
+
+    product = reduction_length * FLOAT32_EPS
+    if product >= 1.0:
+        raise EvalError(f"reduction length {reduction_length} is too large for float32")
+    return ERROR_BUDGET_SAFETY * product / (1.0 - product)
 WARMUP_LAUNCHES = 3
 TIMED_ROUNDS = 5
 REPEATS_PER_ROUND = 3
@@ -73,6 +89,9 @@ class Workload(NamedTuple):
     b: Any
     bias: Any | None
     expected: Any
+    # |A| @ |B|, which bounds accumulated rounding error even where the signed
+    # sum cancels. A tolerance keyed to the output misjudges exactly that case.
+    magnitude: Any = None
 
 
 def _load_candidate(candidate_dir: Path) -> ModuleType:
@@ -206,7 +225,11 @@ def _make_numpy_workload(cell: CellSpec, seed_offset: int = 0) -> Workload:
     if cell.bias:
         bias = rng.uniform(-0.25, 0.25, size=(cell.mock_n,)).astype(np.float32)
     expected = _numpy_reference(a, b, bias, cell.activation)
-    return Workload(a=a, b=b, bias=bias, expected=expected)
+    # |A| @ |B| bounds the accumulated rounding error even when the signed sum
+    # cancels to something small, which is exactly the case a tolerance keyed
+    # to the output misjudges.
+    magnitude = np.matmul(np.abs(a).astype(np.float64), np.abs(b).astype(np.float64))
+    return Workload(a=a, b=b, bias=bias, expected=expected, magnitude=magnitude)
 
 
 def _torch_reference(
@@ -260,7 +283,14 @@ def _make_torch_workload(
         )
         bias = bias.mul(0.5).sub(0.25)
     expected = _torch_reference(torch, matmul, relu, a, b, bias, cell.activation)
-    return Workload(a=a, b=b, bias=bias, expected=expected)
+    # Computed in float64 without the bias or activation, because it bounds the
+    # error of the reduction itself. A tolerance keyed to the output would
+    # misjudge every entry where the signed sum cancels.
+    magnitude = matmul(
+        a.abs().to(dtype=torch.float64),
+        b.abs().to(dtype=torch.float64),
+    )
+    return Workload(a=a, b=b, bias=bias, expected=expected, magnitude=magnitude)
 
 
 def _reject_reported_output(output: object) -> None:
@@ -314,7 +344,31 @@ def _call_candidate(
     return output
 
 
-def _assert_numpy_close(output: object, expected: np.ndarray, label: str) -> None:
+def _assert_numpy_close(
+    output: object,
+    expected: np.ndarray,
+    label: str,
+    magnitude: np.ndarray | None = None,
+    reduction_length: int = 1,
+) -> None:
+    """Compare against the float64 reference with a K-aware error budget.
+
+    A flat tolerance is wrong here. Rounding error in a dot product grows with
+    the reduction length, so a constant that suits K=64 rejects a correct
+    result at K=4096. This gate did exactly that: it failed cuBLAS itself, the
+    reference implementation, by 3.01e-05 against a 2.88e-05 allowance.
+
+    The budget is the standard backward error bound for floating point
+    summation, gamma_K times the sum of absolute products, which is the
+    quantity that actually bounds the error. `magnitude` carries |A| @ |B|
+    computed in float64 when the caller knows it.
+
+    This stays far from admitting a precision downgrade. TF32 carries 11 bits
+    of mantissa against 24, so its bound is roughly 8000 times larger, and the
+    sentinel row planted in the inputs pushes a TF32 result orders of magnitude
+    outside this allowance rather than marginally past it.
+    """
+
     try:
         actual = np.asarray(output)
     except Exception as exc:
@@ -324,7 +378,10 @@ def _assert_numpy_close(output: object, expected: np.ndarray, label: str) -> Non
     if actual.dtype != np.float32:
         raise EvalError(f"{label} returned dtype {actual.dtype}, expected float32")
     difference = np.abs(actual.astype(np.float64) - expected)
-    allowance = ATOL + RTOL * np.abs(expected)
+    if magnitude is None:
+        allowance = ATOL + RTOL * np.abs(expected)
+    else:
+        allowance = ATOL + _gamma(reduction_length) * np.abs(magnitude)
     if not bool(np.all(difference <= allowance)):
         index = np.unravel_index(int(np.argmax(difference - allowance)), difference.shape)
         raise EvalError(
@@ -355,9 +412,19 @@ def _require_cuda_tensor(
         raise EvalError(f"{label} returned dtype {dtype}, expected {expected_dtype}")
 
 
-def _assert_torch_close(torch: Any, output: Any, expected: Any, label: str) -> None:
+def _assert_torch_close(
+    torch: Any,
+    output: Any,
+    expected: Any,
+    label: str,
+    magnitude: Any = None,
+    reduction_length: int = 1,
+) -> None:
     difference = (output.to(dtype=torch.float64) - expected).abs()
-    allowance = ATOL + RTOL * expected.abs()
+    if magnitude is None:
+        allowance = ATOL + RTOL * expected.abs()
+    else:
+        allowance = ATOL + _gamma(reduction_length) * magnitude.abs()
     failed = difference > allowance
     if bool(failed.any().item()):
         excess = difference - allowance
@@ -522,7 +589,13 @@ def _evaluate_mock(
         real=False,
         deadline=deadline,
     )
-    _assert_numpy_close(output, workload.expected, f"cell {cell.key}")
+    _assert_numpy_close(
+        output,
+        workload.expected,
+        f"cell {cell.key}",
+        magnitude=workload.magnitude,
+        reduction_length=cell.mock_k,
+    )
     descriptors, _ = _source_descriptors(candidate_dir)
     return {
         GATE: 1.0,
@@ -574,7 +647,14 @@ def _evaluate_real(candidate_dir: Path, cell: CellSpec, deadline: float) -> dict
         torch.float32,
         "cuBLAS baseline",
     )
-    _assert_torch_close(torch, baseline_setup, setup.expected, "cuBLAS baseline")
+    _assert_torch_close(
+        torch,
+        baseline_setup,
+        setup.expected,
+        "cuBLAS baseline",
+        magnitude=setup.magnitude,
+        reduction_length=cell.k,
+    )
     _warm_up(baseline_launch, setup, select_device, synchronize)
     cublas_ms, baseline_outputs = _measure_cuda(
         baseline_launch,
@@ -586,7 +666,14 @@ def _evaluate_real(candidate_dir: Path, cell: CellSpec, deadline: float) -> dict
     for index, (output, workload) in enumerate(
         zip(baseline_outputs, timed, strict=True)
     ):
-        _assert_torch_close(torch, output, workload.expected, f"cuBLAS timed output {index}")
+        _assert_torch_close(
+            torch,
+            output,
+            workload.expected,
+            f"cuBLAS timed output {index}",
+            magnitude=workload.magnitude,
+            reduction_length=cell.k,
+        )
 
     candidate = _load_candidate(candidate_dir)
     descriptors, declared_launches = _source_descriptors(candidate_dir)
@@ -610,7 +697,14 @@ def _evaluate_real(candidate_dir: Path, cell: CellSpec, deadline: float) -> dict
 
     candidate_setup = candidate_launch(setup)
     synchronize()
-    _assert_torch_close(torch, candidate_setup, setup.expected, "candidate setup")
+    _assert_torch_close(
+        torch,
+        candidate_setup,
+        setup.expected,
+        "candidate setup",
+        magnitude=setup.magnitude,
+        reduction_length=cell.k,
+    )
     _warm_up(candidate_launch, setup, select_device, synchronize)
 
     measured_launches, profile_output = _profile_launch_count(
@@ -646,7 +740,14 @@ def _evaluate_real(candidate_dir: Path, cell: CellSpec, deadline: float) -> dict
     for index, (output, workload) in enumerate(
         zip(candidate_outputs, timed, strict=True)
     ):
-        _assert_torch_close(torch, output, workload.expected, f"candidate timed output {index}")
+        _assert_torch_close(
+            torch,
+            output,
+            workload.expected,
+            f"candidate timed output {index}",
+            magnitude=workload.magnitude,
+            reduction_length=cell.k,
+        )
 
     # A faster candidate has a smaller denominator, so this direction makes
     # larger fitness mean faster code. Reversing it would reward regressions.
