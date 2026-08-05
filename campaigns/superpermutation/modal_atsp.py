@@ -116,7 +116,21 @@ def _read_repo_head_sha(repo_root: Path) -> str:
     return head_value if _is_commit_sha(head_value) else "main"
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+def _repo_root() -> Path:
+    """Locate the repository root, tolerating the container's flat layout.
+
+    Modal mounts this file at /root/modal_atsp.py, which has no third parent,
+    so indexing parents blindly raises IndexError at import and crash-loops
+    every worker before it starts. The container does not need the real root,
+    because the build step already checked the repository out.
+    """
+
+    resolved = Path(__file__).resolve()
+    parents = resolved.parents
+    return parents[2] if len(parents) > 2 else resolved.parent
+
+
+REPO_ROOT = _repo_root()
 REPO_HEAD_SHA = _read_repo_head_sha(REPO_ROOT)
 
 app = modal.App(APP_NAME)
