@@ -46,7 +46,11 @@ def test_seed_passes_exact_stage_zero_gate_and_reports_metric(
     assert evaluator.METRIC == "size"
     assert evaluator.METRIC in scores
     assert scores[evaluator.METRIC] > 35.0
-    assert scores["binary_inputs"] == 8192.0
+    # The n11 cell verifies over 2**11 inputs. The zero-one principle makes
+    # that exhaustive, so the count tracks the cell's channel width and is not
+    # a constant borrowed from another cell.
+    assert scores["binary_inputs"] == 2048.0
+    assert scores["channels"] == 11.0
     assert scores["depth"] > 0.0
     assert scores["first_layer_channels"] > 0.0
     assert evaluator.MAXIMIZE is False

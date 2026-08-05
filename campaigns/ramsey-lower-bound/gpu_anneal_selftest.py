@@ -19,7 +19,6 @@ from itertools import combinations
 from pathlib import Path
 
 import torch
-
 from gpu_anneal import (
     OBJECTIVE_K5,
     blue_rows,
