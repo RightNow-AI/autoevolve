@@ -56,6 +56,8 @@ def _gamma(reduction_length: int) -> float:
     if product >= 1.0:
         raise EvalError(f"reduction length {reduction_length} is too large for float32")
     return ERROR_BUDGET_SAFETY * product / (1.0 - product)
+
+
 WARMUP_LAUNCHES = 3
 TIMED_ROUNDS = 5
 REPEATS_PER_ROUND = 3
