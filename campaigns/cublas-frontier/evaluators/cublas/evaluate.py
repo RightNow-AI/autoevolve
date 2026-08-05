@@ -33,7 +33,18 @@ FIXTURE_PATH = PACK_DIR / "fixtures" / "cases.json"
 # tolerance failed cuBLAS itself at K = 4096, because cancellation makes the
 # output small while the accumulated error does not shrink with it.
 FLOAT32_EPS = 2.0**-24
-ERROR_BUDGET_SAFETY = 4.0
+# The sentinel deliberately fills a row and a column with the same value, so
+# the entry at index zero sums thousands of identical same-signed products.
+# That is the worst case for floating point accumulation, and implementations
+# differ in summation order, so a factor of four proved 3 percent too tight
+# against an honest ieee-precision Triton kernel. Sixteen leaves room for any
+# reasonable accumulation order.
+#
+# This is still nowhere near admitting a precision downgrade. TF32 carries 11
+# mantissa bits against 24, so its error budget is about 8192 times larger, and
+# this factor spends well under one percent of that. A TF32 result fails by
+# roughly five hundred times the allowance rather than marginally.
+ERROR_BUDGET_SAFETY = 16.0
 RTOL = 5e-5
 ATOL = 2e-5
 
@@ -384,9 +395,14 @@ def _assert_numpy_close(
         allowance = ATOL + _gamma(reduction_length) * np.abs(magnitude)
     if not bool(np.all(difference <= allowance)):
         index = np.unravel_index(int(np.argmax(difference - allowance)), difference.shape)
+        # Report the ratio and the reduction length too. A bare pair of numbers
+        # cannot distinguish a marginally tight budget from a real precision
+        # downgrade, and that distinction cost two launches to work out.
+        ratio = float(difference[index]) / max(float(allowance[index]), 1e-30)
         raise EvalError(
             f"{label} failed float64 parity at {index}; absolute error "
-            f"{float(difference[index])} exceeds {float(allowance[index])}"
+            f"{float(difference[index])} exceeds {float(allowance[index])} "
+            f"by {ratio:.2f}x with reduction length {reduction_length}"
         )
 
 
