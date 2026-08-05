@@ -1,4 +1,4 @@
-"""Give one long-lived agent control of a research campaign on Modal.
+﻿"""Give one long-lived agent control of a research campaign on Modal.
 
 This is deliberately not the evolutionary loop. There, the loop is in charge:
 it samples a parent, picks an operator, asks for one mutation, scores it, and
@@ -200,8 +200,13 @@ def research(
     hours: float = 4.0,
     rounds: int = 8,
 ) -> dict:
-    """Run successive agent sessions that share one journal and one best file."""
+    """Run the campaign. GPU packs must reach this through `with_options`.
 
+    A GPU pack silently falls back to its CPU mock when no device is attached,
+    and a mock reports a speedup of zero rather than failing, so a campaign can
+    look busy while measuring nothing. The local entrypoint attaches a GPU
+    whenever one is asked for.
+    """
     import json
     import os
     import shutil
@@ -333,11 +338,19 @@ def research(
 
     best = json.loads(best_file.read_text(encoding="utf-8")) if best_file.is_file() else None
     store.commit()
+    mocked = bool(best and best.get("scores", {}).get("mock_mode"))
     return {
         "store": store_name,
         "metric": contract["metric"],
         "maximize": contract["maximize"],
         "best": best,
+        "mock_mode": mocked,
+        "warning": (
+            "this campaign ran without a GPU, so every measurement is a CPU mock "
+            "and the metric is meaningless"
+            if mocked
+            else ""
+        ),
         "rounds": history,
     }
 
@@ -409,10 +422,12 @@ def main(
     store_name: str = "research",
     hours: float = 4.0,
     rounds: int = 8,
+    gpu: str = "",
 ) -> None:
     import json
 
-    result = research.remote(
+    remote = research.with_options(gpu=gpu) if gpu else research
+    result = remote.remote(
         evaluator=evaluator,
         mission=mission,
         cell=cell,
