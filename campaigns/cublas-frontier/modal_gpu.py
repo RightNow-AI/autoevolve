@@ -1,4 +1,4 @@
-"""Run one cuBLAS frontier cell on a selectable Modal GPU.
+﻿"""Run one cuBLAS frontier cell on a selectable Modal GPU.
 
 The image is keyed by the local repository HEAD SHA. The shared autoevolve Volume is
 mounted at /store, and every remote call commits it in a finally block.
@@ -127,7 +127,11 @@ def run_search(
         "--parallel",
         str(parallel),
         "--operators",
-        "diff,rewrite,agentic,crossover",
+        # Measured on Modal: codex cannot reach its websocket responses
+        # endpoint through this base URL, so every agentic cycle exits without
+        # editing and is charged as a skip. Excluding it spends the budget on
+        # operators that actually run here.
+        "diff,rewrite,crossover",
         "--seed",
         str(seed),
     ]
