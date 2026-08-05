@@ -96,3 +96,37 @@ search can improve a frontier.
 `k5-frontier` is the open cell. Any result above 42 vertices must remain an
 improvement-candidate until its canonical certificate is independently rechecked and
 the literature bounds are re-read after the run.
+
+## 2026-08-05 exhaustive: the circulant family at n=43 is empty
+
+Negative result, decided rather than searched, and validated by a control.
+
+For prime n a circulant colouring is determined by a subset of the (n-1)/2
+difference classes, and a circulant is vertex transitive, so a monochromatic K5
+exists exactly when one exists through vertex 0. That reduces each candidate to
+finding a K4 in an induced subgraph on about (n-1)/2 vertices, which makes the
+whole family decidable.
+
+| n | subsets tested | certificates found |
+|---|---|---|
+| 37 (control) | 262,144 | 110 |
+| 43 (target) | 2,097,152 | 0 |
+
+The control is what makes the target believable. At n = 37 the sweep
+rediscovers 110 K5-free circulant colourings, which is expected because the
+Paley graph of order 37 is circulant and K5-free and is this pack's own seed. A
+sweep that could not find those would say nothing when it returned zero.
+
+So no circulant colouring on 43 vertices avoids a monochromatic K5. This does
+not improve `R(5,5) >= 43` and it is not claimed as novel: circulant graphs are
+the first family anyone searches for these bounds, so the absence is very
+likely already known to the people who set the record. What it does here is
+close the family off with an exhaustive check in this repository, and redirect
+the search: any 43 vertex certificate must be less symmetric than a circulant.
+
+That redirection is consistent with what the general search is seeing. The
+batched GPU annealer, which searches the unrestricted space, reached 2
+monochromatic K5s at n = 43 across 16384 chains and plateaued there.
+
+Reproduce with `modal run campaigns/ramsey-lower-bound/modal_circulant43.py
+--n 43 --shard-count 64`, and check the tool first with `--n 37`.
