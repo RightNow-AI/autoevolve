@@ -1,0 +1,184 @@
+{
+  "bounds": [
+    {
+      "claim": "optimal sorting-network size, n=11",
+      "value": "35",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation; optimality proved by Jannis Harder, 2020",
+      "source_url": "https://arxiv.org/abs/2012.04400",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the 11-channel lower bound of 35 and compare the maintained SorterHunter row"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=11",
+      "value": "8",
+      "direction": "lower_is_better",
+      "who_and_year": "Loren Schwiebert, 2001; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=11 summary row and confirm that the minimum depth remains 8"
+    },
+    {
+      "claim": "optimal sorting-network size, n=12",
+      "value": "39",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation; optimality proved by Jannis Harder, 2020",
+      "source_url": "https://arxiv.org/abs/2012.04400",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the 12-channel lower bound of 39 and compare the maintained SorterHunter row"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=12",
+      "value": "8",
+      "direction": "lower_is_better",
+      "who_and_year": "Shapiro, 1969; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://arxiv.org/abs/1310.6271",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the depth-optimality result and the maintained n=12 depth bound of 8"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=13",
+      "value": "45",
+      "direction": "lower_is_better",
+      "who_and_year": "Hugues Juille, 1995",
+      "source_url": "https://en.wikipedia.org/wiki/Sorting_network",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the optimal-network table and confirm that the n=13 size upper bound remains 45"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=13",
+      "value": "9",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation, 1973; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://arxiv.org/abs/1310.6271",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the depth-optimality result and the maintained n=13 depth bound of 9"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=14",
+      "value": "51",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation, 1973",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=14 summary row and confirm that the size upper bound remains 51"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=14",
+      "value": "9",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation, 1973; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://arxiv.org/abs/1310.6271",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the depth-optimality result and the maintained n=14 depth bound of 9"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=15",
+      "value": "56",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation, 1973",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=15 summary row and confirm that the size upper bound remains 56"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=15",
+      "value": "9",
+      "direction": "lower_is_better",
+      "who_and_year": "original finder not identified in sources read; Knuth tabulation, 1973; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://arxiv.org/abs/1310.6271",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the depth-optimality result and the maintained n=15 depth bound of 9"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=16",
+      "value": "60",
+      "direction": "lower_is_better",
+      "who_and_year": "M. W. Green, 1969",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=16 summary row and the Green-network note; confirm size 60"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=16",
+      "value": "9",
+      "direction": "lower_is_better",
+      "who_and_year": "David C. Van Voorhis, 1972; optimality proved by Bundala and Zavodny, 2014",
+      "source_url": "https://arxiv.org/abs/1310.6271",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the depth-optimality result and the maintained n=16 depth bound of 9"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=17",
+      "value": "71",
+      "direction": "lower_is_better",
+      "who_and_year": "Al-Haj Baddar, 2009; independently matched by Valsalam and Miikkulainen, 2013",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=17 summary and individual-network notes; confirm size 71 and both attributions"
+    },
+    {
+      "claim": "optimal sorting-network depth, n=17",
+      "value": "10",
+      "direction": "lower_is_better",
+      "who_and_year": "Thorsten Ehlers and Mike Muller, 2014; optimality proved by Codish and coauthors, 2016",
+      "source_url": "https://arxiv.org/abs/1410.2736",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the 17-channel depth-10 construction and the maintained optimal-depth row"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=18",
+      "value": "77",
+      "direction": "lower_is_better",
+      "who_and_year": "Bert Dobbelaere, SorterHunter, 2020",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=18 summary row and page history; confirm size 77"
+    },
+    {
+      "claim": "best known sorting-network depth upper bound, n=18",
+      "value": "11",
+      "direction": "lower_is_better",
+      "who_and_year": "Sherenaz Al-Haj Baddar and Kenneth Batcher, 2009",
+      "source_url": "https://www.kent.edu/sites/default/files/file/TR-KSU-CS-2007-06.pdf",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the paper's 18-channel 11-step network and compare the maintained list"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=19",
+      "value": "85",
+      "direction": "lower_is_better",
+      "who_and_year": "Bert Dobbelaere, SorterHunter, 2017",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=19 summary row and page history; confirm size 85"
+    },
+    {
+      "claim": "best known sorting-network depth upper bound, n=19",
+      "value": "11",
+      "direction": "lower_is_better",
+      "who_and_year": "Thorsten Ehlers and Mike Muller, 2014",
+      "source_url": "https://arxiv.org/abs/1410.2736",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the 19-channel depth-11 construction and compare the maintained list"
+    },
+    {
+      "claim": "best known sorting-network size upper bound, n=20",
+      "value": "91",
+      "direction": "lower_is_better",
+      "who_and_year": "Bert Dobbelaere, SorterHunter, 2017",
+      "source_url": "https://bertdobbelaere.github.io/sorting_networks.html",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "read the n=20 summary row and page history; confirm size 91"
+    },
+    {
+      "claim": "best known sorting-network depth upper bound, n=20",
+      "value": "11",
+      "direction": "lower_is_better",
+      "who_and_year": "Thorsten Ehlers and Mike Muller, 2014",
+      "source_url": "https://arxiv.org/abs/1410.2736",
+      "checked_on": "2026-08-05",
+      "how_to_recheck": "confirm the 20-channel depth-11 construction and compare the maintained list"
+    }
+  ]
+}
