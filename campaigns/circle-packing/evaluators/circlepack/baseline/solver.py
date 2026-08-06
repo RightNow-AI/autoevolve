@@ -8,6 +8,8 @@ import time
 import numpy as np
 
 # EVOLVE-BLOCK-START
+
+
 def _minimum_squared_distance(points: np.ndarray) -> float:
     deltas = points[:, None, :] - points[None, :, :]
     squared = np.einsum("ijk,ijk->ij", deltas, deltas)
