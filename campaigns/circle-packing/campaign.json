@@ -1,0 +1,62 @@
+{
+  "name": "circle-packing",
+  "domain": "circle-packing",
+  "evaluator": "evaluators/circlepack",
+  "cells": [
+    {
+      "key": "n2-validation",
+      "env": {"AUTOEVOLVE_CELL": "n2-validation"},
+      "target": null
+    },
+    {
+      "key": "n10-calibration",
+      "env": {"AUTOEVOLVE_CELL": "n10-calibration"},
+      "target": null
+    },
+    {
+      "key": "n20-calibration",
+      "env": {"AUTOEVOLVE_CELL": "n20-calibration"},
+      "target": null
+    },
+    {
+      "key": "n30-calibration",
+      "env": {"AUTOEVOLVE_CELL": "n30-calibration"},
+      "target": null
+    },
+    {
+      "key": "n31-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n31-frontier"},
+      "target": null
+    },
+    {
+      "key": "n37-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n37-frontier"},
+      "target": null
+    },
+    {
+      "key": "n43-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n43-frontier"},
+      "target": null
+    },
+    {
+      "key": "n51-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n51-frontier"},
+      "target": null
+    },
+    {
+      "key": "n62-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n62-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 40},
+  "full_budget": {"max_evals": 1200},
+  "ladder": [
+    "validation",
+    "calibration",
+    "frontier",
+    "replicate-3",
+    "independent-recheck"
+  ],
+  "replicate_seeds": 3
+}
