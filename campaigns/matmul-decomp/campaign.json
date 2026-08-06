@@ -1,0 +1,26 @@
+{
+  "name": "matmul-decomp",
+  "domain": "matmul-decomp",
+  "evaluator": "evaluators/matmul",
+  "cells": [
+    {
+      "key": "2x2-real-r7-validation",
+      "env": {"AUTOEVOLVE_CELL": "2x2-real-r7-validation"},
+      "target": 7
+    },
+    {
+      "key": "3x3-real-r23-frontier",
+      "env": {"AUTOEVOLVE_CELL": "3x3-real-r23-frontier"},
+      "target": 23
+    },
+    {
+      "key": "4x4-complex-r48-frontier",
+      "env": {"AUTOEVOLVE_CELL": "4x4-complex-r48-frontier"},
+      "target": 48
+    }
+  ],
+  "proxy_budget": {"max_evals": 40, "wall_clock_s": 21600},
+  "full_budget": {"max_evals": 1200, "wall_clock_s": 259200},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
