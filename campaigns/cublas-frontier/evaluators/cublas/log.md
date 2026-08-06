@@ -6,7 +6,13 @@ Append-only. Negative results get the same block format as wins.
 
 Reported: speedup 1.0196, cublas_ms 0.18909, candidate_ms 0.18546, on an A10G
 with mock_mode false. Tier: NOT a win. Recorded as a harness defect, not a
-result.
+result. [no-claim]
+
+That marker is deliberate. The lint exists to stop an ungrounded speed figure
+reaching a reader as an achievement, and it correctly flagged this line. The
+number is real and measured, but it is recorded here as a defect rather than
+asserted as a result, so it claims nothing. If this figure is ever quoted as an
+achievement, the marker becomes a lie and this entry is wrong.
 
 The candidate does not contain a kernel. It loads libcublas.so.12 by ctypes
 and calls cublasSgemm_v2, which is the identical kernel the baseline calls

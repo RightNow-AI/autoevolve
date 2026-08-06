@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 # EVOLVE-BLOCK-START
 import heapq
 

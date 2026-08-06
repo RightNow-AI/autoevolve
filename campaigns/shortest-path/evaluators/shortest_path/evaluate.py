@@ -354,7 +354,11 @@ def _validate_answer(
     if _LEN(_SET(answer.path)) != _LEN(answer.path):
         raise EvalError(f"{label} path contains a repeated vertex")
     total = 0
-    for left, right in _ZIP(answer.path, answer.path[1:], strict=True):
+    # Pairing a list with its own tail is off by one by construction, so
+    # strict=True raised on every path including valid ones. Dropping the last
+    # element makes the arguments genuinely equal in length, which is what
+    # strict exists to check.
+    for left, right in _ZIP(answer.path[:-1], answer.path[1:], strict=True):
         weight = _edge_weight(adjacency, left, right)
         if weight is None:
             raise EvalError(f"{label} path uses missing directed edge {left}->{right}")
