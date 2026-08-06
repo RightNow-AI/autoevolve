@@ -13,6 +13,7 @@ from pathlib import Path
 from types import ModuleType
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from autoevolve.eval.trusted import restored_builtins
 
 GATE = "valid_binary_sequence"
 METRIC = "merit_factor"
@@ -201,14 +202,26 @@ def _load_candidate_sequence(candidate_dir: Path, deadline: float) -> tuple[int,
     module: ModuleType = _MODULE_FROM_SPEC(spec)
     _MODULES[module_name] = module
     try:
-        try:
-            spec.loader.exec_module(module)
-        except _EXCEPTION as exc:
-            raise EvalError(f"solver.py failed to import: {exc}") from exc
+        # Each candidate entry gets its own restore scope, so the table is
+        # clean again before the gate does anything that reaches the standard
+        # library. inspect.signature is the case that forces this: it resolves
+        # callable from builtins at call time, so a candidate that poisons the
+        # table during import would break signature detection here no matter
+        # what this module bound at import time.
+        with restored_builtins():
+            try:
+                spec.loader.exec_module(module)
+            except _EXCEPTION as exc:
+                raise EvalError(f"solver.py failed to import: {exc}") from exc
+
         solver = _GETATTR(module, "solve", None)
         if not _CALLABLE(solver):
             raise EvalError("solver.py must define callable solve()")
-        raw = _call_solver(solver, deadline)
+
+        # The call is candidate code too, and _snapshot_sequence validates its
+        # result, so the second scope keeps that validation honest.
+        with restored_builtins():
+            raw = _call_solver(solver, deadline)
         return _snapshot_sequence(raw)
     finally:
         _DICT_POP(_MODULES, module_name, None)

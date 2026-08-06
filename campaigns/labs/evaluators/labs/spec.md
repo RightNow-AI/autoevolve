@@ -34,8 +34,8 @@ the callable accepts only `(n)`.
 
 `deadline` is an absolute `time.monotonic()` value derived from the selected stage timeout
 with three seconds reserved for import, result normalization, the exact gate, and process
-teardown. The candidate may burn its whole budget searching and should return its best
-sequence before the deadline. A stage timeout is a total loss and no partial result is
+teardown. The candidate may burn its whole budget searching and should
+return its best sequence before the deadline. A stage timeout is a total loss and no partial result is
 scored. `seed` is fixed per cell so search behavior is reproducible.
 
 The baseline is a real search procedure. It runs deterministic random restarts, applies

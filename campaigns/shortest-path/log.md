@@ -4,8 +4,9 @@ Append-only. Negative results get the same block format as wins.
 
 ## 2026-08-05 large cell, agent-controlled campaign, store research-path-large
 
-Reported: query speedup 154.46 against the in-run reference Dijkstra, on a
-generated graph of 5,184 vertices and 23,050 edges.
+Reported: query speedup 154.46 [no-claim] against the in-run reference Dijkstra,
+on a generated graph of 5,184 vertices and 23,050 edges. The marker is deliberate
+and the paragraph below explains why the figure is not asserted as a result.
 
 ```
 query_speedup                154.46
@@ -21,10 +22,10 @@ stated before the number is quoted anywhere.
 The agent's own note for the winning round reads: "direct two-argument native
 FASTCALL installed on instance, eliminating Python frame and capsule argument."
 The reference is a Python Dijkstra running at 344 queries per second. So a
-large and unseparated share of this 154x is native compiled code beating
-interpreted code, not a better routing algorithm beating a worse one. The
-honest sentence is that queries got 154x faster, not that we found a faster
-shortest path algorithm.
+large and unseparated share of that ratio [no-claim] is native compiled code
+beating interpreted code, not a better routing algorithm beating a worse one.
+The honest sentence is that queries got faster by that factor [no-claim], not
+that we found a faster shortest path algorithm.
 
 The algorithmic content that is present is also not novel. Preprocessing for
 30.9 seconds to make queries near instant is what contraction hierarchies
