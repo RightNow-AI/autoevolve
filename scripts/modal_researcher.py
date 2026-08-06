@@ -250,12 +250,23 @@ def research(
         check=False,
         env={**os.environ, **({"AUTOEVOLVE_CELL": cell} if cell else {})},
     )
-    contract = {"metric": "score", "maximize": True, "gate": "correct"}
-    if describe.stdout.strip():
-        try:
-            contract = json.loads(describe.stdout.strip().splitlines()[-1])
-        except json.JSONDecodeError:
-            pass
+    # Fail loudly. A silent default here is worse than a crash: the submit tool
+    # would look for a metric the pack never reports, so every gate-passing
+    # submission would be discarded and the campaign would run for hours
+    # recording nothing while looking healthy. That is exactly what happened
+    # when this was launched against a mistyped evaluator path.
+    if not evaluator_dir.is_dir():
+        raise RuntimeError(f"no evaluator directory at {evaluator_dir}")
+    if not describe.stdout.strip():
+        raise RuntimeError(
+            f"could not describe {evaluator_dir}: {(describe.stderr or '')[-800:]}"
+        )
+    try:
+        contract = json.loads(describe.stdout.strip().splitlines()[-1])
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"describe returned invalid JSON: {describe.stdout[-400:]}") from exc
+    if not contract.get("metric"):
+        raise RuntimeError(f"{evaluator_dir} declares no METRIC, so nothing can be scored")
 
     submit_path = root / "submit"
     submit_path.write_text(
