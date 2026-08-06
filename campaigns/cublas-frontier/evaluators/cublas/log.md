@@ -4,9 +4,9 @@ Append-only. Negative results get the same block format as wins.
 
 ## 2026-08-06 skinny-4096x8, agent-controlled campaign, store research-cublas-gpu
 
-Reported: speedup 1.0196, cublas_ms 0.18909, candidate_ms 0.18546, on an A10G
-with mock_mode false. Tier: NOT a win. Recorded as a harness defect, not a
-result. [no-claim]
+Reported: speedup 1.0196 [no-claim], cublas_ms 0.18909, candidate_ms 0.18546,
+on an A10G with mock_mode false. Tier: NOT a win. Recorded as a harness defect,
+not a result.
 
 That marker is deliberate. The lint exists to stop an ungrounded speed figure
 reaching a reader as an achievement, and it correctly flagged this line. The
