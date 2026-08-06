@@ -72,6 +72,27 @@ The source index pages are:
 The fetch entrypoint copies only instance definitions from a pinned public
 mirror. It does not fetch best-known tables or solution routes.
 
+## Portfolio execution
+
+`modal_portfolio.py` maps one solver across a fixture family with one Modal
+container per instance. Each worker selects a dynamic `file:` cell, sets the
+requested long timeout, and invokes the normal evaluator cascade. Per-instance
+gate failures, evaluator errors, and container failures become table rows rather
+than stopping the portfolio. JSON and readable text results are committed under
+`/store/<store-name>/vrp-portfolio/` on the shared `autoevolve-store` volume.
+
+The solver may be `baseline` or a solver file inside `/store`. Example:
+
+```text
+modal run campaigns/vrp/modal_portfolio.py --solver baseline \
+  --family homberger_400 --limit 60 --minutes 30 --store-name portfolio-vrp
+```
+
+`fetch_bounds.py` reads the six SINTEF best known tables on Modal and writes
+their real rows into `bounds.json`. It records the page's attribution and date,
+the final response URL, and a recheck instruction for every instance. A failed
+or changed page is reported separately while rows from other pages are retained.
+
 ## Candidate compute
 
 Candidates define `solve(instance, deadline=None, seed=0)` in `solver.py` and
@@ -123,8 +144,8 @@ cell proves the offline search path. Public instances become benchmark evidence
 only when the exact cell, run id, program id, distance convention, vehicle
 count, distance, stop reason, and artifacts are retained.
 
-`bounds.json` remains empty until the orchestrator adds cited sources. This pack
-contains no published best-known distance, best-known vehicle count, or known
-solution route. A model-written constant is not evidence. Budget exhaustion,
-plateau, or infeasibility remains that recorded outcome and is never promoted
-to a target claim.
+`bounds.json` remains empty until `fetch_bounds.py` has written cited source
+rows. No published best-known distance or vehicle count is hardcoded in this
+pack, and no known solution route is included. A model-written constant is not
+evidence. Budget exhaustion, plateau, or infeasibility remains that recorded
+outcome and is never promoted to a target claim.
