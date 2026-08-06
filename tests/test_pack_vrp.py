@@ -6,6 +6,7 @@ import json
 import os
 import subprocess
 import sys
+from dataclasses import astuple
 from pathlib import Path
 from types import ModuleType
 
@@ -131,7 +132,16 @@ def test_file_cell_matches_equivalent_named_fixture(
     assert file_cell.CELL.key == "file:generated-tiny-12.txt"
     assert file_cell.CELL.fixture == "generated-tiny-12.txt"
     assert file_cell.CELL.timeout_s == 300.0
-    assert file_cell.INSTANCE == named.INSTANCE
+    # Compared field by field rather than with ==. The evaluator is imported
+    # twice under different module names, so each import defines its own
+    # Instance and Stop classes and dataclass equality is False between them
+    # however identical the data is.
+    assert file_cell.INSTANCE.name == named.INSTANCE.name
+    assert file_cell.INSTANCE.vehicle_limit == named.INSTANCE.vehicle_limit
+    assert file_cell.INSTANCE.capacity == named.INSTANCE.capacity
+    assert [astuple(stop) for stop in file_cell.INSTANCE.stops] == [
+        astuple(stop) for stop in named.INSTANCE.stops
+    ]
     assert file_scores == named_scores
 
 
