@@ -1,0 +1,21 @@
+{
+  "name": "shortest-path",
+  "domain": "shortest-path",
+  "evaluator": "evaluators/shortest_path",
+  "cells": [
+    {
+      "key": "small-validation",
+      "env": {"AUTOEVOLVE_CELL": "small-validation"},
+      "target": null
+    },
+    {
+      "key": "large-frontier",
+      "env": {"AUTOEVOLVE_CELL": "large-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 60, "wall_clock_s": 14400},
+  "full_budget": {"max_evals": 600, "wall_clock_s": 86400},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-rerun"],
+  "replicate_seeds": 3
+}
