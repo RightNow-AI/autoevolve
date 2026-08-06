@@ -16,6 +16,8 @@ def solve(
 ) -> dict[str, object]:
     """Build routes with savings and nearest-neighbor starts, then improve them."""
 
+    from campaigns.vrp.objective import is_better_result
+
     raw_depot = instance["depot"]
     raw_customers = instance["customers"]
     if not isinstance(raw_depot, Mapping) or not isinstance(raw_customers, Sequence):
@@ -172,8 +174,13 @@ def solve(
             raise ValueError("baseline could not construct a feasible incumbent")
         starts.append(singletons)
 
-    incumbent = min(starts, key=objective)
+    incumbent = starts[0]
     incumbent_key = objective(incumbent)
+    for candidate in starts[1:]:
+        candidate_key = objective(candidate)
+        if is_better_result(candidate_key, incumbent_key):
+            incumbent = candidate
+            incumbent_key = candidate_key
     local_deadline = time.monotonic() + min(4.0, max(0.25, len(customer_ids) / 100.0))
     if deadline is not None:
         local_deadline = min(local_deadline, deadline)
@@ -221,7 +228,7 @@ def solve(
             proposal[route_index] = changed
 
         proposal_key = objective(proposal)
-        if proposal_key < incumbent_key:
+        if is_better_result(proposal_key, incumbent_key):
             incumbent = proposal
             incumbent_key = proposal_key
 

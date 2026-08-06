@@ -11,12 +11,13 @@ import sys
 import time
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from types import ModuleType
 
 import numpy as np
 
 from autoevolve.eval.contract import EvalError, StageSpec
+from campaigns.vrp.objective import is_better_result
 
 GATE = "routes_feasible"
 METRIC = "total_distance"
@@ -102,6 +103,9 @@ class Measurement:
     def objective(self) -> tuple[int, float]:
         return (self.vehicle_count, self.total_distance)
 
+    def is_better_than(self, other: Measurement) -> bool:
+        return is_better_result(self.objective, other.objective)
+
 
 _CELLS = {
     "tiny-12-validation": CellSpec(
@@ -156,11 +160,76 @@ _CELLS = {
     ),
 }
 
+
+_FIXTURES_DIR = (Path(__file__).resolve().parent / "fixtures").resolve()
+_FILE_CELL_PREFIX = "file:"
+_FILE_CELL_DEFAULT_TIMEOUT_S = _CELLS["solomon-c1-frontier"].timeout_s
+
+
+def _stable_path_seed(relative_path: str) -> int:
+    """Derive a process-stable 32-bit FNV-1a seed from a fixture path."""
+
+    value = 2_166_136_261
+    for byte in relative_path.encode("utf-8"):
+        value ^= byte
+        value = (value * 16_777_619) & 0xFFFF_FFFF
+    return value or 1
+
+
+def _resolve_fixture_path(relative_path: str) -> tuple[str, Path]:
+    if not relative_path:
+        raise EvalError("file: cell fixture path must not be empty")
+    portable = PurePosixPath(relative_path.replace("\\", "/"))
+    windows = PureWindowsPath(relative_path)
+    if portable.is_absolute() or windows.is_absolute() or windows.drive:
+        raise EvalError("file: cell fixture path must be relative to fixtures")
+    if ".." in portable.parts or ".." in windows.parts:
+        raise EvalError("file: cell fixture path must not contain '..'")
+
+    try:
+        resolved = (_FIXTURES_DIR / Path(*portable.parts)).resolve()
+    except (OSError, RuntimeError) as exc:
+        raise EvalError(f"could not resolve file: cell fixture path: {exc}") from exc
+    try:
+        canonical = resolved.relative_to(_FIXTURES_DIR)
+    except ValueError as exc:
+        raise EvalError("file: cell fixture path escapes the fixtures directory") from exc
+    return canonical.as_posix(), resolved
+
+
+def _file_cell_timeout() -> float:
+    raw = os.environ.get("AUTOEVOLVE_VRP_TIMEOUT_S")
+    if raw is None:
+        return _FILE_CELL_DEFAULT_TIMEOUT_S
+    try:
+        timeout_s = float(raw)
+    except ValueError as exc:
+        raise EvalError("AUTOEVOLVE_VRP_TIMEOUT_S must be a positive finite number") from exc
+    if not math.isfinite(timeout_s) or timeout_s <= 0.0:
+        raise EvalError("AUTOEVOLVE_VRP_TIMEOUT_S must be a positive finite number")
+    return timeout_s
+
+
+def _resolve_cell(key: str) -> CellSpec:
+    named = _CELLS.get(key)
+    if named is not None:
+        return named
+    if key.startswith(_FILE_CELL_PREFIX):
+        fixture, _ = _resolve_fixture_path(key.removeprefix(_FILE_CELL_PREFIX))
+        return CellSpec(
+            key=f"{_FILE_CELL_PREFIX}{fixture}",
+            fixture=fixture,
+            timeout_s=_file_cell_timeout(),
+            seed=_stable_path_seed(fixture),
+        )
+    choices = ", ".join(_CELLS)
+    raise EvalError(
+        f"AUTOEVOLVE_CELL must be one of {choices} or file:<fixture path>; got {key!r}"
+    )
+
+
 _CELL_KEY = os.environ.get("AUTOEVOLVE_CELL", "tiny-12-validation")
-if _CELL_KEY not in _CELLS:
-    _choices = ", ".join(_CELLS)
-    raise EvalError(f"AUTOEVOLVE_CELL must be one of {_choices}; got {_CELL_KEY!r}")
-CELL = _CELLS[_CELL_KEY]
+CELL = _resolve_cell(_CELL_KEY)
 STAGES: list[StageSpec] = [
     StageSpec(name="candidate-search-and-exact-vrptw-gate", timeout_s=CELL.timeout_s),
 ]
@@ -372,7 +441,7 @@ def generate_fixture_text(customer_count: int, seed: int, name: str) -> str:
 
 
 def _load_instance(cell: CellSpec) -> Instance:
-    fixture = Path(__file__).resolve().parent / "fixtures" / cell.fixture
+    _, fixture = _resolve_fixture_path(cell.fixture)
     if not fixture.is_file():
         raise EvalError(
             f"cell {cell.key!r} requires fixture {cell.fixture!r}; "

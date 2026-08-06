@@ -46,6 +46,11 @@ read both recorded metrics and apply the lexicographic key. The vehicle-count
 descriptor preserves separate distance leaders instead of collapsing all fleet
 sizes into one archive cell.
 
+Shared campaign comparison uses a `1e-9` distance epsilon only to absorb binary
+floating-point noise. A difference of 0.01 in SINTEF's reported two-decimal
+totals remains decisive. SINTEF notes that many best known rows have no peer
+reviewed publication, so an apparent improvement requires a fresh row recheck.
+
 ## Parser and fixtures
 
 `parse_solomon_text` reads the standard Solomon text layout with a vehicle
@@ -64,6 +69,13 @@ deterministic generator from fixed seeds. The evaluator compares their full
 text with regenerated text before parsing. Public Solomon and
 Gehring-Homberger fixtures are read from subdirectories created by the Modal
 fetch entrypoint. There is no network code in this module.
+
+Every existing named cell remains available. A dynamic cell uses
+`AUTOEVOLVE_CELL=file:<relative path under fixtures>`. Absolute paths, `..`
+components, and paths whose resolved target leaves `fixtures/` are rejected.
+Its seed is stable 32-bit FNV-1a over the canonical relative path. Its timeout
+comes from `AUTOEVOLVE_VRP_TIMEOUT_S`, defaulting to the named frontier timeout
+of 300 seconds.
 
 ## Exact feasibility gate
 
