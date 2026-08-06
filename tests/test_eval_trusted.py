@@ -47,6 +47,29 @@ def test_restoration_survives_an_exception() -> None:
     assert builtins.len is original
 
 
+def test_cleanup_survives_a_replaced_next() -> None:
+    """The reason this helper is a class and not a @contextmanager.
+
+    A generator-based context manager is driven by contextlib, whose __exit__
+    calls the builtin next to resume the generator. A candidate that replaced
+    next therefore broke the cleanup that was supposed to undo its damage, and
+    the first version of this helper failed exactly here. The with statement
+    looks __enter__ and __exit__ up as type slots, so this version never goes
+    through builtins to clean up.
+    """
+
+    original = builtins.next
+
+    def explode(*args: object, **kwargs: object) -> None:
+        del args, kwargs
+        raise RuntimeError("candidate replaced a builtin")
+
+    with restored_builtins():
+        builtins.next = explode
+
+    assert builtins.next is original
+
+
 def test_standard_library_works_again_after_restore() -> None:
     """The case that motivated the helper.
 

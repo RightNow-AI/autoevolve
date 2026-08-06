@@ -33,7 +33,7 @@ the optimum.
 
 Packebusch and Mertens, *Low autocorrelation binary sequences*, Journal of Physics A 49
 165001 (2016), computed all optimal LABS sequences for `n <= 66` by exhaustive branch and
-bound. In this pack, `n <= 66` is solved. The length 41 and 61 cells are therefore labelled
+bound. In this pack, n <= 66 is solved. The length 41 and 61 cells are therefore labelled
 calibration, not frontier. A calibration result that reaches the cited optimum is a
 matched-known-optimum result and must never be reported as a record or improvement.
 

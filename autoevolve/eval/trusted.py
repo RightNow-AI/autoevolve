@@ -33,25 +33,44 @@ return an honest verdict.
 from __future__ import annotations
 
 import builtins
-from collections.abc import Iterator
-from contextlib import contextmanager
+from types import TracebackType
+
+# Bound now, for the same reason evaluators bind their own primitives: this
+# module has to keep working while the table it repairs is broken.
+_DICT = dict
 
 
-@contextmanager
-def restored_builtins() -> Iterator[None]:
+class restored_builtins:  # noqa: N801
     """Run a block, then restore ``builtins`` to its state on entry.
 
-    Restoration runs in a ``finally``, so it also covers a candidate that
+    Deliberately a class rather than a ``@contextmanager`` generator. A
+    generator-based manager is driven by ``contextlib``, whose ``__exit__``
+    calls the builtin ``next`` to resume it, so a candidate that replaced
+    ``next`` breaks the very cleanup meant to undo the damage. The ``with``
+    statement looks ``__enter__`` and ``__exit__`` up as type slots and never
+    goes through ``builtins`` at all, which is what makes this version safe.
+
+    Restoration runs on every exit path, so it also covers a candidate that
     raises partway through rewriting the table.
     """
 
-    snapshot = dict(builtins.__dict__)
-    try:
-        yield
-    finally:
+    __slots__ = ("_snapshot",)
+
+    def __enter__(self) -> None:
+        self._snapshot = _DICT(builtins.__dict__)
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        snapshot = self._snapshot
         current = builtins.__dict__
         # Delete first: a candidate can add names as well as replace them, and
         # a leftover name is still a change to the table the gate runs on.
+        # The comprehension is materialised before deleting, because mutating
+        # a dict while iterating it raises.
         for name in [name for name in current if name not in snapshot]:
             del current[name]
         current.update(snapshot)
