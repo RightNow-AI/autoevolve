@@ -12,7 +12,16 @@ from pathlib import Path, PurePosixPath
 import modal
 
 REPO = "https://github.com/RightNow-AI/autoevolve"
-REPO_ROOT = Path("/root/autoevolve")
+# The container path as a literal string, because it is interpolated into shell
+# commands at build time. Path("/root/autoevolve") stringifies to
+# "\root\autoevolve" on Windows, so every build command silently addressed the
+# wrong directory while runtime code read the correct one. That mismatch is what
+# produced a container missing files that exist in the repository.
+REMOTE_ROOT = "/root/autoevolve"
+# Path is fine for runtime use, where this module is imported inside a Linux
+# container and resolves to a PosixPath. It must never be interpolated into a
+# build command, which is what REMOTE_ROOT above is for.
+REPO_ROOT = Path(REMOTE_ROOT)
 EVALUATOR_RELATIVE = Path("campaigns/vrp/evaluators/vrp")
 FIXTURES_RELATIVE = EVALUATOR_RELATIVE / "fixtures"
 FAMILIES = frozenset(
@@ -71,18 +80,27 @@ def _head_sha() -> str:
 
 COMMIT = _head_sha()
 
+_LOCAL_ROOT = Path(__file__).resolve().parents[2]
+
+# The working tree is copied in rather than cloned from GitHub. Cloning made the
+# image depend on push state and on Modal's layer cache, and the clone command
+# string never varies, so that layer kept being served with an older tree while
+# only the checkout line busted. The result was a container missing files that
+# exist in the repository, which cost a completed sweep. COMMIT is still
+# recorded in the image and in every result payload, so a run stays traceable to
+# a revision without the image depending on the network to reach it.
 image = (
     modal.Image.debian_slim(python_version="3.12")
-    .apt_install("git", "ca-certificates")
     .pip_install("uv")
+    .add_local_dir(
+        str(_LOCAL_ROOT),
+        remote_path=REMOTE_ROOT,
+        ignore=["**/.git/**", "**/__pycache__/**", "**/.venv/**", "**/node_modules/**"],
+        copy=True,
+    )
     .run_commands(
-        f"git clone {REPO} {REPO_ROOT}",
-        # The clone command never varies, so its layer can be served from cache
-        # holding an older tree while only the checkout line busts. Fetching the
-        # pinned commit first makes the checkout independent of the cache age.
-        f"cd {REPO_ROOT} && git fetch origin {COMMIT} && git checkout --detach {COMMIT}",
-        f"cd {REPO_ROOT} && uv sync --frozen",
-        f"printf '%s' '{COMMIT}' > {REPO_ROOT}/.autoevolve-image-commit",
+        f"cd {REMOTE_ROOT} && uv sync --frozen",
+        f"printf '%s' '{COMMIT}' > {REMOTE_ROOT}/.autoevolve-image-commit",
     )
 )
 
