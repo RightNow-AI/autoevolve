@@ -77,7 +77,10 @@ image = (
     .pip_install("uv")
     .run_commands(
         f"git clone {REPO} {REPO_ROOT}",
-        f"cd {REPO_ROOT} && git checkout --detach {COMMIT}",
+        # The clone command never varies, so its layer can be served from cache
+        # holding an older tree while only the checkout line busts. Fetching the
+        # pinned commit first makes the checkout independent of the cache age.
+        f"cd {REPO_ROOT} && git fetch origin {COMMIT} && git checkout --detach {COMMIT}",
         f"cd {REPO_ROOT} && uv sync --frozen",
         f"printf '%s' '{COMMIT}' > {REPO_ROOT}/.autoevolve-image-commit",
     )
@@ -242,10 +245,38 @@ def run_instance(job: dict[str, object]) -> dict[str, object]:
     return row
 
 
+def _objective_module():
+    """Load campaigns/vrp/objective.py by path, once per container.
+
+    The campaigns tree ships no __init__.py, so `from campaigns.vrp.objective
+    import ...` depends on namespace package resolution and raises
+    ModuleNotFoundError inside the container. It also ran in functions where
+    sys.path had never been extended, which is how a completed twenty instance
+    sweep was lost at the final persist step.
+    """
+
+    import importlib.util
+    import sys
+
+    cached = sys.modules.get("vrp_objective")
+    if cached is not None:
+        return cached
+    path = REPO_ROOT / "campaigns" / "vrp" / "objective.py"
+    spec = importlib.util.spec_from_file_location("vrp_objective", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load the vrp objective module at {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["vrp_objective"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def _load_bounds() -> dict[str, dict[str, object]]:
     import json
 
-    from campaigns.vrp.objective import BOUND_CLAIM_PREFIX, decode_objective_value
+    objective = _objective_module()
+    BOUND_CLAIM_PREFIX = objective.BOUND_CLAIM_PREFIX
+    decode_objective_value = objective.decode_objective_value
 
     path = REPO_ROOT / "campaigns" / "vrp" / "bounds.json"
     try:
@@ -272,7 +303,7 @@ def _load_bounds() -> dict[str, dict[str, object]]:
 
 
 def _annotate_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
-    from campaigns.vrp.objective import is_better_result
+    is_better_result = _objective_module().is_better_result
 
     bounds = _load_bounds()
     annotated: list[dict[str, object]] = []
