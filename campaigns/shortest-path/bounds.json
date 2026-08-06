@@ -1,0 +1,22 @@
+{
+  "bounds": [
+    {
+      "claim": "same-run plain Dijkstra throughput for small-validation",
+      "value": "dynamic reference_queries_per_second from the evaluator run",
+      "direction": "higher_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/small-validation/reference_queries_per_second",
+      "checked_on": "2026-08-06",
+      "how_to_recheck": "rerun the cell and cite its run id and reference timing metrics"
+    },
+    {
+      "claim": "same-run plain Dijkstra throughput for large-frontier",
+      "value": "dynamic reference_queries_per_second from the evaluator run",
+      "direction": "higher_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/large-frontier/reference_queries_per_second",
+      "checked_on": "2026-08-06",
+      "how_to_recheck": "rerun the cell and cite its run id and reference timing metrics"
+    }
+  ]
+}
