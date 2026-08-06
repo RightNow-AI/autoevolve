@@ -253,6 +253,7 @@ def test_campaign_and_empty_bounds_registry_parse_with_repo_loaders() -> None:
         "small-validation",
         "pairs-80-frontier",
         "pairs-160-frontier",
+        "pairs-5000-frontier",
     ]
     assert all(cell.target is None for cell in campaign.cells)
     assert campaign.budget(full=False).is_bounded()

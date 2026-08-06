@@ -190,6 +190,16 @@ _CELLS = {
         chain_cap=8,
         timeout_s=60.0,
     ),
+    "pairs-5000-frontier": CellSpec(
+        key="pairs-5000-frontier",
+        seed=81024,
+        pair_count=5_000,
+        altruist_count=100,
+        cycle_cap=3,
+        chain_cap=8,
+        timeout_s=60.0,
+        require_validation_shape=False,
+    ),
 }
 
 
@@ -235,14 +245,21 @@ def _build_adjacency(
 ) -> tuple[tuple[int, ...], ...]:
     rng = random.Random(seed ^ 0x4B49_444E_4559)
     donor_blood = tuple(pair.donor_blood for pair in pairs) + altruist_blood
+    compatible_targets = {
+        blood: tuple(
+            patient_vertex
+            for patient_vertex, pair in enumerate(pairs)
+            if _abo_compatible(blood, pair.patient_blood)
+        )
+        for blood, _ in _BLOOD_WEIGHTS
+    }
     rows: list[tuple[int, ...]] = []
     for donor_vertex, blood in enumerate(donor_blood):
         targets: list[int] = []
-        for patient_vertex, pair in enumerate(pairs):
+        for patient_vertex in compatible_targets[blood]:
             if donor_vertex == patient_vertex:
                 continue
-            if not _abo_compatible(blood, pair.patient_blood):
-                continue
+            pair = pairs[patient_vertex]
             if rng.randrange(100) < _POSITIVE_CROSSMATCH_PERCENT[pair.pra_tier]:
                 continue
             targets.append(patient_vertex)

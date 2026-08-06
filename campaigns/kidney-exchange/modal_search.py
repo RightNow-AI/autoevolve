@@ -97,6 +97,7 @@ def search(
         "small-validation",
         "pairs-80-frontier",
         "pairs-160-frontier",
+        "pairs-5000-frontier",
     }
     if cell not in allowed_cells:
         raise ValueError(f"cell must be one of {', '.join(sorted(allowed_cells))}")

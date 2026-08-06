@@ -17,6 +17,11 @@
       "key": "pairs-160-frontier",
       "env": {"AUTOEVOLVE_CELL": "pairs-160-frontier"},
       "target": null
+    },
+    {
+      "key": "pairs-5000-frontier",
+      "env": {"AUTOEVOLVE_CELL": "pairs-5000-frontier"},
+      "target": null
     }
   ],
   "proxy_budget": {"max_evals": 40, "wall_clock_s": 3600},

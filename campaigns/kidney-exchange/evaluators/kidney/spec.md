@@ -160,6 +160,8 @@ untuned and contains no recalled construction.
   chain cap 6, and a 45 second stage [no-claim].
 - `pairs-160-frontier` has 160 incompatible pairs, 4 altruists, cycle cap 3,
   chain cap 8, and a 60 second stage [no-claim].
+- `pairs-5000-frontier` has 5000 incompatible pairs, 100 altruists, cycle cap 3,
+  chain cap 8, and a 60 second stage [no-claim].
 
 The tests feed the exact small-cell solution back through the ordinary candidate
 gate and require the gate's transplant count to equal the exact optimum.
@@ -179,6 +181,10 @@ selects the requested cell through `AUTOEVOLVE_CELL`, sets
 `AUTOEVOLVE_AGENT_RUNTIME=codex`, mounts the shared `autoevolve-store` volume,
 uses a problem-specific store directory, checkpoints while running, and commits
 the volume in a `finally` block. The founder laptop is not campaign compute.
+
+`reference_ilp.py` is an isolated PICEF integer-program reference and is never
+imported by the evaluator. `modal_exact.py` runs it with SciPy HiGHS and reports
+the measured incumbent, dual bound, and whether the bound proves optimality.
 
 ## Honesty
 
