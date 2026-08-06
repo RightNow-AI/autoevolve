@@ -11,7 +11,12 @@ from pathlib import Path
 import modal
 
 REPO = "https://github.com/RightNow-AI/autoevolve"
-REPO_ROOT = Path("/root/autoevolve")
+# The container path stays a plain string wherever it reaches a shell. As a
+# Path it stringifies to "\root\autoevolve" on Windows, so the clone landed in a
+# directory of that literal name while the runtime code read /root/autoevolve
+# and found nothing there.
+REMOTE_ROOT = "/root/autoevolve"
+REPO_ROOT = Path(REMOTE_ROOT)
 PAGES = (
     (
         "solomon_100",
@@ -80,12 +85,12 @@ image = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("git", "ca-certificates")
     .run_commands(
-        f"git clone {REPO} {REPO_ROOT}",
+        f"git clone {REPO} {REMOTE_ROOT}",
         # The clone command string never varies, so its layer can be served
         # from cache long after the commit it holds went stale. Fetching the
         # exact commit first is what makes the checkout below reliable.
-        f"cd {REPO_ROOT} && git fetch origin {COMMIT} && git checkout --detach {COMMIT}",
-        f"printf '%s' '{COMMIT}' > {REPO_ROOT}/.autoevolve-image-commit",
+        f"cd {REMOTE_ROOT} && git fetch origin {COMMIT} && git checkout --detach {COMMIT}",
+        f"printf '%s' '{COMMIT}' > {REMOTE_ROOT}/.autoevolve-image-commit",
     )
 )
 
