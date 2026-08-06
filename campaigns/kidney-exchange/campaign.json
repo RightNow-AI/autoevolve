@@ -1,0 +1,26 @@
+{
+  "name": "kidney-exchange",
+  "domain": "kidney-exchange",
+  "evaluator": "evaluators/kidney",
+  "cells": [
+    {
+      "key": "small-validation",
+      "env": {"AUTOEVOLVE_CELL": "small-validation"},
+      "target": null
+    },
+    {
+      "key": "pairs-80-frontier",
+      "env": {"AUTOEVOLVE_CELL": "pairs-80-frontier"},
+      "target": null
+    },
+    {
+      "key": "pairs-160-frontier",
+      "env": {"AUTOEVOLVE_CELL": "pairs-160-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 40, "wall_clock_s": 3600},
+  "full_budget": {"max_evals": 1200, "wall_clock_s": 86400},
+  "ladder": ["validation", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
