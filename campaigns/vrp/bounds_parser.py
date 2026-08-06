@@ -21,23 +21,24 @@ class PageParseResult:
 
 
 class _TableCollector(HTMLParser):
+    """Collect every table row on the page, whatever it is nested inside.
+
+    Nesting depth is deliberately not tracked. SINTEF wraps the best known
+    table inside an outer layout table, so a collector that only read
+    depth-one tables saw the wrapper and skipped every data row, returning
+    zero bounds from a page that holds sixty of them. Rows are gathered into
+    one sequence and the header detection below decides which of them mean
+    anything.
+    """
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.tables: list[list[list[str]]] = []
-        self._table_depth = 0
-        self._table: list[list[str]] | None = None
+        self.rows: list[list[str]] = []
         self._row: list[str] | None = None
         self._cell: list[str] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         del attrs
-        if tag == "table":
-            self._table_depth += 1
-            if self._table_depth == 1:
-                self._table = []
-            return
-        if self._table_depth != 1:
-            return
         if tag == "tr":
             self._row = []
         elif tag in {"td", "th"} and self._row is not None:
@@ -50,21 +51,19 @@ class _TableCollector(HTMLParser):
             self._cell.append(data)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "table":
-            if self._table_depth == 1 and self._table is not None:
-                self.tables.append(self._table)
-                self._table = None
-            self._table_depth = max(0, self._table_depth - 1)
-            return
-        if self._table_depth != 1:
-            return
         if tag in {"td", "th"} and self._cell is not None and self._row is not None:
             self._row.append(_clean("".join(self._cell)))
             self._cell = None
-        elif tag == "tr" and self._row is not None and self._table is not None:
+        elif tag == "tr" and self._row is not None:
             if any(self._row):
-                self._table.append(self._row)
+                self.rows.append(self._row)
             self._row = None
+
+    @property
+    def tables(self) -> list[list[list[str]]]:
+        """Present the flat row list in the shape the caller already expects."""
+
+        return [self.rows] if self.rows else []
 
 
 def _clean(value: str) -> str:
