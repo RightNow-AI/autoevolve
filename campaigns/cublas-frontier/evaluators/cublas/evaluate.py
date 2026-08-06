@@ -60,7 +60,14 @@ def _gamma(reduction_length: int) -> float:
 
 WARMUP_LAUNCHES = 3
 TIMED_ROUNDS = 5
+# A fixed, knowable launch count is an invitation to fit the harness instead of
+# the problem. A candidate reached 1.02 by popping from a pool of exactly 32
+# preallocated outputs, which covers the 18 calls this used to make and raises
+# IndexError on call 33. The repeat count is now drawn per run from the cell
+# seed and is large enough that no fixed pool can quietly cover it.
 REPEATS_PER_ROUND = 3
+MIN_REPEATS_PER_ROUND = 11
+MAX_REPEATS_PER_ROUND = 29
 DEADLINE_HEADROOM_S = 90.0
 
 _PROTECTED_REPORT_NAMES = frozenset(
@@ -502,7 +509,19 @@ def _baseline_output(
     matmul: Callable[[Any, Any], Any],
     relu: Callable[[Any], Any],
     activation: str,
+    out: Any = None,
 ) -> Any:
+    """Compute the reference result, reusing a caller buffer when given one.
+
+    Fairness, not convenience. A candidate may reuse a preallocated output; if
+    the baseline allocates a fresh tensor on every call then the comparison
+    measures the allocator rather than the kernel. A candidate reached 1.02
+    that way while calling the identical cublasSgemm_v2, so the baseline gets
+    the same advantage and the timing isolates the work.
+    """
+
+    if out is not None and workload.bias is None and activation == "none":
+        return matmul(workload.a, workload.b, out=out)
     output = matmul(workload.a, workload.b)
     if workload.bias is not None:
         output = output + workload.bias
