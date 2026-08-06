@@ -1,1 +1,3109 @@
-{"bounds": []}
+{
+  "bounds": [
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c101",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c101 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c102",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c102 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c103",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c103 row and confirm 10 vehicles, distance 828.06, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.06,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c104",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c104 row and confirm 10 vehicles, distance 824.78, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":824.78,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c105",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c105 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c106",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c106 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c107",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c107 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c108",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c108 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c109",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c109 row and confirm 10 vehicles, distance 828.94, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.94,\"vehicle_count\":10}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_10 row and confirm 90 vehicles, distance 39852.44, attribution 'SCR', and date '10-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":39852.44,\"vehicle_count\":90}",
+      "who_and_year": "SCR; 10-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_2 row and confirm 90 vehicles, distance 42222.96, attribution 'CAINIAO', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42222.96,\"vehicle_count\":90}",
+      "who_and_year": "CAINIAO; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_3 row and confirm 90 vehicles, distance 40101.36, attribution 'Q', and date '17-sep-15'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":40101.36,\"vehicle_count\":90}",
+      "who_and_year": "Q; 17-sep-15"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_4 row and confirm 90 vehicles, distance 39468.60, attribution 'Q', and date '17-apr-13'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":39468.6,\"vehicle_count\":90}",
+      "who_and_year": "Q; 17-apr-13"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_6 row and confirm 99 vehicles, distance 43830.21, attribution 'HD', and date '11-nov-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43830.21,\"vehicle_count\":99}",
+      "who_and_year": "HD; 11-nov-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_7 row and confirm 97 vehicles, distance 43341.77, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43341.77,\"vehicle_count\":97}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_8 row and confirm 92 vehicles, distance 42629.91, attribution 'CAINIAO', and date 'Mar-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42629.91,\"vehicle_count\":92}",
+      "who_and_year": "CAINIAO; Mar-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_10_9 row and confirm 90 vehicles, distance 40318.03, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":40318.03,\"vehicle_count\":90}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_1 row and confirm 20 vehicles, distance 2704.57, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2704.57,\"vehicle_count\":20}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_10 row and confirm 18 vehicles, distance 2643.51, attribution 'MB', and date '10-may-05'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2643.51,\"vehicle_count\":18}",
+      "who_and_year": "MB; 10-may-05"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_2 row and confirm 18 vehicles, distance 2917.89, attribution 'BVH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2917.89,\"vehicle_count\":18}",
+      "who_and_year": "BVH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_3 row and confirm 18 vehicles, distance 2707.35, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2707.35,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_4 row and confirm 18 vehicles, distance 2643.31, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2643.31,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_5 row and confirm 20 vehicles, distance 2702.05, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2702.05,\"vehicle_count\":20}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_6 row and confirm 20 vehicles, distance 2701.04, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2701.04,\"vehicle_count\":20}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_7 row and confirm 20 vehicles, distance 2701.04, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2701.04,\"vehicle_count\":20}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_8 row and confirm 19 vehicles, distance 2775.48, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2775.48,\"vehicle_count\":19}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_2_9 row and confirm 18 vehicles, distance 2687.83, attribution 'MB', and date '02-sep-13'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2687.83,\"vehicle_count\":18}",
+      "who_and_year": "MB; 02-sep-13"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_1 row and confirm 40 vehicles, distance 7152.02, attribution 'MBD', and date '2005'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7152.02,\"vehicle_count\":40}",
+      "who_and_year": "MBD; 2005"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_10 row and confirm 36 vehicles, distance 6860.63, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6860.63,\"vehicle_count\":36}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_2 row and confirm 36 vehicles, distance 7686.38, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7686.38,\"vehicle_count\":36}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_3 row and confirm 36 vehicles, distance 7060.67, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7060.67,\"vehicle_count\":36}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_4 row and confirm 36 vehicles, distance 6803.24, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6803.24,\"vehicle_count\":36}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_5 row and confirm 40 vehicles, distance 7152.02, attribution 'MBD', and date '2005'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7152.02,\"vehicle_count\":40}",
+      "who_and_year": "MBD; 2005"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_6 row and confirm 40 vehicles, distance 7153.41, attribution 'MBD', and date '2005'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7153.41,\"vehicle_count\":40}",
+      "who_and_year": "MBD; 2005"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_7 row and confirm 39 vehicles, distance 7417.92, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7417.92,\"vehicle_count\":39}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_8 row and confirm 37 vehicles, distance 7347.23, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7347.23,\"vehicle_count\":37}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_4_9 row and confirm 36 vehicles, distance 7042.53, attribution 'Q', and date '19-oct-15'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7042.53,\"vehicle_count\":36}",
+      "who_and_year": "Q; 19-oct-15"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_1 row and confirm 60 vehicles, distance 14095.64, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14095.64,\"vehicle_count\":60}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_10 row and confirm 56 vehicles, distance 13637.34, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13637.34,\"vehicle_count\":56}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_2 row and confirm 56 vehicles, distance 14163.31, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14163.31,\"vehicle_count\":56}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_3 row and confirm 56 vehicles, distance 13777.81, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13777.81,\"vehicle_count\":56}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_4 row and confirm 56 vehicles, distance 13558.54, attribution 'Q', and date '30-sep-13'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13558.54,\"vehicle_count\":56}",
+      "who_and_year": "Q; 30-sep-13"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_5 row and confirm 60 vehicles, distance 14085.72, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14085.72,\"vehicle_count\":60}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_6 row and confirm 59 vehicles, distance 15832.68, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15832.68,\"vehicle_count\":59}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_7 row and confirm 57 vehicles, distance 15731.20, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15731.2,\"vehicle_count\":57}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_8 row and confirm 56 vehicles, distance 14385.80, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14385.8,\"vehicle_count\":56}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_6_9 row and confirm 56 vehicles, distance 13693.42, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13693.42,\"vehicle_count\":56}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_1 row and confirm 80 vehicles, distance 25030.36, attribution 'M', and date '2002. There are questions whether the solution is valid, several authors report 80/25184.38'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":25030.36,\"vehicle_count\":80}",
+      "who_and_year": "M; 2002. There are questions whether the solution is valid, several authors report 80/25184.38"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_10 row and confirm 72 vehicles, distance 24070.17, attribution 'Q', and date '04-sep-15'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":24070.17,\"vehicle_count\":72}",
+      "who_and_year": "Q; 04-sep-15"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_2 row and confirm 72 vehicles, distance 26540.53, attribution 'CAINIAO', and date 'Feb-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":26540.53,\"vehicle_count\":72}",
+      "who_and_year": "CAINIAO; Feb-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_3 row and confirm 72 vehicles, distance 24242.49, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":24242.49,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_4 row and confirm 72 vehicles, distance 23824.17, attribution 'Q', and date '28-oct-14'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":23824.17,\"vehicle_count\":72}",
+      "who_and_year": "Q; 28-oct-14"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_6 row and confirm 79 vehicles, distance 26873.86, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":26873.86,\"vehicle_count\":79}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_7 row and confirm 77 vehicles, distance 26464.91, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":26464.91,\"vehicle_count\":77}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_8 row and confirm 73 vehicles, distance 26099.74, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":26099.74,\"vehicle_count\":73}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c1_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c1_8_9 row and confirm 72 vehicles, distance 24300.21, attribution 'Q', and date '14-aug-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":24300.21,\"vehicle_count\":72}",
+      "who_and_year": "Q; 14-aug-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c201",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c201 row and confirm 3 vehicles, distance 591.56, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":591.56,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c202",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c202 row and confirm 3 vehicles, distance 591.56, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":591.56,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c203",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c203 row and confirm 3 vehicles, distance 591.17, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":591.17,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c204",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c204 row and confirm 3 vehicles, distance 590.60, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":590.6,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c205",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c205 row and confirm 3 vehicles, distance 588.88, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":588.88,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c206",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c206 row and confirm 3 vehicles, distance 588.49, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":588.49,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c207",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c207 row and confirm 3 vehicles, distance 588.29, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":588.29,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c208",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c208 row and confirm 3 vehicles, distance 588.32, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":588.32,\"vehicle_count\":3}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_10 row and confirm 28 vehicles, distance 15937.45, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":15937.45,\"vehicle_count\":28}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_3 row and confirm 28 vehicles, distance 16829.47, attribution 'CAINIAO SCR', and date 'Tie, Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":16829.47,\"vehicle_count\":28}",
+      "who_and_year": "CAINIAO SCR; Tie, Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_4 row and confirm 28 vehicles, distance 15607.48, attribution 'SCR', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":15607.48,\"vehicle_count\":28}",
+      "who_and_year": "SCR; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_5 row and confirm 30 vehicles, distance 16561.29, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":16561.29,\"vehicle_count\":30}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_6 row and confirm 29 vehicles, distance 16863.71, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":16863.71,\"vehicle_count\":29}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_7 row and confirm 29 vehicles, distance 17602.84, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":17602.84,\"vehicle_count\":29}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_8 row and confirm 28 vehicles, distance 16512.43, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":16512.43,\"vehicle_count\":28}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_10_9 row and confirm 28 vehicles, distance 17809.34, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":17809.34,\"vehicle_count\":28}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_1 row and confirm 6 vehicles, distance 1931.44, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1931.44,\"vehicle_count\":6}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_10 row and confirm 6 vehicles, distance 1806.58, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1806.58,\"vehicle_count\":6}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_2 row and confirm 6 vehicles, distance 1863.16, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1863.16,\"vehicle_count\":6}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_3 row and confirm 6 vehicles, distance 1775.08, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1775.08,\"vehicle_count\":6}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_4 row and confirm 6 vehicles, distance 1703.43, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1703.43,\"vehicle_count\":6}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_5 row and confirm 6 vehicles, distance 1878.85, attribution 'BVH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1878.85,\"vehicle_count\":6}",
+      "who_and_year": "BVH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_6 row and confirm 6 vehicles, distance 1857.35, attribution 'B', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1857.35,\"vehicle_count\":6}",
+      "who_and_year": "B; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_7 row and confirm 6 vehicles, distance 1849.46, attribution 'GH', and date '2001'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1849.46,\"vehicle_count\":6}",
+      "who_and_year": "GH; 2001"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_8 row and confirm 6 vehicles, distance 1820.53, attribution 'RP', and date '25-feb-05'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1820.53,\"vehicle_count\":6}",
+      "who_and_year": "RP; 25-feb-05"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_2_9 row and confirm 6 vehicles, distance 1830.05, attribution 'RP', and date '25-feb-05'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1830.05,\"vehicle_count\":6}",
+      "who_and_year": "RP; 25-feb-05"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_1 row and confirm 12 vehicles, distance 4116.05, attribution 'MBD', and date '2005'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4116.05,\"vehicle_count\":12}",
+      "who_and_year": "MBD; 2005"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_10 row and confirm 11 vehicles, distance 3825.67, attribution 'SCR', and date '08-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3825.67,\"vehicle_count\":11}",
+      "who_and_year": "SCR; 08-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_2 row and confirm 12 vehicles, distance 3929.89, attribution 'MB', and date '30-jun-05'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3929.89,\"vehicle_count\":12}",
+      "who_and_year": "MB; 30-jun-05"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_3 row and confirm 11 vehicles, distance 4018.02, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4018.02,\"vehicle_count\":11}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_4 row and confirm 11 vehicles, distance 3702.49, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3702.49,\"vehicle_count\":11}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_5 row and confirm 12 vehicles, distance 3938.69, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3938.69,\"vehicle_count\":12}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_6 row and confirm 12 vehicles, distance 3875.94, attribution 'MB', and date '16-sep-03'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3875.94,\"vehicle_count\":12}",
+      "who_and_year": "MB; 16-sep-03"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_7 row and confirm 12 vehicles, distance 3894.13, attribution 'MBD', and date '2005'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3894.13,\"vehicle_count\":12}",
+      "who_and_year": "MBD; 2005"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_8 row and confirm 11 vehicles, distance 4233.20, attribution 'CAINIAO', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4233.2,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_4_9 row and confirm 12 vehicles, distance 3864.68, attribution 'MB2', and date '18-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3864.68,\"vehicle_count\":12}",
+      "who_and_year": "MB2; 18-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_1 row and confirm 18 vehicles, distance 7774.10, attribution 'MB', and date '16-sep-03'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7774.1,\"vehicle_count\":18}",
+      "who_and_year": "MB; 16-sep-03"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_10 row and confirm 17 vehicles, distance 7255.69, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7255.69,\"vehicle_count\":17}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_2 row and confirm 17 vehicles, distance 8258.20, attribution 'CAINIAO SCR', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":8258.2,\"vehicle_count\":17}",
+      "who_and_year": "CAINIAO SCR; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_3 row and confirm 17 vehicles, distance 7506.62, attribution 'SCR', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7506.62,\"vehicle_count\":17}",
+      "who_and_year": "SCR; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_4 row and confirm 17 vehicles, distance 6909.58, attribution 'Q', and date '18-mar-15'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":6909.58,\"vehicle_count\":17}",
+      "who_and_year": "Q; 18-mar-15"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_5 row and confirm 18 vehicles, distance 7575.20, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7575.2,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_6 row and confirm 18 vehicles, distance 7470.36, attribution 'MB2', and date '18-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7470.36,\"vehicle_count\":18}",
+      "who_and_year": "MB2; 18-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_7 row and confirm 18 vehicles, distance 7512.07, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7512.07,\"vehicle_count\":18}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_8 row and confirm 17 vehicles, distance 7539.73, attribution 'Q', and date '08-jul-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7539.73,\"vehicle_count\":17}",
+      "who_and_year": "Q; 08-jul-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_6_9 row and confirm 17 vehicles, distance 7911.61, attribution 'CAINIAO', and date 'Sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7911.61,\"vehicle_count\":17}",
+      "who_and_year": "CAINIAO; Sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_1 row and confirm 24 vehicles, distance 11662.08, attribution 'SCR', and date 'Oct-2018'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":11662.08,\"vehicle_count\":24}",
+      "who_and_year": "SCR; Oct-2018"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_10 row and confirm 23 vehicles, distance 10977.36, attribution 'Q', and date '08-jul-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":10977.36,\"vehicle_count\":23}",
+      "who_and_year": "Q; 08-jul-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_2 row and confirm 23 vehicles, distance 12285.31, attribution 'Q', and date '19-mar-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":12285.31,\"vehicle_count\":23}",
+      "who_and_year": "Q; 19-mar-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_3 row and confirm 23 vehicles, distance 11410.69, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":11410.69,\"vehicle_count\":23}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_4 row and confirm 22 vehicles, distance 10990.64, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":10990.64,\"vehicle_count\":22}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_6 row and confirm 23 vehicles, distance 12235.30, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":12235.3,\"vehicle_count\":23}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_7 row and confirm 23 vehicles, distance 13427.12, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":13427.12,\"vehicle_count\":23}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_8 row and confirm 23 vehicles, distance 11288.01, attribution 'Q', and date '18-mar-15'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":11288.01,\"vehicle_count\":23}",
+      "who_and_year": "Q; 18-mar-15"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for c2_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the c2_8_9 row and confirm 23 vehicles, distance 11592.52, attribution 'Q', and date '08-jan-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":11592.52,\"vehicle_count\":23}",
+      "who_and_year": "Q; 08-jan-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r101",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r101 row and confirm 19 vehicles, distance 1650.80, attribution 'H', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1650.8,\"vehicle_count\":19}",
+      "who_and_year": "H; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r102",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r102 row and confirm 17 vehicles, distance 1486.12, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1486.12,\"vehicle_count\":17}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r103",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r103 row and confirm 13 vehicles, distance 1292.68, attribution 'LLH', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1292.68,\"vehicle_count\":13}",
+      "who_and_year": "LLH; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r104",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r104 row and confirm 9 vehicles, distance 1007.31, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1007.31,\"vehicle_count\":9}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r105",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r105 row and confirm 14 vehicles, distance 1377.11, attribution 'RT', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1377.11,\"vehicle_count\":14}",
+      "who_and_year": "RT; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r106",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r106 row and confirm 12 vehicles, distance 1252.03, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1252.03,\"vehicle_count\":12}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r107",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r107 row and confirm 10 vehicles, distance 1104.66, attribution 'S97', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1104.66,\"vehicle_count\":10}",
+      "who_and_year": "S97; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r108",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r108 row and confirm 9 vehicles, distance 960.88, attribution 'BBB', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":960.88,\"vehicle_count\":9}",
+      "who_and_year": "BBB; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r109",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r109 row and confirm 11 vehicles, distance 1194.73, attribution 'HG', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1194.73,\"vehicle_count\":11}",
+      "who_and_year": "HG; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r110",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r110 row and confirm 10 vehicles, distance 1118.84, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1118.84,\"vehicle_count\":10}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r112",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r112 row and confirm 9 vehicles, distance 982.14, attribution 'GTA', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":982.14,\"vehicle_count\":9}",
+      "who_and_year": "GTA; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_1 row and confirm 100 vehicles, distance 53380.18, attribution 'SCR', and date '19-des-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":53380.18,\"vehicle_count\":100}",
+      "who_and_year": "SCR; 19-des-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_10 row and confirm 91 vehicles, distance 47407.16, attribution 'SCR', and date '19-des-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":47407.16,\"vehicle_count\":91}",
+      "who_and_year": "SCR; 19-des-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_2 row and confirm 91 vehicles, distance 48232.67, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":48232.67,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_3 row and confirm 91 vehicles, distance 44694.16, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":44694.16,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_4 row and confirm 91 vehicles, distance 42463.74, attribution 'SCR', and date '19-des-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42463.74,\"vehicle_count\":91}",
+      "who_and_year": "SCR; 19-des-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_5 row and confirm 91 vehicles, distance 50445.39, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":50445.39,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_6 row and confirm 91 vehicles, distance 46930.04, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":46930.04,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_7 row and confirm 91 vehicles, distance 43975.47, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43975.47,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_8 row and confirm 91 vehicles, distance 42288.50, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42288.5,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_10_9 row and confirm 91 vehicles, distance 49195.26, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":49195.26,\"vehicle_count\":91}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_1 row and confirm 20 vehicles, distance 4784.11, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":4784.11,\"vehicle_count\":20}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_10 row and confirm 18 vehicles, distance 3301.18, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3301.18,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_2 row and confirm 18 vehicles, distance 4039.86, attribution 'MB2', and date '18-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":4039.86,\"vehicle_count\":18}",
+      "who_and_year": "MB2; 18-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_3 row and confirm 18 vehicles, distance 3381.96, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3381.96,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_4 row and confirm 18 vehicles, distance 3057.81, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3057.81,\"vehicle_count\":18}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_5 row and confirm 18 vehicles, distance 4107.86, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":4107.86,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_6 row and confirm 18 vehicles, distance 3583.14, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3583.14,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_7 row and confirm 18 vehicles, distance 3150.11, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3150.11,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_8 row and confirm 18 vehicles, distance 2951.99, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2951.99,\"vehicle_count\":18}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_2_9 row and confirm 18 vehicles, distance 3760.58, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3760.58,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_1 row and confirm 40 vehicles, distance 10372.31, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":10372.31,\"vehicle_count\":40}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_10 row and confirm 36 vehicles, distance 8094.10, attribution 'Q', and date '09-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8094.1,\"vehicle_count\":36}",
+      "who_and_year": "Q; 09-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_2 row and confirm 36 vehicles, distance 8898.15, attribution 'CAINIAO SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8898.15,\"vehicle_count\":36}",
+      "who_and_year": "CAINIAO SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_3 row and confirm 36 vehicles, distance 7808.34, attribution 'Q', and date '08-feb-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7808.34,\"vehicle_count\":36}",
+      "who_and_year": "Q; 08-feb-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_4 row and confirm 36 vehicles, distance 7282.78, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7282.78,\"vehicle_count\":36}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_5 row and confirm 36 vehicles, distance 9222.96, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":9222.96,\"vehicle_count\":36}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_6 row and confirm 36 vehicles, distance 8358.69, attribution 'Q', and date '04-dec-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8358.69,\"vehicle_count\":36}",
+      "who_and_year": "Q; 04-dec-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_7 row and confirm 36 vehicles, distance 7616.15, attribution 'Q', and date '04-dec-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7616.15,\"vehicle_count\":36}",
+      "who_and_year": "Q; 04-dec-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_8 row and confirm 36 vehicles, distance 7257.28, attribution 'Q', and date '07-sep-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7257.28,\"vehicle_count\":36}",
+      "who_and_year": "Q; 07-sep-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_4_9 row and confirm 36 vehicles, distance 8694.78, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8694.78,\"vehicle_count\":36}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_1 row and confirm 59 vehicles, distance 21394.95, attribution 'CAINIAO SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":21394.95,\"vehicle_count\":59}",
+      "who_and_year": "CAINIAO SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_10 row and confirm 54 vehicles, distance 17610.12, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":17610.12,\"vehicle_count\":54}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_2 row and confirm 54 vehicles, distance 18585.00, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":18585.0,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_3 row and confirm 54 vehicles, distance 16900.67, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16900.67,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_4 row and confirm 54 vehicles, distance 15748.07, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15748.07,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_5 row and confirm 54 vehicles, distance 19381.52, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":19381.52,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_6 row and confirm 54 vehicles, distance 17790.97, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":17790.97,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_7 row and confirm 54 vehicles, distance 16522.52, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16522.52,\"vehicle_count\":54}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_8 row and confirm 54 vehicles, distance 15610.00, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15610.0,\"vehicle_count\":54}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_6_9 row and confirm 54 vehicles, distance 18530.96, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":18530.96,\"vehicle_count\":54}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_1 row and confirm 80 vehicles, distance 36767.92, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":36767.92,\"vehicle_count\":80}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_10 row and confirm 72 vehicles, distance 30952.77, attribution 'SCR', and date 'Jan-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":30952.77,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Jan-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_2 row and confirm 72 vehicles, distance 32313.17, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":32313.17,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_3 row and confirm 72 vehicles, distance 29338.97, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":29338.97,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_4 row and confirm 72 vehicles, distance 27769.19, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":27769.19,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_5 row and confirm 72 vehicles, distance 33529.08, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":33529.08,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_6 row and confirm 72 vehicles, distance 30906.90, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":30906.9,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_7 row and confirm 72 vehicles, distance 28823.76, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28823.76,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_8 row and confirm 72 vehicles, distance 27643.38, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":27643.38,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r1_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r1_8_9 row and confirm 72 vehicles, distance 32293.46, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":32293.46,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r201",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r201 row and confirm 4 vehicles, distance 1252.37, attribution 'HG', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1252.37,\"vehicle_count\":4}",
+      "who_and_year": "HG; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r202",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r202 row and confirm 3 vehicles, distance 1191.70, attribution 'RGP', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1191.7,\"vehicle_count\":3}",
+      "who_and_year": "RGP; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r203",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r203 row and confirm 3 vehicles, distance 939.50, attribution 'WL', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":939.5,\"vehicle_count\":3}",
+      "who_and_year": "WL; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r206",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r206 row and confirm 3 vehicles, distance 906.14, attribution 'SSSD', and date 'Detailed solution by SAM::OPT'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":906.14,\"vehicle_count\":3}",
+      "who_and_year": "SSSD; Detailed solution by SAM::OPT"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r207",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r207 row and confirm 2 vehicles, distance 890.61, attribution 'RP', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":890.61,\"vehicle_count\":2}",
+      "who_and_year": "RP; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r208",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r208 row and confirm 2 vehicles, distance 726.82, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":726.82,\"vehicle_count\":2}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r209",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r209 row and confirm 3 vehicles, distance 909.16, attribution 'H', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":909.16,\"vehicle_count\":3}",
+      "who_and_year": "H; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r210",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r210 row and confirm 3 vehicles, distance 939.37, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":939.37,\"vehicle_count\":3}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r211",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r211 row and confirm 2 vehicles, distance 885.71, attribution 'WL', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":885.71,\"vehicle_count\":2}",
+      "who_and_year": "WL; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_1 row and confirm 19 vehicles, distance 42182.57, attribution 'CAINIAO', and date 'Mar-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42182.57,\"vehicle_count\":19}",
+      "who_and_year": "CAINIAO; Mar-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_10 row and confirm 19 vehicles, distance 30207.49, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":30207.49,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_2 row and confirm 19 vehicles, distance 33411.21, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":33411.21,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_3 row and confirm 19 vehicles, distance 24916.88, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":24916.88,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_4 row and confirm 19 vehicles, distance 17851.96, attribution 'CAINIAO', and date 'Sep-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":17851.96,\"vehicle_count\":19}",
+      "who_and_year": "CAINIAO; Sep-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_5 row and confirm 19 vehicles, distance 36216.05, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":36216.05,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_6 row and confirm 19 vehicles, distance 29978.02, attribution 'SCR', and date 'Aug-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":29978.02,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Aug-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_7 row and confirm 19 vehicles, distance 23219.61, attribution 'SCR', and date 'Aug-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":23219.61,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Aug-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_8 row and confirm 19 vehicles, distance 17442.29, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":17442.29,\"vehicle_count\":19}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_10_9 row and confirm 19 vehicles, distance 32995.71, attribution 'CAINIAO', and date 'Sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":32995.71,\"vehicle_count\":19}",
+      "who_and_year": "CAINIAO; Sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_1 row and confirm 4 vehicles, distance 4483.16, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":4483.16,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_10 row and confirm 4 vehicles, distance 2654.97, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2654.97,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_2 row and confirm 4 vehicles, distance 3621.20, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3621.2,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_3 row and confirm 4 vehicles, distance 2880.62, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2880.62,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_4 row and confirm 4 vehicles, distance 1981.29, attribution 'MB', and date '16-sep-03'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1981.29,\"vehicle_count\":4}",
+      "who_and_year": "MB; 16-sep-03"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_5 row and confirm 4 vehicles, distance 3366.79, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3366.79,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_6 row and confirm 4 vehicles, distance 2913.03, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2913.03,\"vehicle_count\":4}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_7 row and confirm 4 vehicles, distance 2451.14, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2451.14,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_8 row and confirm 4 vehicles, distance 1849.87, attribution 'MB', and date '16-sep-03'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":1849.87,\"vehicle_count\":4}",
+      "who_and_year": "MB; 16-sep-03"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_2_9 row and confirm 4 vehicles, distance 3092.04, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3092.04,\"vehicle_count\":4}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_1 row and confirm 8 vehicles, distance 9210.15, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":9210.15,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_10 row and confirm 8 vehicles, distance 5773.17, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":5773.17,\"vehicle_count\":8}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_2 row and confirm 8 vehicles, distance 7606.75, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7606.75,\"vehicle_count\":8}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_3 row and confirm 8 vehicles, distance 5911.07, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":5911.07,\"vehicle_count\":8}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_4 row and confirm 8 vehicles, distance 4241.47, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4241.47,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_5 row and confirm 8 vehicles, distance 7127.83, attribution 'CAINIAO SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7127.83,\"vehicle_count\":8}",
+      "who_and_year": "CAINIAO SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_6 row and confirm 8 vehicles, distance 6122.60, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6122.6,\"vehicle_count\":8}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_7 row and confirm 8 vehicles, distance 5018.53, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":5018.53,\"vehicle_count\":8}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_8 row and confirm 8 vehicles, distance 4015.60, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4015.6,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_4_9 row and confirm 8 vehicles, distance 6400.10, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6400.1,\"vehicle_count\":8}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_1 row and confirm 11 vehicles, distance 18205.58, attribution 'CAINIAO', and date 'Sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":18205.58,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_10 row and confirm 11 vehicles, distance 12202.28, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":12202.28,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_2 row and confirm 11 vehicles, distance 14754.13, attribution 'CAINIAO', and date 'Dec-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14754.13,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Dec-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_3 row and confirm 11 vehicles, distance 11188.70, attribution 'SCR', and date '23-jul-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":11188.7,\"vehicle_count\":11}",
+      "who_and_year": "SCR; 23-jul-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_4 row and confirm 11 vehicles, distance 8008.14, attribution 'CAINIAO', and date 'Feb-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":8008.14,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Feb-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_5 row and confirm 11 vehicles, distance 15067.34, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15067.34,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_6 row and confirm 11 vehicles, distance 12498.27, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":12498.27,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_7 row and confirm 11 vehicles, distance 10064.56, attribution 'SCR', and date '18-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":10064.56,\"vehicle_count\":11}",
+      "who_and_year": "SCR; 18-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_8 row and confirm 11 vehicles, distance 7571.99, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7571.99,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_6_9 row and confirm 11 vehicles, distance 13377.56, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13377.56,\"vehicle_count\":11}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_1 row and confirm 15 vehicles, distance 28112.36, attribution 'SCR', and date '01-mar-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28112.36,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 01-mar-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_10 row and confirm 15 vehicles, distance 20358.61, attribution 'CAINIAO', and date '19-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":20358.61,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO; 19-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_2 row and confirm 15 vehicles, distance 22795.79, attribution 'CAINIAO', and date 'May-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":22795.79,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO; May-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_3 row and confirm 15 vehicles, distance 17703.99, attribution 'SCR', and date '09-jul-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":17703.99,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 09-jul-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_4 row and confirm 15 vehicles, distance 13192.32, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":13192.32,\"vehicle_count\":15}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_5 row and confirm 15 vehicles, distance 24255.00, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":24255.0,\"vehicle_count\":15}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_6 row and confirm 15 vehicles, distance 20412.02, attribution 'CAINIAO SCR', and date 'Tie, Mar-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":20412.02,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO SCR; Tie, Mar-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_7 row and confirm 15 vehicles, distance 16597.87, attribution 'SCR', and date 'Mar-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":16597.87,\"vehicle_count\":15}",
+      "who_and_year": "SCR; Mar-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_8 row and confirm 15 vehicles, distance 12642.67, attribution 'SCR', and date '04-jul-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":12642.67,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 04-jul-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for r2_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the r2_8_9 row and confirm 15 vehicles, distance 22277.04, attribution 'SCR', and date 'Jul-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":22277.04,\"vehicle_count\":15}",
+      "who_and_year": "SCR; Jul-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc102",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc102 row and confirm 12 vehicles, distance 1554.75, attribution 'TBGGP', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1554.75,\"vehicle_count\":12}",
+      "who_and_year": "TBGGP; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc103",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc103 row and confirm 11 vehicles, distance 1261.67, attribution 'S98', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1261.67,\"vehicle_count\":11}",
+      "who_and_year": "S98; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc104",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc104 row and confirm 10 vehicles, distance 1135.48, attribution 'CLM', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1135.48,\"vehicle_count\":10}",
+      "who_and_year": "CLM; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc105",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc105 row and confirm 13 vehicles, distance 1629.44, attribution 'BBB', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1629.44,\"vehicle_count\":13}",
+      "who_and_year": "BBB; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc106",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc106 row and confirm 11 vehicles, distance 1424.73, attribution 'BBB', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1424.73,\"vehicle_count\":11}",
+      "who_and_year": "BBB; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc107",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc107 row and confirm 11 vehicles, distance 1230.48, attribution 'S97', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1230.48,\"vehicle_count\":11}",
+      "who_and_year": "S97; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc108",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc108 row and confirm 10 vehicles, distance 1139.82, attribution 'TBGGP', and date 'Detailed solution by Shobb'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1139.82,\"vehicle_count\":10}",
+      "who_and_year": "TBGGP; Detailed solution by Shobb"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_1 row and confirm 90 vehicles, distance 45830.62, attribution 'CAINIAO', and date 'Dec-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":45830.62,\"vehicle_count\":90}",
+      "who_and_year": "CAINIAO; Dec-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_10 row and confirm 90 vehicles, distance 43551.69, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43551.69,\"vehicle_count\":90}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_2 row and confirm 90 vehicles, distance 43718.84, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43718.84,\"vehicle_count\":90}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_3 row and confirm 90 vehicles, distance 42146.79, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":42146.79,\"vehicle_count\":90}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_4 row and confirm 90 vehicles, distance 41391.18, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":41391.18,\"vehicle_count\":90}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_5 row and confirm 90 vehicles, distance 45069.37, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":45069.37,\"vehicle_count\":90}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_6 row and confirm 90 vehicles, distance 44937.36, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":44937.36,\"vehicle_count\":90}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_7 row and confirm 90 vehicles, distance 44457.79, attribution 'SCR', and date 'Feb-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":44457.79,\"vehicle_count\":90}",
+      "who_and_year": "SCR; Feb-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_8 row and confirm 90 vehicles, distance 43956.91, attribution 'SCR', and date 'Jan-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43956.91,\"vehicle_count\":90}",
+      "who_and_year": "SCR; Jan-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_10_9 row and confirm 90 vehicles, distance 43897.21, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":43897.21,\"vehicle_count\":90}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_1 row and confirm 18 vehicles, distance 3602.80, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3602.8,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_10 row and confirm 18 vehicles, distance 3000.30, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3000.3,\"vehicle_count\":18}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_2 row and confirm 18 vehicles, distance 3249.05, attribution 'BC4', and date '05-april-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3249.05,\"vehicle_count\":18}",
+      "who_and_year": "BC4; 05-april-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_3 row and confirm 18 vehicles, distance 3008.33, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3008.33,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_4 row and confirm 18 vehicles, distance 2851.68, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2851.68,\"vehicle_count\":18}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_5 row and confirm 18 vehicles, distance 3371.00, attribution 'BC4', and date '05-april-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3371.0,\"vehicle_count\":18}",
+      "who_and_year": "BC4; 05-april-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_6 row and confirm 18 vehicles, distance 3324.80, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3324.8,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_7 row and confirm 18 vehicles, distance 3189.32, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3189.32,\"vehicle_count\":18}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_8 row and confirm 18 vehicles, distance 3083.93, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3083.93,\"vehicle_count\":18}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_2_9 row and confirm 18 vehicles, distance 3081.13, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3081.13,\"vehicle_count\":18}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_1 row and confirm 36 vehicles, distance 8571.32, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8571.32,\"vehicle_count\":36}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_10 row and confirm 36 vehicles, distance 7596.04, attribution 'EOE', and date '01-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7596.04,\"vehicle_count\":36}",
+      "who_and_year": "EOE; 01-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_2 row and confirm 36 vehicles, distance 7892.52, attribution 'EOE', and date '01-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7892.52,\"vehicle_count\":36}",
+      "who_and_year": "EOE; 01-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_3 row and confirm 36 vehicles, distance 7533.05, attribution 'Q', and date '03-oct-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7533.05,\"vehicle_count\":36}",
+      "who_and_year": "Q; 03-oct-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_4 row and confirm 36 vehicles, distance 7308.55, attribution 'Q', and date '22-jun-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7308.55,\"vehicle_count\":36}",
+      "who_and_year": "Q; 22-jun-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_5 row and confirm 36 vehicles, distance 8172.64, attribution 'Q', and date '17-oct-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8172.64,\"vehicle_count\":36}",
+      "who_and_year": "Q; 17-oct-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_6 row and confirm 36 vehicles, distance 8164.98, attribution 'EOE', and date '01-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":8164.98,\"vehicle_count\":36}",
+      "who_and_year": "EOE; 01-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_7 row and confirm 36 vehicles, distance 7948.51, attribution 'EOE', and date '01-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7948.51,\"vehicle_count\":36}",
+      "who_and_year": "EOE; 01-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_8 row and confirm 36 vehicles, distance 7772.57, attribution 'SCR', and date '13-jul-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7772.57,\"vehicle_count\":36}",
+      "who_and_year": "SCR; 13-jul-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_4_9 row and confirm 36 vehicles, distance 7733.35, attribution 'CAINIAO', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":7733.35,\"vehicle_count\":36}",
+      "who_and_year": "CAINIAO; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_1 row and confirm 55 vehicles, distance 16982.86, attribution 'SCR', and date 'Jun-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16982.86,\"vehicle_count\":55}",
+      "who_and_year": "SCR; Jun-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_10 row and confirm 55 vehicles, distance 15675.53, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15675.53,\"vehicle_count\":55}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_2 row and confirm 55 vehicles, distance 15914.70, attribution 'CAINIAO', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15914.7,\"vehicle_count\":55}",
+      "who_and_year": "CAINIAO; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_3 row and confirm 55 vehicles, distance 15204.64, attribution 'Q', and date '23-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15204.64,\"vehicle_count\":55}",
+      "who_and_year": "Q; 23-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_4 row and confirm 55 vehicles, distance 14777.19, attribution 'SCR', and date '08-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":14777.19,\"vehicle_count\":55}",
+      "who_and_year": "SCR; 08-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_5 row and confirm 55 vehicles, distance 16559.78, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16559.78,\"vehicle_count\":55}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_6 row and confirm 55 vehicles, distance 16496.88, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16496.88,\"vehicle_count\":55}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_7 row and confirm 55 vehicles, distance 16077.12, attribution 'Q', and date '07-sep-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":16077.12,\"vehicle_count\":55}",
+      "who_and_year": "Q; 07-sep-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_8 row and confirm 55 vehicles, distance 15914.91, attribution 'Q', and date '23-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15914.91,\"vehicle_count\":55}",
+      "who_and_year": "Q; 23-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_6_9 row and confirm 55 vehicles, distance 15826.24, attribution 'Q', and date '23-dec-16'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":15826.24,\"vehicle_count\":55}",
+      "who_and_year": "Q; 23-dec-16"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_1 row and confirm 72 vehicles, distance 30464.65, attribution 'SCR', and date 'Aug-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":30464.65,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Aug-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_10 row and confirm 72 vehicles, distance 28331.16, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28331.16,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_2 row and confirm 72 vehicles, distance 28511.37, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28511.37,\"vehicle_count\":72}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_3 row and confirm 72 vehicles, distance 27528.16, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":27528.16,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_4 row and confirm 72 vehicles, distance 26663.45, attribution 'SCR', and date 'Jan-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":26663.45,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Jan-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_5 row and confirm 72 vehicles, distance 29508.27, attribution 'SCR', and date 'May-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":29508.27,\"vehicle_count\":72}",
+      "who_and_year": "SCR; May-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_6 row and confirm 72 vehicles, distance 29458.38, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":29458.38,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_7 row and confirm 72 vehicles, distance 28979.60, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28979.6,\"vehicle_count\":72}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_8 row and confirm 72 vehicles, distance 28605.60, attribution 'NVIDIA', and date '15-jan-24'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28605.6,\"vehicle_count\":72}",
+      "who_and_year": "NVIDIA; 15-jan-24"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc1_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc1_8_9 row and confirm 72 vehicles, distance 28555.53, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":28555.53,\"vehicle_count\":72}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc201",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc201 row and confirm 4 vehicles, distance 1406.94, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1406.94,\"vehicle_count\":4}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc202",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc202 row and confirm 3 vehicles, distance 1365.65, attribution 'GCC', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1365.65,\"vehicle_count\":3}",
+      "who_and_year": "GCC; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc203",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc203 row and confirm 3 vehicles, distance 1049.62, attribution 'CC', and date 'Detailed solution by Victor Allis'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1049.62,\"vehicle_count\":3}",
+      "who_and_year": "CC; Detailed solution by Victor Allis"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc204",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc204 row and confirm 3 vehicles, distance 798.46, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":798.46,\"vehicle_count\":3}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc205",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc205 row and confirm 4 vehicles, distance 1297.65, attribution 'MBD', and date 'See note below'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1297.65,\"vehicle_count\":4}",
+      "who_and_year": "MBD; See note below"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc206",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc206 row and confirm 3 vehicles, distance 1146.32, attribution 'H', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":1146.32,\"vehicle_count\":3}",
+      "who_and_year": "H; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc208",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc208 row and confirm 3 vehicles, distance 828.14, attribution 'IKMUY', and date 'Detailed solution from BVH'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "value": "{\"total_distance\":828.14,\"vehicle_count\":3}",
+      "who_and_year": "IKMUY; Detailed solution from BVH"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_1 row and confirm 20 vehicles, distance 30276.27, attribution 'CAINIAO', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":30276.27,\"vehicle_count\":20}",
+      "who_and_year": "CAINIAO; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_10 row and confirm 18 vehicles, distance 21834.94, attribution 'SCR', and date 'Jul-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":21834.94,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Jul-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_2 row and confirm 18 vehicles, distance 26104.09, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":26104.09,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_3 row and confirm 18 vehicles, distance 19911.48, attribution 'SCR', and date 'Jan-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":19911.48,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Jan-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_4 row and confirm 18 vehicles, distance 15693.28, attribution 'CAINIAO', and date 'Feb-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":15693.28,\"vehicle_count\":18}",
+      "who_and_year": "CAINIAO; Feb-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_5 row and confirm 18 vehicles, distance 27067.04, attribution 'SCR', and date 'Jul-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":27067.04,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Jul-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_6 row and confirm 18 vehicles, distance 26741.27, attribution 'CAINIAO', and date '27-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":26741.27,\"vehicle_count\":18}",
+      "who_and_year": "CAINIAO; 27-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_7 row and confirm 18 vehicles, distance 24999.66, attribution 'SCR', and date 'Jan-20'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":24999.66,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Jan-20"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_8 row and confirm 18 vehicles, distance 23595.33, attribution 'SCR', and date 'Mar-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":23595.33,\"vehicle_count\":18}",
+      "who_and_year": "SCR; Mar-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_10_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_10_9 row and confirm 18 vehicles, distance 22919.42, attribution 'SCR', and date '19-des-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/",
+      "value": "{\"total_distance\":22919.42,\"vehicle_count\":18}",
+      "who_and_year": "SCR; 19-des-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_1 row and confirm 6 vehicles, distance 3099.53, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":3099.53,\"vehicle_count\":6}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_10 row and confirm 4 vehicles, distance 2015.60, attribution 'MB', and date '16-sep-03'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2015.6,\"vehicle_count\":4}",
+      "who_and_year": "MB; 16-sep-03"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_2 row and confirm 5 vehicles, distance 2825.24, attribution 'PGDR', and date '17-oct-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2825.24,\"vehicle_count\":5}",
+      "who_and_year": "PGDR; 17-oct-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_3 row and confirm 4 vehicles, distance 2601.87, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2601.87,\"vehicle_count\":4}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_4 row and confirm 4 vehicles, distance 2038.56, attribution 'BC4', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2038.56,\"vehicle_count\":4}",
+      "who_and_year": "BC4; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_5 row and confirm 4 vehicles, distance 2911.46, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2911.46,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_6 row and confirm 4 vehicles, distance 2873.12, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2873.12,\"vehicle_count\":4}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_7 row and confirm 4 vehicles, distance 2525.83, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2525.83,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_8 row and confirm 4 vehicles, distance 2292.53, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2292.53,\"vehicle_count\":4}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_2_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_2_9 row and confirm 4 vehicles, distance 2175.04, attribution 'BSJ2', and date '20-sep-07'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/",
+      "value": "{\"total_distance\":2175.04,\"vehicle_count\":4}",
+      "who_and_year": "BSJ2; 20-sep-07"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_1 row and confirm 11 vehicles, distance 6682.37, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6682.37,\"vehicle_count\":11}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_10 row and confirm 8 vehicles, distance 4278.61, attribution 'VCGP', and date '31-jul-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4278.61,\"vehicle_count\":8}",
+      "who_and_year": "VCGP; 31-jul-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_2 row and confirm 9 vehicles, distance 6180.62, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6180.62,\"vehicle_count\":9}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_3 row and confirm 8 vehicles, distance 4930.84, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4930.84,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_4 row and confirm 8 vehicles, distance 3631.01, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":3631.01,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_5 row and confirm 8 vehicles, distance 6706.44, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":6706.44,\"vehicle_count\":8}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_6 row and confirm 8 vehicles, distance 5766.61, attribution 'NBD', and date '2009'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":5766.61,\"vehicle_count\":8}",
+      "who_and_year": "NBD; 2009"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_7 row and confirm 8 vehicles, distance 5334.72, attribution 'Q', and date '25-sep-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":5334.72,\"vehicle_count\":8}",
+      "who_and_year": "Q; 25-sep-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_8 row and confirm 8 vehicles, distance 4790.14, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4790.14,\"vehicle_count\":8}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_4_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_4_9 row and confirm 8 vehicles, distance 4551.11, attribution 'Q', and date '15-nov-17'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/",
+      "value": "{\"total_distance\":4551.11,\"vehicle_count\":8}",
+      "who_and_year": "Q; 15-nov-17"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_1 row and confirm 14 vehicles, distance 13324.93, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":13324.93,\"vehicle_count\":14}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_10 row and confirm 11 vehicles, distance 9058.90, attribution 'SCR', and date 'Apr-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":9058.9,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Apr-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_2 row and confirm 12 vehicles, distance 11555.51, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":11555.51,\"vehicle_count\":12}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_3 row and confirm 11 vehicles, distance 9438.52, attribution 'SCR', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":9438.52,\"vehicle_count\":11}",
+      "who_and_year": "SCR; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_4 row and confirm 11 vehicles, distance 7057.94, attribution 'CAINIAO', and date 'Nov-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":7057.94,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Nov-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_5 row and confirm 11 vehicles, distance 12909.07, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":12909.07,\"vehicle_count\":11}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_6 row and confirm 11 vehicles, distance 11913.11, attribution 'CAINIAO', and date 'Dec-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":11913.11,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Dec-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_7 row and confirm 11 vehicles, distance 10711.85, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":10711.85,\"vehicle_count\":11}",
+      "who_and_year": "SCR; 19-dec-21"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_8 row and confirm 11 vehicles, distance 9990.40, attribution 'CAINIAO', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":9990.4,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_6_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_6_9 row and confirm 11 vehicles, distance 9574.99, attribution 'CAINIAO', and date '19-Sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/",
+      "value": "{\"total_distance\":9574.99,\"vehicle_count\":11}",
+      "who_and_year": "CAINIAO; 19-Sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_1",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_1 row and confirm 18 vehicles, distance 20981.14, attribution 'BC4', and date '05-apr-12'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":20981.14,\"vehicle_count\":18}",
+      "who_and_year": "BC4; 05-apr-12"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_10",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_10 row and confirm 15 vehicles, distance 14411.81, attribution 'SCR', and date 'Oct-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":14411.81,\"vehicle_count\":15}",
+      "who_and_year": "SCR; Oct-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_2",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_2 row and confirm 16 vehicles, distance 18151.95, attribution 'CAINIAO', and date '19-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":18151.95,\"vehicle_count\":16}",
+      "who_and_year": "CAINIAO; 19-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_3",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_3 row and confirm 15 vehicles, distance 14427.39, attribution 'SCR', and date '25-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":14427.39,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 25-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_4",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_4 row and confirm 15 vehicles, distance 10999.03, attribution 'CAINIAO', and date '26-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":10999.03,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO; 26-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_5",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_5 row and confirm 15 vehicles, distance 19074.02, attribution 'CAINIAO SCR', and date 'Tie, Mar-19'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":19074.02,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO SCR; Tie, Mar-19"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_6",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_6 row and confirm 15 vehicles, distance 18143.04, attribution 'CAINIAO', and date '19-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":18143.04,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO; 19-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_7",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_7 row and confirm 15 vehicles, distance 16817.46, attribution 'SCR', and date '25-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":16817.46,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 25-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_8",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_8 row and confirm 15 vehicles, distance 15759.14, attribution 'CAINIAO', and date '26-sep-18'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":15759.14,\"vehicle_count\":15}",
+      "who_and_year": "CAINIAO; 26-sep-18"
+    },
+    {
+      "checked_on": "2026-08-06",
+      "claim": "best known VRPTW solution for rc2_8_9",
+      "direction": "lexicographic_lower_is_better",
+      "how_to_recheck": "re-read the rc2_8_9 row and confirm 15 vehicles, distance 15325.25, attribution 'SCR', and date '19-dec-21'",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/",
+      "value": "{\"total_distance\":15325.25,\"vehicle_count\":15}",
+      "who_and_year": "SCR; 19-dec-21"
+    }
+  ]
+}
