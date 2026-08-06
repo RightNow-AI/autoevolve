@@ -1,0 +1,51 @@
+{
+  "name": "labs",
+  "domain": "low-autocorrelation-binary-sequences",
+  "evaluator": "evaluators/labs",
+  "cells": [
+    {
+      "key": "n13-validation",
+      "env": {"AUTOEVOLVE_CELL": "n13-validation"},
+      "target": null
+    },
+    {
+      "key": "n41-calibration",
+      "env": {"AUTOEVOLVE_CELL": "n41-calibration"},
+      "target": null
+    },
+    {
+      "key": "n61-calibration",
+      "env": {"AUTOEVOLVE_CELL": "n61-calibration"},
+      "target": null
+    },
+    {
+      "key": "n71-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n71-frontier"},
+      "target": null
+    },
+    {
+      "key": "n81-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n81-frontier"},
+      "target": null
+    },
+    {
+      "key": "n91-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n91-frontier"},
+      "target": null
+    },
+    {
+      "key": "n101-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n101-frontier"},
+      "target": null
+    },
+    {
+      "key": "n121-frontier",
+      "env": {"AUTOEVOLVE_CELL": "n121-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 24, "wall_clock_s": 7200},
+  "full_budget": {"max_evals": 240, "wall_clock_s": 86400},
+  "ladder": ["validation", "calibration", "frontier", "replicate-3", "independent-recheck"],
+  "replicate_seeds": 3
+}
