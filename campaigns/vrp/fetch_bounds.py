@@ -81,7 +81,10 @@ image = (
     .apt_install("git", "ca-certificates")
     .run_commands(
         f"git clone {REPO} {REPO_ROOT}",
-        f"cd {REPO_ROOT} && git checkout --detach {COMMIT}",
+        # The clone command string never varies, so its layer can be served
+        # from cache long after the commit it holds went stale. Fetching the
+        # exact commit first is what makes the checkout below reliable.
+        f"cd {REPO_ROOT} && git fetch origin {COMMIT} && git checkout --detach {COMMIT}",
         f"printf '%s' '{COMMIT}' > {REPO_ROOT}/.autoevolve-image-commit",
     )
 )
