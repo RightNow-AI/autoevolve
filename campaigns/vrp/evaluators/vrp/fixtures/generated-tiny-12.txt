@@ -1,0 +1,22 @@
+AUTOEVOLVE_GENERATED_12_SEED_730121
+
+VEHICLE
+NUMBER     CAPACITY
+    12           30
+
+CUSTOMER
+CUST NO.  XCOORD.  YCOORD.  DEMAND  READY TIME  DUE DATE  SERVICE TIME
+
+         0         50         50          0          0       5828          0
+         1         10         94          1         78        212          7
+         2         78         56          4        185        348          9
+         3         79         61          6        210        349          9
+         4         85         14          4        266        435          9
+         5         29         38          1        349        451          5
+         6         40          5          6        408        570          9
+         7          8         25          4        463        640          7
+         8         61         63          2        571        674          5
+         9         23         90          6        635        754          7
+        10         49         64          4        688        779          9
+        11         78         43          1        757        883          9
+        12         84         53          8        776        892          7
