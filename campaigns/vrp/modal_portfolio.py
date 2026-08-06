@@ -80,7 +80,23 @@ def _head_sha() -> str:
 
 COMMIT = _head_sha()
 
-_LOCAL_ROOT = Path(__file__).resolve().parents[2]
+def _local_root() -> Path:
+    """Return the working tree locally, and a harmless stand-in in the container.
+
+    Module level code runs twice: once here to define the image, and again
+    inside the container when Modal imports this file flat at /root. There it
+    has no parents[2] and an unguarded call raises IndexError before the
+    function body is ever reached, which kills the run at hydration. The value
+    is only ever used at build time, so any existing path will do remotely.
+    """
+
+    try:
+        return Path(__file__).resolve().parents[2]
+    except IndexError:
+        return Path(REMOTE_ROOT)
+
+
+_LOCAL_ROOT = _local_root()
 
 # The working tree is copied in rather than cloned from GitHub. Cloning made the
 # image depend on push state and on Modal's layer cache, and the clone command
