@@ -1,0 +1,43 @@
+{
+  "name": "ann-search",
+  "domain": "ann-search",
+  "evaluator": "evaluators/ann",
+  "cells": [
+    {
+      "key": "tiny-r100-validation",
+      "env": {
+        "AUTOEVOLVE_CELL": "tiny-r100-validation"
+      },
+      "target": null
+    },
+    {
+      "key": "medium-r095-frontier",
+      "env": {
+        "AUTOEVOLVE_CELL": "medium-r095-frontier"
+      },
+      "target": null
+    },
+    {
+      "key": "large-r090-frontier",
+      "env": {
+        "AUTOEVOLVE_CELL": "large-r090-frontier"
+      },
+      "target": null
+    }
+  ],
+  "proxy_budget": {
+    "max_evals": 40,
+    "wall_clock_s": 14400
+  },
+  "full_budget": {
+    "max_evals": 400,
+    "wall_clock_s": 86400
+  },
+  "ladder": [
+    "validation",
+    "frontier",
+    "replicate-3",
+    "independent-rerun"
+  ],
+  "replicate_seeds": 3
+}
