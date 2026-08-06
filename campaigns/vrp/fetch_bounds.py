@@ -99,22 +99,20 @@ image = (
 def fetch_pages() -> dict[str, object]:
     """Fetch all pages, retaining successful rows when another page fails."""
 
-    import importlib.util
+    import sys
     import urllib.request
     from datetime import UTC, datetime
 
-    # Loaded by path rather than imported as campaigns.vrp.bounds_parser. The
-    # campaigns tree ships no __init__.py, so the dotted import depends on
-    # namespace package resolution inside the container and fails there.
+    # Imported by dotted name rather than loaded by path, because bounds_parser
+    # itself imports campaigns.vrp.objective. Loading the parser by path leaves
+    # that inner import unresolvable. With the repository root on sys.path the
+    # campaigns tree resolves as a namespace package and both imports work.
     parser_path = REPO_ROOT / "campaigns" / "vrp" / "bounds_parser.py"
     if not parser_path.is_file():
         raise RuntimeError(f"bounds parser missing from the image at {parser_path}")
-    parser_spec = importlib.util.spec_from_file_location("vrp_bounds_parser", parser_path)
-    if parser_spec is None or parser_spec.loader is None:
-        raise RuntimeError(f"could not load the bounds parser at {parser_path}")
-    parser_module = importlib.util.module_from_spec(parser_spec)
-    parser_spec.loader.exec_module(parser_module)
-    parse_sintef_page = parser_module.parse_sintef_page
+    if REMOTE_ROOT not in sys.path:
+        sys.path.insert(0, REMOTE_ROOT)
+    from campaigns.vrp.bounds_parser import parse_sintef_page
 
     checked_on = datetime.now(UTC).date().isoformat()
     bounds: list[dict[str, str]] = []
