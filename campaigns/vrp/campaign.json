@@ -1,0 +1,87 @@
+{
+  "name": "vrp",
+  "domain": "vehicle-routing-with-time-windows",
+  "evaluator": "evaluators/vrp",
+  "cells": [
+    {
+      "key": "tiny-12-validation",
+      "env": {"AUTOEVOLVE_CELL": "tiny-12-validation"},
+      "target": null
+    },
+    {
+      "key": "generated-100",
+      "env": {"AUTOEVOLVE_CELL": "generated-100"},
+      "target": null
+    },
+    {
+      "key": "solomon-c1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-c1-frontier"},
+      "target": null
+    },
+    {
+      "key": "solomon-c2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-c2-frontier"},
+      "target": null
+    },
+    {
+      "key": "solomon-r1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-r1-frontier"},
+      "target": null
+    },
+    {
+      "key": "solomon-r2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-r2-frontier"},
+      "target": null
+    },
+    {
+      "key": "solomon-rc1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-rc1-frontier"},
+      "target": null
+    },
+    {
+      "key": "solomon-rc2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "solomon-rc2-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-c1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-c1-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-c2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-c2-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-r1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-r1-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-r2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-r2-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-rc1-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-rc1-frontier"},
+      "target": null
+    },
+    {
+      "key": "homberger-rc2-frontier",
+      "env": {"AUTOEVOLVE_CELL": "homberger-rc2-frontier"},
+      "target": null
+    }
+  ],
+  "proxy_budget": {"max_evals": 40, "wall_clock_s": 14400},
+  "full_budget": {"max_evals": 1200, "wall_clock_s": 86400},
+  "ladder": [
+    "validation",
+    "generated-frontier",
+    "public-frontier",
+    "replicate-3",
+    "independent-recheck"
+  ],
+  "replicate_seeds": 3
+}
