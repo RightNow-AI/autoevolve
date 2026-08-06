@@ -1,0 +1,31 @@
+{
+  "bounds": [
+    {
+      "claim": "same-run exact brute-force throughput for tiny-r100-validation",
+      "value": "dynamic exact_queries_per_second from the evaluator run",
+      "direction": "higher_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/tiny-r100-validation/exact_queries_per_second",
+      "checked_on": "2026-08-06",
+      "how_to_recheck": "rerun this cell and cite its run id and exact_queries_per_second"
+    },
+    {
+      "claim": "same-run exact brute-force throughput for medium-r095-frontier",
+      "value": "dynamic exact_queries_per_second from the evaluator run",
+      "direction": "higher_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/medium-r095-frontier/exact_queries_per_second",
+      "checked_on": "2026-08-06",
+      "how_to_recheck": "rerun this cell and cite its run id and exact_queries_per_second"
+    },
+    {
+      "claim": "same-run exact brute-force throughput for large-r090-frontier",
+      "value": "dynamic exact_queries_per_second from the evaluator run",
+      "direction": "higher_is_better",
+      "who_and_year": "autoevolve same-process measurement, not a published bound",
+      "source_url": "run-artifact://same-run/large-r090-frontier/exact_queries_per_second",
+      "checked_on": "2026-08-06",
+      "how_to_recheck": "rerun this cell and cite its run id and exact_queries_per_second"
+    }
+  ]
+}
